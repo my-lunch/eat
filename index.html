@@ -17,12 +17,15 @@
         :root { --primary: #ff9f43; --danger: #e11d48; --success: #26de81; --bg: #f1f5f9; --dark: #1e293b; }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
+        /* 主佈局 */
         .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
         
+        /* 1. 網頁最上方標題區 */
         .page-title-section { text-align: center; margin-top: 10px; margin-bottom: 5px; }
         .page-title-section h1 { margin: 0; font-size: 32px; font-weight: 900; color: var(--dark); letter-spacing: 2px; }
         .page-title-section h2 { margin: 6px 0 0 0; font-size: 16px; font-weight: bold; color: #64748b; letter-spacing: 5px; }
 
+        /* 2. 👑 團主工具欄 */
         .admin-toolbar { display: none; background: var(--dark); padding: 15px 25px; border-radius: 12px; align-items: center; justify-content: space-between; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 15px; box-sizing: border-box; }
         .toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .toolbar-left input { padding: 10px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; }
@@ -38,6 +41,7 @@
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
 
+        /* 3. 公告展示區 */
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
         .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); } 
@@ -50,24 +54,29 @@
         .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
 
+        /* 菜單圖片 */
         .menu-wrapper { width: 100%; display: none; text-align: center; }
         .menu-display { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: block; }
         
+        /* 數據看板 */
         .dashboard { display: flex; gap: 20px; }
         .card { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
         .card h3 { margin: 0 0 10px; color: #64748b; font-size: 16px; font-weight: bold; }
         .card p { margin: 0; font-size: 36px; font-weight: 900; } 
         .text-red { color: var(--danger); }
 
+        /* 點餐表單 */
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .form-grid { display: grid; grid-template-columns: 1.2fr 2fr 1fr 1fr 1fr 1.2fr; gap: 25px; align-items: end; } 
         .col-span-2 { grid-column: span 2; } 
         .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; }
         
+        /* 找零顯示框 */
         .live-change-box { background: #f8fafc; border: 2px dashed #cbd5e1; padding: 0 10px; border-radius: 8px; text-align: center; font-size: 18px; font-weight: 900; color: var(--dark); height: 48px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
         .live-change-box.has-change { color: var(--danger); background: #fff1f2; border-color: var(--danger); }
 
+        /* 表格區 */
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -90,6 +99,7 @@
         .stats-list { max-height: 350px; overflow-y: auto; padding-right: 10px; }
         .stats-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
 
+        /* 📱 手機版完美排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
@@ -128,7 +138,9 @@
     </style>
 </head>
 <body>
+
     <div class="container">
+        
         <div class="page-title-section">
             <h1>今天吃什麼</h1>
             <h2>點餐系統</h2>
@@ -136,80 +148,62 @@
 
         <div class="admin-toolbar" id="adminToolbar">
             <div class="toolbar-left">
-                <span style="font-weight:bold; color:var(--primary); text-align:center; display:block; width:100%; margin-bottom:5px;">👑 團主控制面板</span>
+                <span id="adminTitle" style="font-weight:bold; color:var(--primary); text-align:center; display:block; width:100%; margin-bottom:5px;"></span>
                 <input type="text" id="annInput" class="ann-input" placeholder="修改收款公告...">
                 <input type="text" id="timeInput" class="time-input" placeholder="時間(例如 11:00)">
-                <button class="btn-sync" onclick="updateAnnouncement()">同步公告與時間</button>
-                <span style="font-weight:bold; font-size:14px; margin-top:5px;">上傳菜單圖檔：</span>
+                <button id="btnSync" class="btn-sync" onclick="updateAnnouncement()"></button>
+                <span id="uploadLabel" style="font-weight:bold; font-size:14px; margin-top:5px;"></span>
                 <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             </div>
             <div class="toolbar-btns">
-                <button class="btn-stats" onclick="showStats()">📊 叫餐統計清單</button>
-                <button class="btn-clear" onclick="clearOrders()">🧹 淨空所有訂單</button>
+                <button id="btnStats" class="btn-stats" onclick="showStats()"></button>
+                <button id="btnClear" class="btn-clear" onclick="clearOrders()"></button>
             </div>
         </div>
         
         <div class="status-banner">
             <div class="announcement-row">
-                <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
+                <div id="announceText" class="cash-info"></div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
                         <span class="time-label">截止</span>
-                        <span id="timeText" class="time-value">未設定</span>
+                        <span id="timeText" class="time-value"></span>
                     </div>
                     <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
                 </div>
             </div>
         </div>
 
-        <div id="menuWrapper" class="menu-wrapper">
-            <img id="menuImg" class="menu-display">
-        </div>
-
         <div class="dashboard">
-            <div class="card">
-                <h3>總金額</h3>
-                <p id="totalNeed">0</p>
-            </div>
-            <div class="card">
-                <h3>已收現金</h3>
-                <p id="totalGet">0</p>
-            </div>
-            <div class="card">
-                <h3>剩餘待收</h3>
-                <p id="totalPending" class="text-red">0</p>
-            </div>
+            <div class="card"><h3 id="lblTotalNeed"></h3><p id="totalNeed">0</p></div>
+            <div class="card"><h3 id="lblTotalGet"></h3><p id="totalGet">0</p></div>
+            <div class="card"><h3 id="lblTotalPending"></h3><p id="totalPending" class="text-red">0</p></div>
         </div>
 
         <div class="form-section">
-            <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
+            <h3 id="lblFormTitle" style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;"></h3>
             <div class="form-grid">
-                <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
-                <div class="form-group col-span-2"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
-                <div class="form-group"><label>應付</label><input type="number" id="price" placeholder="100" oninput="calculateLiveChange()"></div>
-                <div class="form-group"><label>實付</label><input type="number" id="pay" placeholder="0" oninput="calculateLiveChange()"></div>
-                
-                <div class="form-group">
-                    <label>找零</label>
-                    <div id="liveChangeDisplay" class="live-change-box">0</div>
-                </div>
-
-                <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+                <div class="form-group"><label id="lblFormName"></label><input type="text" id="userName" placeholder="AMY"></div>
+                <div class="form-group col-span-2"><label id="lblFormItem"></label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
+                <div class="form-group"><label id="lblFormPrice"></label><input type="number" id="price" placeholder="100" oninput="calculateLiveChange()"></div>
+                <div class="form-group"><label id="lblFormPay"></label><input type="number" id="pay" placeholder="0" oninput="calculateLiveChange()"></div>
+                <div class="form-group"><label id="lblFormChange"></label><div id="liveChangeDisplay" class="live-change-box">0</div></div>
+                <button id="btnSubmitOrder" class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()"></button>
             </div>
         </div>
 
         <div class="table-container">
-            <h3 style="color:var(--danger)">📝 所有未付款區</h3>
+            <h3 id="lblUnpaidTitle" style="color:var(--danger)"></h3>
             <table id="unpaidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零狀態</th><th>管理操作</th></tr></thead>
+                <thead><tr><th id="thName1"></th><th id="thItem1"></th><th id="thPrice1"></th><th id="thPay1"></th><th id="thStatus1"></th><th id="thAction1"></th></tr></thead>
                 <tbody id="unpaidBody"></tbody>
             </table>
         </div>
 
         <div class="table-container">
-            <h3 style="color:var(--success)">✅ 所有已付款區</h3>
+            <h3 id="lblPaidTitle" style="color:var(--success)"></h3>
             <table id="paidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>管理操作</th></tr></thead>
+                <thead><tr><th id="thName2"></th><th id="thItem2"></th><th id="thPrice2"></th><th id="thPay2"></th><th id="thAction2"></th></tr></thead>
                 <tbody id="paidBody"></tbody>
             </table>
         </div>
@@ -217,10 +211,10 @@
 
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
     <div id="statsModal">
-        <div class="stats-header">📞 叫餐統計</div>
-        <div id="statsTotal" class="stats-total">總計：0 份</div>
+        <div id="lblStatsHeader" class="stats-header"></div>
+        <div id="statsTotal" class="stats-total"></div>
         <div id="statsContent" class="stats-list"></div>
-        <button class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px;" onclick="closeModal()">關閉</button>
+        <button id="btnCloseModal" class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px;" onclick="closeModal()"></button>
     </div>
 
     <script>
@@ -232,7 +226,33 @@
         localStorage.setItem('myDeviceId', myId);
         let editingId = null;
 
+        // 網頁開啟後，才用 JS 注入所有中文字（徹底斷絕 LINE 爬蟲偷抓內文的可能）
         window.addEventListener('load', () => {
+            document.getElementById('adminTitle').innerText = "👑 團主控制面板";
+            document.getElementById('btnSync').innerText = "同步公告與時間";
+            document.getElementById('uploadLabel').innerText = "上傳菜單圖檔：";
+            document.getElementById('btnStats').innerText = "📊 叫餐統計清單";
+            document.getElementById('btnClear').innerText = "🧹 淨空所有訂單";
+            document.getElementById('lblTotalNeed').innerText = "總金額";
+            document.getElementById('lblTotalGet').innerText = "已收現金";
+            document.getElementById('lblTotalPending').innerText = "剩餘待收";
+            document.getElementById('lblFormTitle').innerText = "📝 點餐";
+            document.getElementById('lblFormName').innerText = "姓名";
+            document.getElementById('lblFormItem').innerText = "品項";
+            document.getElementById('lblFormPrice').innerText = "應付";
+            document.getElementById('lblFormPay').innerText = "實付";
+            document.getElementById('lblFormChange').innerText = "找零";
+            document.getElementById('btnSubmitOrder').innerText = "送出點餐";
+            document.getElementById('lblUnpaidTitle').innerText = "📝 所有未付款區";
+            document.getElementById('lblPaidTitle').innerText = "✅ 所有已付款區";
+            
+            const titles = ["姓名", "品項", "應付", "實收", "找零狀態", "管理操作"];
+            ['thName1','thItem1','thPrice1','thPay1','thStatus1','thAction1'].forEach((id, i) => document.getElementById(id).innerText = titles[i]);
+            ['thName2','thItem2','thPrice2','thPay2','thAction2'].forEach((id, i) => document.getElementById(id).innerText = titles[i<4?i:5]);
+            
+            document.getElementById('lblStatsHeader').innerText = "📞 叫餐統計";
+            document.getElementById('btnCloseModal').innerText = "關閉";
+
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
             document.getElementById('adminToggle').checked = isAdm;
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
