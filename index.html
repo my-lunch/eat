@@ -20,12 +20,12 @@
         /* 主佈局 */
         .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
         
-        /* 網頁標題區 */
-        .page-title-section { text-align: center; margin-bottom: 5px; }
+        /* 1. 網頁最上方標題區 */
+        .page-title-section { text-align: center; margin-top: 10px; margin-bottom: 5px; }
         .page-title-section h1 { margin: 0; font-size: 32px; font-weight: 900; color: var(--dark); letter-spacing: 2px; }
-        .page-title-section h2 { margin: 5px 0 0 0; font-size: 16px; font-weight: bold; color: #64748b; letter-spacing: 5px; }
+        .page-title-section h2 { margin: 6px 0 0 0; font-size: 16px; font-weight: bold; color: #64748b; letter-spacing: 5px; }
 
-        /* 👑 頂部橫向工具欄 (預設隱藏) */
+        /* 2. 👑 團主工具欄 (插在標題與公告之間) */
         .admin-toolbar { display: none; background: var(--dark); padding: 15px 25px; border-radius: 12px; align-items: center; justify-content: space-between; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 15px; box-sizing: border-box; }
         .toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .toolbar-left input { padding: 10px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; }
@@ -41,15 +41,15 @@
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
 
-        /* 公告展示區 */
+        /* 3. 公告展示區 (收現金PAY) */
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
         .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); } 
         
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; color: var(--danger); background: #fff1f2; padding: 8px 20px; border-radius: 8px; white-space: nowrap; } 
-        .time-label { font-size: 16px; font-weight: bold; }
-        .time-value { font-size: 32px; font-weight: 900; margin: 0 5px; line-height: 1; }
+        .time-label { font-size: 14px; font-weight: bold; }
+        .time-value { font-size: 28px; font-weight: 900; margin: 0 5px; line-height: 1; }
 
         /* 💡 特務級隱藏打勾框 */
         .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
@@ -85,53 +85,4 @@
         td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
         
         /* 按鈕群組防擠壓 */
-        .action-btns { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
-        .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; }
-        .btn-edit { background: #4b5563; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .btn-save { background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 6px;}
-        .btn-del:hover { background: #fee2e2; color: var(--danger); }
-        .readonly-text { color: #94a3b8; font-size: 14px; font-weight: bold; padding: 8px; }
-        .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 90%; box-sizing: border-box; font-weight: bold; }
-
-        /* 統計彈窗 */
-        #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 350px; max-width: 500px; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
-        .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
-        .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
-        .stats-list { max-height: 350px; overflow-y: auto; padding-right: 10px; }
-        .stats-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
-
-        /* 📱 手機版防破圖完美排版 */
-        @media (max-width: 768px) {
-            body { padding: 10px 0; }
-            .container { padding: 0 10px; }
-            
-            .page-title-section h1 { font-size: 26px; }
-            .page-title-section h2 { font-size: 14px; }
-
-            .admin-toolbar { padding: 15px; flex-direction: column; align-items: stretch; margin: 0; }
-            .toolbar-left { flex-direction: column; align-items: stretch; gap: 10px; }
-            .toolbar-btns { flex-direction: column; align-items: stretch; width: 100%; margin-top: 10px; }
-            .ann-input, .time-input, .file-input { width: 100% !important; box-sizing: border-box; }
-            .toolbar-left button, .toolbar-btns button { width: 100%; padding: 12px; font-size: 16px; }
-
-            .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
-            .cash-info { font-size: 20px; }
-            .time-info-wrapper { justify-content: center; width: 100%; }
-            
-            .time-info { padding: 6px 12px; }
-            .time-label { font-size: 12px; } 
-            .time-value { font-size: 26px; } 
-            
-            .dashboard { flex-direction: column; gap: 10px; }
-            .form-grid { grid-template-columns: 1fr; gap: 15px; }
-            .col-span-2 { grid-column: span 1; }
-            
-            .menu-wrapper { margin-left: -10px; width: 100vw; margin-top: 20px; }
-            .menu-display { border-radius: 0; border: none; max-height: none; width: 100%; box-shadow: none; }
-            
-            table, thead, tbody, th, td, tr { display: block; }
-            thead { display: none; }
-            tr { margin-bottom: 15px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-            td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #f1f
+        .action-btns { display: flex; gap: 5
