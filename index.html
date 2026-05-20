@@ -359,3 +359,101 @@
                     
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
+
+                    if (o.isPaid) {
+                        tGet += o.pay;
+                        if (isEditing) {
+                            paidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
+                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
+                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
+                                <td data-label="管理操作">
+                                    <div class="action-btns">
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
+                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                        } else {
+                            let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="readonly-text">🔒 唯讀</span>`;
+                            
+                            paidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項" style="color:#475569">${o.item}</td>
+                                <td data-label="應付">$${o.price}</td>
+                                <td data-label="實收" style="color:var(--success); font-weight:900;">$${o.pay}</td>
+                                <td data-label="管理操作"><div class="action-btns">${btnHtml}</div></td>
+                            </tr>`;
+                        }
+                    } else {
+                        if (isEditing) {
+                            unpaidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
+                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
+                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
+                                <td data-label="找零狀態">編輯中</td>
+                                <td data-label="管理操作">
+                                    <div class="action-btns">
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
+                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                        } else {
+                            const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找零 $${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">$0</span>`;
+                            
+                            let btnHtml = '';
+                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> `;
+                            if (canEdit) {
+                                btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
+                            } else {
+                                btnHtml += `<span class="readonly-text">🔒 唯讀</span>`;
+                            }
+
+                            unpaidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項" style="color:#475569">${o.item}</td>
+                                <td data-label="應付">$${o.price}</td>
+                                <td data-label="實收" style="color:#94a3b8">$${o.pay}</td>
+                                <td data-label="找零狀態">${changeText}</td>
+                                <td data-label="管理操作"><div class="action-btns">${btnHtml}</div></td>
+                            </tr>`;
+                        }
+                    }
+                });
+            }
+            
+            document.getElementById('totalNeed').innerText = tNeed;
+            document.getElementById('totalGet').innerText = tGet;
+            document.getElementById('totalPending').innerText = Math.max(0, tNeed - tGet);
+        }
+
+        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
+
+        function showStats() {
+            database.ref('orders').once('value', (s) => {
+                const orders = s.val(); 
+                const stats = {}; let total = 0; 
+                if(orders) {
+                    Object.values(orders).forEach(o => { 
+                        o.item.split(/[+＋,，、/]/).forEach(singleItem => {
+                            const name = singleItem.trim();
+                            if(name) { stats[name] = (stats[name] || 0) + 1; total++; }
+                        });
+                    }); 
+                }
+                document.getElementById('statsTotal').innerText = `總計：${total} 份`;
+                document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `<div class="stats-item"><div class="stats-item-name">🍱 ${k}</div><div class="stats-item-count">× ${v}</div></div>`).join('');
+                document.getElementById('statsModal').style.display = 'block'; 
+                document.getElementById('modalOverlay').style.display = 'block';
+            });
+        }
+
+        function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
+        function deleteOrder(id) { if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); }
+        function clearOrders() { if(confirm("確定清空所有數據？")) database.ref('orders').remove(); }
+    </script>
+</body>
+</html>
