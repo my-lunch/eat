@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>今天吃什麼</title>
+    <title>今天吃什麼 - 點餐系統</title>
     
+    <!-- 貼給同事時，LINE/Slack 預覽會抓取這裡的設定，呈現上下兩行 -->
     <meta property="og:title" content="今天吃什麼">
     <meta property="og:description" content="點餐系統">
     <meta name="description" content="點餐系統">
@@ -34,15 +35,23 @@
         .btn-clear { background: #747d8c; color: white; }
 
         /* 主佈局 */
-        .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 25px; }
+        .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
         
+        /* 網頁標題區 */
+        .page-title-section { text-align: center; margin-bottom: 5px; }
+        .page-title-section h1 { margin: 0; font-size: 32px; font-weight: 900; color: var(--dark); letter-spacing: 2px; }
+        .page-title-section h2 { margin: 5px 0 0 0; font-size: 16px; font-weight: bold; color: #64748b; letter-spacing: 5px; }
+
         /* 公告展示區 */
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
         .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); } 
         
         .time-info-wrapper { display: flex; align-items: center; }
-        .time-info { display: flex; align-items: baseline; font-size: 18px; font-weight: bold; color: var(--danger); background: #fff1f2; padding: 8px 20px; border-radius: 8px; } 
+        /* 強制防斷行 white-space: nowrap */
+        .time-info { display: flex; align-items: baseline; color: var(--danger); background: #fff1f2; padding: 8px 20px; border-radius: 8px; white-space: nowrap; } 
+        .time-label { font-size: 16px; font-weight: bold; }
+        .time-value { font-size: 32px; font-weight: 900; margin: 0 5px; line-height: 1; }
 
         /* 💡 特務級隱藏打勾框 */
         .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
@@ -100,6 +109,9 @@
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
             
+            .page-title-section h1 { font-size: 26px; }
+            .page-title-section h2 { font-size: 14px; }
+
             /* 修正工具列，強制直排，絕對不撐破螢幕 */
             .admin-toolbar { padding: 15px; flex-direction: column; align-items: stretch; margin: 0 10px 20px 10px; }
             .toolbar-left { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -108,9 +120,13 @@
             .toolbar-left button, .toolbar-btns button { width: 100%; padding: 12px; font-size: 16px; }
 
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
-            .cash-info { font-size: 22px; }
+            .cash-info { font-size: 20px; }
             .time-info-wrapper { justify-content: center; width: 100%; }
-            .time-info { box-sizing: border-box; font-size: 16px; }
+            
+            /* 手機版「截止時間」特別縮小，時間數字稍微等比例縮小以確保100%同一行 */
+            .time-info { padding: 6px 12px; }
+            .time-label { font-size: 12px; } 
+            .time-value { font-size: 26px; } 
             
             .dashboard { flex-direction: column; gap: 10px; }
             .form-grid { grid-template-columns: 1fr; gap: 15px; }
@@ -147,11 +163,20 @@
 
     <div class="container">
         
+        <!-- 網頁內視覺標題 -->
+        <div class="page-title-section">
+            <h1>今天吃什麼</h1>
+            <h2>點餐系統</h2>
+        </div>
+        
         <div class="status-banner">
             <div class="announcement-row">
                 <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
-                    <div class="time-info">截止時間：<span id="timeText" style="font-size:32px; font-weight:900; margin:0 5px; line-height:1;">未設定</span></div>
+                    <div class="time-info">
+                        <span class="time-label">截止時間：</span>
+                        <span id="timeText" class="time-value">未設定</span>
+                    </div>
                     <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
                 </div>
             </div>
