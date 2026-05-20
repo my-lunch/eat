@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>今天吃什麼</title>
     
+    <meta name="description" content="辦公室揪團點餐系統，趕快來送出你的餐點吧！">
+    <meta property="og:title" content="👑 今天吃什麼 - 點餐系統">
+    <meta property="og:description" content="辦公室揪團點餐系統，趕快來送出你的餐點吧！">
+    <meta property="og:type" content="website">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -397,42 +401,4 @@
                                 <td data-label="應付">$${o.price}</td>
                                 <td data-label="實收" style="color:#94a3b8">$${o.pay}</td>
                                 <td data-label="找零狀態">${changeText}</td>
-                                <td data-label="管理操作">${btnHtml}</td>
-                            </tr>`;
-                        }
-                    }
-                });
-            }
-            
-            document.getElementById('totalNeed').innerText = tNeed;
-            document.getElementById('totalGet').innerText = tGet;
-            document.getElementById('totalPending').innerText = Math.max(0, tNeed - tGet);
-        }
-
-        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
-
-        function showStats() {
-            database.ref('orders').once('value', (s) => {
-                const orders = s.val(); 
-                const stats = {}; let total = 0; 
-                if(orders) {
-                    Object.values(orders).forEach(o => { 
-                        o.item.split(/[+＋,，、/]/).forEach(singleItem => {
-                            const name = singleItem.trim();
-                            if(name) { stats[name] = (stats[name] || 0) + 1; total++; }
-                        });
-                    }); 
-                }
-                document.getElementById('statsTotal').innerText = `總計：${total} 份`;
-                document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `<div class="stats-item"><div class="stats-item-name">🍱 ${k}</div><div class="stats-item-count">× ${v}</div></div>`).join('');
-                document.getElementById('statsModal').style.display = 'block'; 
-                document.getElementById('modalOverlay').style.display = 'block';
-            });
-        }
-
-        function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
-        function deleteOrder(id) { if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); }
-        function clearOrders() { if(confirm("確定清空所有數據？")) database.ref('orders').remove(); }
-    </script>
-</body>
-</html>
+                                <td data-label="管理操作">${
