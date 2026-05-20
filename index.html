@@ -64,4 +64,97 @@
     <div class="card">
         <h3>📝 點餐</h3>
         <div class="grid">
-            <input type="text" id="userName"
+            <input type="text" id="userName" placeholder="姓名">
+            <input type="text" id="userItem" placeholder="品項">
+            <input type="number" id="price" placeholder="應付">
+            <input type="number" id="pay" placeholder="實付">
+            <button class="btn" onclick="submitOrder()">送出</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>未付款</h3>
+        <table id="unpaidTable">
+            <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>管理</th></tr></thead>
+            <tbody id="unpaidBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('myDeviceId', myId);
+
+    const adminToggle = document.getElementById('adminToggle');
+    adminToggle.checked = localStorage.getItem('isAdminMode') === 'true';
+    document.getElementById('adminToolbar').style.display = adminToggle.checked ? 'flex' : 'none';
+
+    adminToggle.addEventListener('change', (e) => {
+        localStorage.setItem('isAdminMode', e.target.checked);
+        document.getElementById('adminToolbar').style.display = e.target.checked ? 'flex' : 'none';
+        db.ref('orders').once('value', s => renderTable(s.val()));
+    });
+
+    function uploadMenu(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 1200; canvas.height = img.height * (1200 / img.width);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    db.ref('config/menuImage').set(canvas.toDataURL('image/jpeg', 0.8));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    db.ref('config/menuImage').on('value', s => {
+        const img = document.getElementById('menuImg'), wrap = document.getElementById('menuWrapper');
+        if (s.val()) { img.src = s.val(); wrap.style.display = 'block'; }
+    });
+
+    db.ref('config/announcement').on('value', s => {
+        const v = s.val() || { text: "收現金 / 收 LINE Pay", deadline: "未設定" };
+        document.getElementById('announceText').innerText = "📢 " + v.text;
+        document.getElementById('timeText').innerText = v.deadline;
+    });
+
+    function updateAnnouncement() {
+        db.ref('config/announcement').update({ text: document.getElementById('annInput').value, deadline: document.getElementById('timeInput').value });
+    }
+
+    function submitOrder() {
+        const n = document.getElementById('userName').value.trim(), i = document.getElementById('userItem').value.trim();
+        const p = parseInt(document.getElementById('price').value)||0, y = parseInt(document.getElementById('pay').value)||0;
+        if(!n || !i) return alert("填寫姓名與品項！");
+        db.ref('orders').push({ name:n, item:i, price:p, pay:y, isPaid:false, owner:myId });
+    }
+
+    function renderTable(orders) {
+        const b = document.getElementById('unpaidBody'); b.innerHTML = '';
+        const isAdmin = adminToggle.checked;
+        if(orders) {
+            Object.keys(orders).forEach(id => {
+                const o = orders[id];
+                if(!o.isPaid) {
+                    b.innerHTML += `<tr data-label="訂單">
+                        <td data-label="姓名">${o.name}</td><td data-label="品項">${o.item}</td><td data-label="應付">${o.price}</td><td data-label="實收">${o.pay}</td>
+                        <td data-label="管理">${isAdmin ? `<button class="btn" onclick="db.ref('orders/${id}/isPaid').set(true)">收</button> ` : ''} ${(o.owner === myId || isAdmin) ? `<button class="btn-del" onclick="db.ref('orders/${id}').remove()">刪除</button>` : '唯讀'}</td>
+                    </tr>`;
+                }
+            });
+        }
+    }
+    db.ref('orders').on('value', s => renderTable(s.val()));
+    function clearOrders() { if(confirm("確定清空？")) db.ref('orders').remove(); }
+</script>
+</body>
+</html>
