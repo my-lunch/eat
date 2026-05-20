@@ -4,157 +4,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>今天吃什麼</title>
+    
     <meta name="description" content="辦公室揪團點餐系統，趕快來送出你的餐點吧！">
     <meta property="og:title" content="👑 今天吃什麼 - 點餐系統">
     <meta property="og:description" content="辦公室揪團點餐系統，趕快來送出你的餐點吧！">
+    <meta property="og:type" content="website">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
         :root { --primary: #ff9f43; --danger: #e11d48; --success: #26de81; --bg: #f1f5f9; --dark: #1e293b; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--dark); overflow-x: hidden; }
-        .admin-toolbar { display: none; background: var(--dark); padding: 15px; border-radius: 12px; margin-bottom: 20px; color: white; flex-wrap: wrap; gap: 10px; }
-        .container { max-width: 1000px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
-        .status-banner { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: block; color: var(--dark); overflow-x: hidden; }
+        
+        /* 👑 頂部橫向工具欄 (預設隱藏) */
+        .admin-toolbar { display: none; background: var(--dark); padding: 12px 25px; border-radius: 12px; align-items: center; justify-content: space-between; margin-bottom: 25px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 15px; }
+        .toolbar-left { display: flex; align-items: center; gap: 15px; flex-grow: 1; flex-wrap: wrap; }
+        .toolbar-left input { padding: 8px 12px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; }
+        .toolbar-left input::placeholder { color: #a0aec0; }
+        
+        .toolbar-btns { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .toolbar-btns button { padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .btn-sync { background: var(--primary); color: white; }
+        .btn-stats { background: #a55eea; color: white; }
+        .btn-clear { background: #747d8c; color: white; }
+
+        /* 主佈局 */
+        .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 25px; }
+        
+        /* 公告展示區 */
+        .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
-        .menu-wrapper { width: 100%; display: none; margin-top: 15px; }
-        .menu-display { width: 100%; height: auto; border-radius: 12px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
-        .btn { padding: 10px; border: none; border-radius: 6px; background: var(--primary); color: white; cursor: pointer; }
-        .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; }
-        .admin-checkbox-secret { opacity: 0.1; margin-left: 10px; }
+        
+        .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); } 
+        
+        .time-info-wrapper { display: flex; align-items: center; }
+        .time-info { display: flex; align-items: baseline; font-size: 18px; font-weight: bold; color: var(--danger); background: #fff1f2; padding: 8px 20px; border-radius: 8px; } 
+
+        /* 💡 特務級隱藏打勾框 */
+        .admin-checkbox-secret { width: 13px; height: 13px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
+        .admin-checkbox-secret:hover { opacity: 0.6; }
+
+        /* 菜單圖片 (桌機預設：放大極限，讓直式圖片能清楚顯示) */
+        .menu-wrapper { width: 100%; display: none; text-align: center; }
+        .menu-display { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: block; }
+        
+        /* 數據看板 */
+        .dashboard { display: flex; gap: 20px; }
+        .card { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+        .card h3 { margin: 0 0 10px; color: #64748b; font-size: 16px; font-weight: bold; }
+        .card p { margin: 0; font-size: 36px; font-weight: 900; } 
+        .text-red { color: var(--danger); }
+
+        /* 點餐表單 */
+        .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .form-grid { display: grid; grid-template-columns: 1.2fr 2fr 1fr 1fr 1fr 1.2fr; gap: 25px; align-items: end; } 
+        .col-span-2 { grid-column: span 2; } 
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; }
+        
+        /* 找零顯示框 */
+        .live-change-box { background: #f8fafc; border: 2px dashed #cbd5e1; padding: 0 10px; border-radius: 8px; text-align: center; font-size: 18px; font-weight: 900; color: var(--dark); height: 48px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+        .live-change-box.has-change { color: var(--danger); background: #fff1f2; border-color: var(--danger); }
+
+        /* 表格區 */
+        .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; background: #f8fafc; padding: 15px; color: #64748b; font-weight: bold; }
+        td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
+        
+        /* 按鈕與標籤 */
+        .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 900; cursor: pointer; margin-right: 5px; }
+        .btn-edit { background: #4b5563; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-save { background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 6px; margin-left: 5px; border-radius: 6px;}
+        .btn-del:hover { background: #fee2e2; color: var(--danger); }
+        .readonly-text { color: #94a3b8; font-size: 14px; font-weight: bold; }
+        .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 90%; box-sizing: border-box; font-weight: bold; }
+
+        /* 統計彈窗 */
+        #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 350px; max-width: 500px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
+        .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
+        .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
+        .stats-list { max-height: 350px; overflow-y: auto; padding-right: 10px; }
+        .stats-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
+
+        /* 📱 手機版排版優化 */
         @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
+            body { padding: 10px 0; }
+            .container, .admin-toolbar { padding: 0 10px; }
+            .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
+            .cash-info { font-size: 22px; }
+            .time-info { width: 100%; box-sizing: border-box; font-size: 16px; justify-content: center; }
+            .dashboard { flex-direction: column; gap: 10px; }
+            .form-grid { grid-template-columns: 1fr; gap: 15px; }
+            .col-span-2 { grid-column: span 1; }
+            .menu-wrapper { margin-left: -10px; width: 100vw; margin-top: 20px; }
+            .menu-display { border-radius: 0; border: none; max-height: none; width: 100%; box-shadow: none; }
             table, thead, tbody, th, td, tr { display: block; }
             thead { display: none; }
-            tr { border: 1px solid #eee; margin-bottom: 10px; padding: 10px; border-radius: 8px; background: white; }
-            td { display: flex; justify-content: space-between; }
-            td::before { content: attr(data-label); font-weight: bold; color: #64748b; }
+            tr { margin-bottom: 15px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+            td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #f1f5f9; padding: 8px 0; }
+            td:last-child { border-bottom: none; }
+            td::before { content: attr(data-label); font-weight: 900; color: #64748b; }
+            .btn-confirm, .btn-edit, .btn-save, .btn-del { padding: 10px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
-<div class="admin-toolbar" id="adminToolbar">
-    <input type="text" id="annInput" placeholder="公告...">
-    <input type="text" id="timeInput" placeholder="時間...">
-    <button class="btn" onclick="updateAnnouncement()">同步</button>
-    <input type="file" accept="image/*" onchange="uploadMenu(this)">
-    <button class="btn" onclick="clearOrders()">清空</button>
-</div>
+    <div class="admin-toolbar" id="adminToolbar">
+        <div class="toolbar-left">
+            <span style="font-weight:bold; color:var(--primary);">👑 工具列：</span>
+            <input type="text" id="annInput" placeholder="修改收款公告..." style="width: 180px;">
+            <input type="text" id="timeInput" placeholder="時間(例如 11:00)" style="width: 120px;">
+            <button class="btn-sync" onclick="updateAnnouncement()">同步</button>
+            <span style="margin-left: 10px; font-weight:bold; font-size:14px;">上傳菜單：</span>
+            <input type="file" accept="image/*" style="color: #cbd5e1; font-size: 13px; width: 200px;" onchange="uploadMenu(this)">
+        </div>
+        <div class="toolbar-btns">
+            <button class="btn-stats" onclick="showStats()">📊 叫餐統計</button>
+            <button class="btn-clear" onclick="clearOrders()">🧹 淨空訂單</button>
+        </div>
+    </div>
 
-<div class="container">
-    <div class="status-banner">
-        <div class="announcement-row">
-            <div style="display:flex; align-items:center;">
-                <div id="announceText" style="font-weight:bold; font-size:20px;">📢 收現金 / 收 LINE Pay</div>
-                <input type="checkbox" id="adminToggle" class="admin-checkbox-secret">
+    <div class="container">
+        
+        <div class="status-banner">
+            <div class="announcement-row">
+                <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
+                <div class="time-info-wrapper">
+                    <div class="time-info">截止時間：<span id="timeText" style="font-size:32px; font-weight:900; margin:0 5px; line-height:1;">未設定</span></div>
+                    <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" title="隱藏開關">
+                </div>
             </div>
-            <div style="font-weight:bold; color:red; font-size:18px;">截止時間：<span id="timeText" style="font-size:32px;">未設定</span></div>
+        </div>
+
+        <div id="menuWrapper" class="menu-wrapper">
+            <img id="menuImg" class="menu-display">
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3>總金額</h3>
+                <p id="totalNeed">0</p>
+            </div>
+            <div class="card">
+                <h3>已收現金</h3>
+                <p id="totalGet">0</p>
+            </div>
+            <div class="card">
+                <h3>剩餘待收</h3>
+                <p id="totalPending" class="text-red">0</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
+            <div class="form-grid">
+                <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
+                <div class="form-group col-span-2"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
+                <div class="form-group"><label>應付</label><input type="number" id="price" placeholder="100" oninput="calculateLiveChange()"></div>
+                <div class="form-group"><label>實付</label><input type="number" id="pay" placeholder="0" oninput="calculateLiveChange()"></div>
+                
+                <div class="form-group">
+                    <label>找零</label>
+                    <div id="liveChangeDisplay" class="live-change-box">0</div>
+                </div>
+
+                <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3 style="color:var(--danger)">📝 所有未付款區</h3>
+            <table id="unpaidTable">
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零狀態</th><th>管理操作</th></tr></thead>
+                <tbody id="unpaidBody"></tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h3 style="color:var(--success)">✅ 所有已付款區</h3>
+            <table id="paidTable">
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>管理操作</th></tr></thead>
+                <tbody id="paidBody"></tbody>
+            </table>
         </div>
     </div>
 
-    <div id="menuWrapper" class="menu-wrapper"><img id="menuImg" class="menu-display"></div>
-
-    <div class="card">
-        <h3>📝 點餐</h3>
-        <div class="grid">
-            <input type="text" id="userName" placeholder="姓名">
-            <input type="text" id="userItem" placeholder="品項">
-            <input type="number" id="price" placeholder="應付">
-            <input type="number" id="pay" placeholder="實付">
-            <button class="btn" onclick="submitOrder()">送出</button>
-        </div>
+    <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
+    <div id="statsModal">
+        <div class="stats-header">📞 叫餐統計</div>
+        <div id="statsTotal" class="stats-total">總計：0 份</div>
+        <div id="statsContent" class="stats-list"></div>
+        <button class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px;" onclick="closeModal()">關閉</button>
     </div>
 
-    <div class="card">
-        <h3>未付款</h3>
-        <table id="unpaidTable">
-            <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>管理</th></tr></thead>
-            <tbody id="unpaidBody"></tbody>
-        </table>
-    </div>
-</div>
+    <script>
+        const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-<script>
-    const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('myDeviceId', myId);
+        // 🟢 個人身分識別
+        let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('myDeviceId', myId);
 
-    const adminToggle = document.getElementById('adminToggle');
-    adminToggle.checked = localStorage.getItem('isAdminMode') === 'true';
-    document.getElementById('adminToolbar').style.display = adminToggle.checked ? 'flex' : 'none';
+        // 🟢 團主打勾框邏輯
+        let isAdminMode = localStorage.getItem('isAdminMode') === 'true';
+        const adminToggle = document.getElementById('adminToggle');
+        adminToggle.checked = isAdminMode;
+        
+        document.getElementById('adminToolbar').style.display = isAdminMode ? 'flex' : 'none';
 
-    adminToggle.addEventListener('change', (e) => {
-        localStorage.setItem('isAdminMode', e.target.checked);
-        document.getElementById('adminToolbar').style.display = e.target.checked ? 'flex' : 'none';
-        db.ref('orders').once('value', s => renderTable(s.val()));
-    });
+        adminToggle.addEventListener('change', (e) => {
+            isAdminMode = e.target.checked;
+            localStorage.setItem('isAdminMode', isAdminMode);
+            document.getElementById('adminToolbar').style.display = isAdminMode ? 'flex' : 'none';
+            database.ref('orders').once('value', s => renderTable(s.val()));
+        });
 
-    function uploadMenu(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = 1200; canvas.height = img.height * (1200 / img.width);
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    db.ref('config/menuImage').set(canvas.toDataURL('image/jpeg', 0.8));
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+        let editingId = null;
 
-    db.ref('config/menuImage').on('value', s => {
-        const img = document.getElementById('menuImg'), wrap = document.getElementById('menuWrapper');
-        if (s.val()) { img.src = s.val(); wrap.style.display = 'block'; }
-    });
-
-    db.ref('config/announcement').on('value', s => {
-        const v = s.val() || { text: "收現金 / 收 LINE Pay", deadline: "未設定" };
-        document.getElementById('announceText').innerText = "📢 " + v.text;
-        document.getElementById('timeText').innerText = v.deadline;
-    });
-
-    function updateAnnouncement() {
-        db.ref('config/announcement').update({ text: document.getElementById('annInput').value, deadline: document.getElementById('timeInput').value });
-    }
-
-    function submitOrder() {
-        const n = document.getElementById('userName').value.trim(), i = document.getElementById('userItem').value.trim();
-        const p = parseInt(document.getElementById('price').value)||0, y = parseInt(document.getElementById('pay').value)||0;
-        if(!n || !i) return alert("填寫姓名與品項！");
-        db.ref('orders').push({ name:n, item:i, price:p, pay:y, isPaid:false, owner:myId });
-    }
-
-    function renderTable(orders) {
-        const b = document.getElementById('unpaidBody'); b.innerHTML = '';
-        const isAdmin = adminToggle.checked;
-        if(orders) {
-            Object.keys(orders).forEach(id => {
-                const o = orders[id];
-                if(!o.isPaid) {
-                    b.innerHTML += `<tr data-label="訂單">
-                        <td data-label="姓名">${o.name}</td><td data-label="品項">${o.item}</td><td data-label="應付">${o.price}</td><td data-label="實收">${o.pay}</td>
-                        <td data-label="管理">${isAdmin ? `<button class="btn" onclick="db.ref('orders/${id}/isPaid').set(true)">收</button> ` : ''} ${(o.owner === myId || isAdmin) ? `<button class="btn-del" onclick="db.ref('orders/${id}').remove()">刪除</button>` : '唯讀'}</td>
-                    </tr>`;
-                }
-            });
-        }
-    }
-    db.ref('orders').on('value', s => renderTable(s.val()));
-    function clearOrders() { if(confirm("確定清空？")) db.ref('orders').remove(); }
-</script>
-</body>
-</html>
+        function calculateLiveChange() {
+            const price = parseInt(document.getElementById('price').value) || 0;
+            const pay = parseInt(document.getElementById('pay').value) || 0;
+            const
