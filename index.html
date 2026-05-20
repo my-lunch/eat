@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>今天吃什麼</title>
     
-    <meta name="description" content="辦公室揪團點餐系統，趕快來送出你的餐點吧！">
-    <meta property="og:title" content="👑 今天吃什麼 - 點餐系統">
-    <meta property="og:description" content="辦公室揪團點餐系統，趕快來送出你的餐點吧！">
+    <meta property="og:title" content="👑 今天吃什麼">
+    <meta property="og:description" content=" ">
+    <meta name="description" content=" ">
     <meta property="og:type" content="website">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -18,18 +18,13 @@
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
         /* 👑 頂部橫向工具欄 (預設隱藏) */
-        .admin-toolbar { display: none; background: var(--dark); padding: 15px 25px; border-radius: 12px; align-items: center; justify-content: space-between; margin-bottom: 25px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 15px; }
-        .toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .toolbar-left input { padding: 10px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; }
+        .admin-toolbar { display: none; background: var(--dark); padding: 12px 25px; border-radius: 12px; align-items: center; justify-content: space-between; margin-bottom: 25px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 15px; box-sizing: border-box; }
+        .toolbar-left { display: flex; align-items: center; gap: 15px; flex-grow: 1; flex-wrap: wrap; }
+        .toolbar-left input { padding: 8px 12px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; }
         .toolbar-left input::placeholder { color: #a0aec0; }
         
-        /* 取代原本寫死在 HTML 的寬度，讓 CSS 來控制，防止手機跑版 */
-        .ann-input { width: 180px; }
-        .time-input { width: 120px; }
-        .file-input { width: 220px; color: #cbd5e1; font-size: 13px; }
-
-        .toolbar-btns { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .toolbar-btns button, .toolbar-left button { padding: 10px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .toolbar-btns { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .toolbar-btns button { padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; }
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
@@ -40,14 +35,15 @@
         /* 公告展示區 */
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
+        
         .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); } 
         
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; font-size: 18px; font-weight: bold; color: var(--danger); background: #fff1f2; padding: 8px 20px; border-radius: 8px; } 
 
         /* 💡 特務級隱藏打勾框 */
-        .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
-        .admin-checkbox-secret:hover { opacity: 0.8; }
+        .admin-checkbox-secret { width: 14px; height: 14px; cursor: pointer; opacity: 0.1; margin-left: 10px; }
+        .admin-checkbox-secret:hover { opacity: 0.6; }
 
         /* 菜單圖片 */
         .menu-wrapper { width: 100%; display: none; text-align: center; }
@@ -78,14 +74,13 @@
         th { text-align: left; background: #f8fafc; padding: 15px; color: #64748b; font-weight: bold; }
         td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
         
-        /* 按鈕群組防擠壓 */
-        .action-btns { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
-        .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; }
-        .btn-edit { background: #4b5563; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .btn-save { background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 6px;}
+        /* 按鈕與標籤 */
+        .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 900; cursor: pointer; margin-right: 5px; }
+        .btn-edit { background: #4b5563; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-save { background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 6px; margin-left: 5px; border-radius: 6px;}
         .btn-del:hover { background: #fee2e2; color: var(--danger); }
-        .readonly-text { color: #94a3b8; font-size: 14px; font-weight: bold; padding: 8px; }
+        .readonly-text { color: #94a3b8; font-size: 14px; font-weight: bold; }
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 90%; box-sizing: border-box; font-weight: bold; }
 
         /* 統計彈窗 */
@@ -96,27 +91,24 @@
         .stats-list { max-height: 350px; overflow-y: auto; padding-right: 10px; }
         .stats-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
 
-        /* 📱 手機版防破圖完美排版 */
+        /* 📱 手機版排版優化 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
             
-            /* 修正工具列，強制直排，絕對不撐破螢幕 */
-            .admin-toolbar { padding: 15px; flex-direction: column; align-items: stretch; margin: 0 10px 20px 10px; }
-            .toolbar-left { flex-direction: column; align-items: stretch; gap: 10px; }
-            .toolbar-btns { flex-direction: column; align-items: stretch; width: 100%; margin-top: 10px; }
-            .ann-input, .time-input, .file-input { width: 100% !important; box-sizing: border-box; }
-            .toolbar-left button, .toolbar-btns button { width: 100%; padding: 12px; font-size: 16px; }
+            /* 工具列防跑版保護 */
+            .admin-toolbar { padding: 15px; flex-direction: column; align-items: stretch; margin: 0 10px 20px 10px; gap: 15px; }
+            .toolbar-left { flex-direction: column; align-items: stretch; width: 100%; }
+            .toolbar-left input, .toolbar-btns { flex-direction: column; align-items: stretch; width: 100%; }
+            .toolbar-btns button, .toolbar-left button { width: 100%; padding: 12px; }
 
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
             .cash-info { font-size: 22px; }
-            .time-info-wrapper { justify-content: center; width: 100%; }
-            .time-info { box-sizing: border-box; font-size: 16px; }
+            .time-info { width: 100%; box-sizing: border-box; font-size: 16px; justify-content: center; }
             
             .dashboard { flex-direction: column; gap: 10px; }
             .form-grid { grid-template-columns: 1fr; gap: 15px; }
             .col-span-2 { grid-column: span 1; }
-            
             .menu-wrapper { margin-left: -10px; width: 100vw; margin-top: 20px; }
             .menu-display { border-radius: 0; border: none; max-height: none; width: 100%; box-shadow: none; }
             
@@ -126,6 +118,7 @@
             td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #f1f5f9; padding: 8px 0; }
             td:last-child { border-bottom: none; }
             td::before { content: attr(data-label); font-weight: 900; color: #64748b; }
+            .btn-confirm, .btn-edit, .btn-save, .btn-del { padding: 10px; font-size: 14px; }
         }
     </style>
 </head>
@@ -133,12 +126,12 @@
 
     <div class="admin-toolbar" id="adminToolbar">
         <div class="toolbar-left">
-            <span style="font-weight:bold; color:var(--primary); text-align:center; display:block; width:100%;">👑 團主控制面板</span>
-            <input type="text" id="annInput" class="ann-input" placeholder="修改收款公告...">
-            <input type="text" id="timeInput" class="time-input" placeholder="時間(例如 11:00)">
+            <span style="font-weight:bold; color:var(--primary); text-align:center; display:block; width:100%; margin-bottom:5px;">👑 團主控制面板</span>
+            <input type="text" id="annInput" placeholder="修改收款公告...">
+            <input type="text" id="timeInput" placeholder="時間(例如 11:00)">
             <button class="btn-sync" onclick="updateAnnouncement()">同步公告與時間</button>
-            <span style="font-weight:bold; font-size:14px; margin-top:5px;">上傳菜單圖檔：</span>
-            <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
+            <span style="font-weight:bold; font-size:14px; margin-top:5px;">上傳菜單：</span>
+            <input type="file" accept="image/*" style="color: #cbd5e1; font-size: 13px;" onchange="uploadMenu(this)">
         </div>
         <div class="toolbar-btns">
             <button class="btn-stats" onclick="showStats()">📊 叫餐統計清單</button>
@@ -153,7 +146,7 @@
                 <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">截止時間：<span id="timeText" style="font-size:32px; font-weight:900; margin:0 5px; line-height:1;">未設定</span></div>
-                    <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" title="開啟團主面板">
+                    <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
                 </div>
             </div>
         </div>
@@ -224,25 +217,25 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 身分識別
         let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
         localStorage.setItem('myDeviceId', myId);
+        let editingId = null;
 
-        // 打勾框控制
-        let isAdminMode = localStorage.getItem('isAdminMode') === 'true';
-        const adminToggle = document.getElementById('adminToggle');
-        adminToggle.checked = isAdminMode;
-        
-        document.getElementById('adminToolbar').style.display = isAdminMode ? 'flex' : 'none';
-
-        adminToggle.addEventListener('change', (e) => {
-            isAdminMode = e.target.checked;
-            localStorage.setItem('isAdminMode', isAdminMode);
-            document.getElementById('adminToolbar').style.display = isAdminMode ? 'flex' : 'none';
-            database.ref('orders').once('value', s => renderTable(s.val()));
+        // 初始化網頁時，讀取並設定團主狀態
+        window.addEventListener('load', () => {
+            let isAdm = localStorage.getItem('isAdminMode') === 'true';
+            document.getElementById('adminToggle').checked = isAdm;
+            document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
         });
 
-        let editingId = null;
+        // 打勾框被點擊時觸發的函數 (強制保證有反應)
+        function toggleAdminMode() {
+            let isAdm = document.getElementById('adminToggle').checked;
+            localStorage.setItem('isAdminMode', isAdm);
+            document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
+            // 重新刷新列表按鈕權限
+            database.ref('orders').once('value', s => renderTable(s.val()));
+        }
 
         function calculateLiveChange() {
             const price = parseInt(document.getElementById('price').value) || 0;
@@ -258,7 +251,6 @@
             }
         }
 
-        // 上傳縮圖
         function uploadMenu(input) {
             if (input.files && input.files[0]) {
                 alert("照片處理中，請稍候..."); 
@@ -352,6 +344,7 @@
             const paidBody = document.getElementById('paidBody');
             unpaidBody.innerHTML = paidBody.innerHTML = '';
             let tNeed = 0, tGet = 0;
+            let isAdminMode = document.getElementById('adminToggle').checked;
 
             if (orders) {
                 Object.keys(orders).forEach(id => {
@@ -373,10 +366,8 @@
                                 <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
                                 <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
                                 <td data-label="管理操作">
-                                    <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
-                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
-                                    </div>
+                                    <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
+                                    <button class="btn-del" onclick="cancelEdit()">取消</button>
                                 </td>
                             </tr>`;
                         } else {
@@ -387,7 +378,7 @@
                                 <td data-label="品項" style="color:#475569">${o.item}</td>
                                 <td data-label="應付">$${o.price}</td>
                                 <td data-label="實收" style="color:var(--success); font-weight:900;">$${o.pay}</td>
-                                <td data-label="管理操作"><div class="action-btns">${btnHtml}</div></td>
+                                <td data-label="管理操作">${btnHtml}</td>
                             </tr>`;
                         }
                     } else {
@@ -399,10 +390,8 @@
                                 <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
                                 <td data-label="找零狀態">編輯中</td>
                                 <td data-label="管理操作">
-                                    <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
-                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
-                                    </div>
+                                    <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
+                                    <button class="btn-del" onclick="cancelEdit()">取消</button>
                                 </td>
                             </tr>`;
                         } else {
@@ -422,7 +411,7 @@
                                 <td data-label="應付">$${o.price}</td>
                                 <td data-label="實收" style="color:#94a3b8">$${o.pay}</td>
                                 <td data-label="找零狀態">${changeText}</td>
-                                <td data-label="管理操作"><div class="action-btns">${btnHtml}</div></td>
+                                <td data-label="管理操作">${btnHtml}</td>
                             </tr>`;
                         }
                     }
