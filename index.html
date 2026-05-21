@@ -74,12 +74,12 @@
         th { text-align: left; background: #f8fafc; padding: 18px 24px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
         td { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
         
-        th:nth-child(1), td:nth-child(1) { width: 10%; } /* 姓名 */
-        th:nth-child(2), td:nth-child(2) { width: 38%; white-space: normal; word-break: break-all; } /* 品項 */
-        th:nth-child(3), td:nth-child(3) { width: 10%; } /* 應付 */
-        th:nth-child(4), td:nth-child(4) { width: 10%; } /* 實收 */
-        th:nth-child(5), td:nth-child(5) { width: 14%; } /* 找零狀態 */
-        th:nth-child(6), td:nth-child(6) { width: 18%; text-align: right; } /* 功能按鈕欄 */
+        th:nth-child(1), td:nth-child(1) { width: 10%; } 
+        th:nth-child(2), td:nth-child(2) { width: 38%; white-space: normal; word-break: break-all; } 
+        th:nth-child(3), td:nth-child(3) { width: 10%; } 
+        th:nth-child(4), td:nth-child(4) { width: 10%; } 
+        th:nth-child(5), td:nth-child(5) { width: 14%; } 
+        th:nth-child(6), td:nth-child(6) { width: 18%; text-align: right; } 
 
         .action-btns { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
@@ -90,14 +90,12 @@
         .readonly-text { color: #94a3b8; font-size: 14px; font-weight: bold; padding: 8px; white-space: nowrap; }
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 95%; box-sizing: border-box; font-weight: bold; }
 
-        /* ✅ 1. 修正統計視窗排版：適度將視窗最大寬度加寬（500px -> 700px），確保有足夠的橫向空間 */
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         .stats-list { max-height: 400px; overflow-y: auto; padding-right: 10px; }
         
-        /* ✅ 2. 核心修正：將 .stats-item-left 設為「絕對不准斷行 (white-space: nowrap)」，讓整串括號備註字乖乖排在同一行！ */
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 12px 0; border-bottom: 1px dashed #e2e8f0; }
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
@@ -131,7 +129,6 @@
             td:last-child { border-bottom: none; }
             td::before { content: attr(data-label); font-weight: 900; color: #64748b; float: left; }
             
-            /* 手機板統計彈窗允許橫向滾動防止爆出去 */
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; }
             .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
         }
@@ -393,7 +390,6 @@
                         } else {
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="readonly-text">🔒 唯讀</span>`;
                             
-                            /* ✅ 已付款區唯讀狀態，補上找零狀態 */
                             paidBody.innerHTML += `<tr>
                                 <td data-label="姓名"><strong>${o.name}</strong></td>
                                 <td data-label="品項" style="color:#475569">${o.item}</td>
@@ -447,14 +443,15 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* ✅ 叫餐統計邏輯：這裡也完全回復你最原始的斜線拆單功能 */
+        /* 👑 真正修正的地方：把 split 括號裡面的「/」徹底移除了！ */
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; 
                 if(orders) {
                     Object.values(orders).forEach(o => { 
-                        o.item.split(/[+＋,，、/]/).forEach(singleItem => {
+                        // 這裡已經徹底拿掉斜線，遇到斜線不會再被拆開了！
+                        o.item.split(/[+＋,，、]/).forEach(singleItem => {
                             const name = singleItem.trim();
                             if(name) { 
                                 if (!stats[name]) {
