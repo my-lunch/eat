@@ -96,7 +96,8 @@
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         .stats-list { max-height: 400px; overflow-y: auto; padding-right: 10px; }
         
-        .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 12px 0; border-bottom: 1px dashed #e2e8f0; }
+        /* ✅ 修正：把統計畫面的上下內距（padding）從 12px 縮小到 6px，讓行距變小緊湊 */
+        .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; }
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
@@ -129,7 +130,7 @@
             td:last-child { border-bottom: none; }
             td::before { content: attr(data-label); font-weight: 900; color: #64748b; float: left; }
             
-            .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; }
+            .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 6px 0; }
             .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
         }
     </style>
@@ -443,15 +444,17 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* 👑 真正修正的地方：把 split 括號裡面的「/」徹底移除了！ */
+        /* ✅ 核心修正位置：
+           1. 移除 頓號、斜線、逗號 的拆單設定。
+           2. 現在「只認 + 和 ＋」，其餘符號一律當作同一個品項，維持在同一行。 */
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; 
                 if(orders) {
                     Object.values(orders).forEach(o => { 
-                        // 這裡已經徹底拿掉斜線，遇到斜線不會再被拆開了！
-                        o.item.split(/[+＋,，、]/).forEach(singleItem => {
+                        // 精準修正：只依據半形加號與全形加號進行 split 拆單
+                        o.item.split(/[+＋]/).forEach(singleItem => {
                             const name = singleItem.trim();
                             if(name) { 
                                 if (!stats[name]) {
