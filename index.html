@@ -96,8 +96,8 @@
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         .stats-list { max-height: 400px; overflow-y: auto; padding-right: 10px; }
         
-        /* ✅ 修正：把統計畫面的上下內距（padding）從 12px 縮小到 6px，讓行距變小緊湊 */
-        .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; }
+        /* ✅ 修正：行距再縮小，Padding 從 12px 縮小到 5px */
+        .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
@@ -130,7 +130,7 @@
             td:last-child { border-bottom: none; }
             td::before { content: attr(data-label); font-weight: 900; color: #64748b; float: left; }
             
-            .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 6px 0; }
+            .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
             .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
         }
     </style>
@@ -444,16 +444,40 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* ✅ 核心修正位置：
-           1. 移除 頓號、斜線、逗號 的拆單設定。
-           2. 現在「只認 + 和 ＋」，其餘符號一律當作同一個品項，維持在同一行。 */
+        /* ✅ 終極防呆統計機制：
+           1. 排除斜線 / 、頓號 、 等符號，絕不拆行。
+           2. 只認 + 進行拆單。
+           3. 如果發現同一個人的獨立訂單內，有沒寫完的括號 ( 造成的斷頭資料，會自動在統計時將其合回同一行！ */
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; 
+                
                 if(orders) {
-                    Object.values(orders).forEach(o => { 
-                        // 精準修正：只依據半形加號與全形加號進行 split 拆單
+                    // 第一步：先把所有訂單轉成陣列，並按照姓名、原始資料排序
+                    let orderList = Object.values(orders);
+                    let processedItems = [];
+
+                    // 核心防呆：遍歷檢查每個人的點餐，如果發現前一筆有「有左括號沒右括號」，就直接把下一筆拼上來！
+                    for(let i = 0; i < orderList.length; i++) {
+                        let currentItem = orderList[i].item.trim();
+                        let currentName = orderList[i].name;
+
+                        // 檢查括號是否沒成對（有左沒右）
+                        let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
+                        let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
+
+                        if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
+                            // 發現斷頭！把下一筆的內容直接用頓號補到目前這一筆後面，合併成一條完整品項
+                            currentItem = currentItem + "、" + orderList[i+1].item.trim();
+                            i++; // 跳過被合併的下一筆
+                        }
+                        
+                        processedItems.push({ name: currentName, item: currentItem });
+                    }
+
+                    // 第二步：依照你指定的規則進行統計（只用加號進行拆分）
+                    processedItems.forEach(o => { 
                         o.item.split(/[+＋]/).forEach(singleItem => {
                             const name = singleItem.trim();
                             if(name) { 
@@ -469,6 +493,7 @@
                         });
                     }); 
                 }
+                
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
                 document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `
                     <div class="stats-item">
