@@ -24,7 +24,6 @@
         .page-title-section h1 { margin: 0; font-size: 32px; font-weight: 900; color: var(--dark); letter-spacing: 2px; }
         .page-title-section h2 { margin: 6px 0 0 0; font-size: 16px; font-weight: bold; color: #64748b; letter-spacing: 5px; }
 
-        /* ✅ 1. 團主控制面板：在電腦版完全「限制為一行」，強制置中不分行 */
         .admin-toolbar { display: none; flex-direction: row; flex-wrap: nowrap; background: var(--dark); padding: 12px 20px; border-radius: 12px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; white-space: nowrap; overflow-x: auto; }
         .admin-toolbar input { padding: 8px 12px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; height: 36px; box-sizing: border-box; }
         .admin-toolbar input::placeholder { color: #a0aec0; }
@@ -71,18 +70,17 @@
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
-        /* ✅ 3. 表格排列一致性優化：兩張表格欄位比例百分之百對齊對稱 */
+        /* ✅ 修正：重新調配兩張表格的欄位比例，把「品項」加寬到 48%，姓名與金額縮小，防止字被擠下去 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        th { text-align: left; background: #f8fafc; padding: 18px 24px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
-        td { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
+        th { text-align: left; background: #f8fafc; padding: 18px 20px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
+        td { padding: 18px 20px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
         
-        /* 兩張表格統一精確比例分開欄位間距 */
-        th:nth-child(1), td:nth-child(1) { width: 10%; } /* 姓名 */
-        th:nth-child(2), td:nth-child(2) { width: 38%; white-space: normal; word-break: break-all; } /* 品項 */
-        th:nth-child(3), td:nth-child(3) { width: 10%; } /* 應付 */
-        th:nth-child(4), td:nth-child(4) { width: 10%; } /* 實收 */
-        th:nth-child(5), td:nth-child(5) { width: 14%; } /* 找零狀態 */
-        th:nth-child(6), td:nth-child(6) { width: 18%; text-align: right; } /* 功能按鈕欄 */
+        th:nth-child(1), td:nth-child(1) { width: 8%; }  /* 姓名縮小到 8% */
+        th:nth-child(2), td:nth-child(2) { width: 48%; white-space: normal; word-break: break-all; } /* 品項加大到 48% */
+        th:nth-child(3), td:nth-child(3) { width: 8%; }  /* 應付 8% */
+        th:nth-child(4), td:nth-child(4) { width: 8%; }  /* 實收 8% */
+        th:nth-child(5), td:nth-child(5) { width: 12%; } /* 找零狀態 12% */
+        th:nth-child(6), td:nth-child(6) { width: 16%; text-align: right; } /* 功能按鈕欄 16% */
 
         .action-btns { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
@@ -99,11 +97,10 @@
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         .stats-list { max-height: 350px; overflow-y: auto; padding-right: 10px; }
         
-        /* ✅ 2. 叫餐統計清單排版（🍱品項名稱 × 1    人名）*/
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 12px 0; border-bottom: 1px dashed #e2e8f0; }
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
-        .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 50px; font-weight: normal; word-break: break-all; white-space: normal; } /* 與數量拉開 50px 距離 */
+        .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 50px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
         /* 📱 手機版排版 */
         @media (max-width: 768px) {
@@ -129,9 +126,10 @@
             table, thead, tbody, th, td, tr { display: block; }
             thead { display: none; }
             tr { margin-bottom: 15px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-            td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #f1f5f9; padding: 8px 0; min-width: 0 !important; width: 100% !important; text-align: right !important; }
+            /* 手機版讓內容可以正常換行，但寬度撐滿 */
+            td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #f1f5f9; padding: 8px 0; min-width: 0 !important; width: 100% !important; text-align: right !important; white-space: normal !important; }
             td:last-child { border-bottom: none; }
-            td::before { content: attr(data-label); font-weight: 900; color: #64748b; float: left; }
+            td::before { content: attr(data-label); font-weight: 900; color: #64748b; float: left; margin-right: 10px; white-space: nowrap; }
             .stats-item { flex-direction: column; align-items: flex-start; }
             .stats-user-names { margin-left: 0; margin-top: 5px; }
         }
@@ -393,7 +391,6 @@
                         } else {
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="readonly-text">🔒 唯讀</span>`;
                             
-                            /* ✅ 2. 已付款區唯讀狀態下，補上「找零狀態」欄位 */
                             paidBody.innerHTML += `<tr>
                                 <td data-label="姓名"><strong>${o.name}</strong></td>
                                 <td data-label="品項" style="color:#475569">${o.item}</td>
@@ -408,4 +405,82 @@
                             unpaidBody.innerHTML += `<tr>
                                 <td data-label="姓名"><strong>${o.name}</strong></td>
                                 <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
-                                <td data-label="應付"><input type="number" id="editPrice_${id}"
+                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
+                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
+                                <td data-label="找零狀態">編輯中</td>
+                                <td data-label="">
+                                    <div class="action-btns">
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
+                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                        } else {
+                            let btnHtml = '';
+                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> `;
+                            if (canEdit) {
+                                btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
+                            } else {
+                                btnHtml += `<span class="readonly-text">🔒 唯讀</span>`;
+                            }
+
+                            unpaidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項" style="color:#475569">${o.item}</td>
+                                <td data-label="應付">$${o.price}</td>
+                                <td data-label="實收" style="color:#94a3b8">$${o.pay}</td>
+                                <td data-label="找零狀態">${changeText}</td>
+                                <td data-label=""><div class="action-btns">${btnHtml}</div></td>
+                            </tr>`;
+                        }
+                    }
+                });
+            }
+            
+            document.getElementById('totalNeed').innerText = tNeed;
+            document.getElementById('totalGet').innerText = tGet;
+            document.getElementById('totalPending').innerText = Math.max(0, tNeed - tGet);
+        }
+
+        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
+
+        function showStats() {
+            database.ref('orders').once('value', (s) => {
+                const orders = s.val(); 
+                const stats = {}; let total = 0; 
+                if(orders) {
+                    Object.values(orders).forEach(o => { 
+                        o.item.split(/[+＋,，、]/).forEach(singleItem => {
+                            const name = singleItem.trim();
+                            if(name) { 
+                                if (!stats[name]) {
+                                    stats[name] = { count: 0, users: [] };
+                                }
+                                stats[name].count++;
+                                if (!stats[name].users.includes(o.name)) {
+                                    stats[name].users.push(o.name);
+                                }
+                                total++; 
+                            }
+                        });
+                    }); 
+                }
+                document.getElementById('statsTotal').innerText = `總計：${total} 份`;
+                document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `
+                    <div class="stats-item">
+                        <div class="stats-item-left">🍱 ${k}</div>
+                        <span class="stats-count">× ${v.count}</span>
+                        <span class="stats-user-names">${v.users.join('、')}</span>
+                    </div>
+                `).join('');
+                document.getElementById('statsModal').style.display = 'block'; 
+                document.getElementById('modalOverlay').style.display = 'block';
+            });
+        }
+
+        function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
+        function deleteOrder(id) { if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); }
+        function clearOrders() { if(confirm("確定清空所有數據？")) database.ref('orders').remove(); }
+    </script>
+</body>
+</html>
