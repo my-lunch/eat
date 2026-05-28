@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>午餐吃什麼 測試版本</title>
+    <title>午餐吃什麼</title>
     
     <meta property="og:title" content="午餐吃什麼">
     <meta property="og:description" content="點餐系統">
-    <meta name="description" content="測試版本">
+    <meta name="description" content="點餐系統">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://my-lunch.github.io/eat/">
     
@@ -70,7 +70,6 @@
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
-        /* ✅ 核心修正：不論電腦或手機，統一橫向表格寬度分配比例，絕不跑格 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         th { text-align: left; background: #f8fafc; padding: 18px 24px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
         td { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
@@ -89,7 +88,11 @@
         .btn-save { background: #2563eb; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; }
         .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 6px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; color: var(--danger); }
-        .readonly-text { color: #94a3b8; font-size: 14px; font-weight: bold; padding: 8px; white-space: nowrap; }
+        
+        /* ✅ 優化：調整鎖頭與打勾圖示的樣式，放大並居中顯示，讓不含文字的圖示更好看 */
+        .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
+        .status-icon-only { font-size: 18px; font-weight: bold; }
+        
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 95%; box-sizing: border-box; font-weight: bold; }
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; }
@@ -97,23 +100,24 @@
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         
-        /* ✅ 統計清單框高度增高至 650px */
+        /* ✅ 統計清單最高高度設定為 650px */
         .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
         
-        /* ✅ 統計字體精確鎖定：品項 16px，點餐人名 13px */
+        /* ✅ 修正：統計文字大小精確設定為品項名稱 16px、點餐人名 12px */
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 12px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
-        /* ✅ 頁尾好好吃飯字體改小（13px），且不使用任何 fixed 強制釘選 */
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 📱 手機版 RWD 排版修正 */
+        /* 📱 手機版 RWD 排版保持橫向一行 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
+            
+            .page-footer { order: 100; }
 
             .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; }
@@ -128,12 +132,10 @@
             .form-grid { grid-template-columns: 1fr; gap: 15px; }
             .col-span-2 { grid-column: span 1; }
             
-            /* ✅ 修正：把先前手機版將表格強迫壓碎變形方塊的 CSS 全部刪除！ */
-            /* 讓手機版表格完全沿用大螢幕的橫向「一行」完美排版，並且微調儲存格內距與字級防溢出 */
             table { table-layout: fixed; width: 100%; }
-            th, td { padding: 10px 6px; font-size: 14px; }
-            .action-btns button { padding: 6px 8px; font-size: 12px; }
-            .inline-input { padding: 4px; font-size: 13px; }
+            th, td { padding: 10px 4px; font-size: 13px; }
+            .action-btns button { padding: 6px 6px; font-size: 11px; }
+            .inline-input { padding: 4px; font-size: 12px; }
             
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
             .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
@@ -146,7 +148,7 @@
         
         <div class="page-title-section">
             <h1>午餐吃什麼</h1>
-            <h2>測試版本</h2>
+            <h2>點餐系統</h2>
         </div>
 
         <div class="admin-toolbar" id="adminToolbar">
@@ -284,7 +286,7 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        // ✅ 照片最大寬度嚴格限制在 1000px 
+                        // ✅ 照片尺寸精確設定為 1000px
                         const MAX_WIDTH = 1000; 
                         let width = img.width;
                         let height = img.height;
@@ -403,14 +405,16 @@
                                 </td>
                             </tr>`;
                         } else {
-                            let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="readonly-text">🔒 唯讀</span>`;
+                            let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
                             
                             let changeStatusHtml = '';
                             if (changeAmt <= 0) {
-                                changeStatusHtml = `<span style="color:var(--success); font-weight:bold;">☑ (已清)</span>`;
+                                // ✅ 修正：拿掉「(已清)」文字，純留打勾圖示
+                                changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">☑</span>`;
                             } else {
                                 if (o.changeSettled) {
-                                    changeStatusHtml = `<span style="color:var(--success); font-weight:bold;">☑ 已找錢</span>`;
+                                    // ✅ 修正：拿掉「已找錢」文字，純留打勾圖示
+                                    changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">☑</span>`;
                                 } else {
                                     changeStatusHtml = isAdminMode ? 
                                         `<button class="btn-change-done" onclick="settleChange('${id}')">☒ 確認找錢</button>` : 
@@ -448,7 +452,8 @@
                             if (canEdit) {
                                 btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
                             } else {
-                                btnHtml += `<span class="readonly-text">🔒 唯讀</span>`;
+                                // ✅ 修正：拿掉「唯讀」文字，純留鎖頭圖示
+                                btnHtml += `<span class="status-icon-only">🔒</span>`;
                             }
 
                             unpaidBody.innerHTML += `<tr>
