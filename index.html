@@ -52,7 +52,6 @@
         .menu-wrapper { width: 100%; display: none; text-align: center; }
         .menu-display { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: block; }
         
-        /* 看板卡片排版 */
         .dashboard { display: flex; gap: 20px; }
         .card { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
         .card h3 { margin: 0 0 10px; color: #64748b; font-size: 16px; font-weight: bold; }
@@ -96,13 +95,9 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
-        
-        /* ✅ 優化 1：將統計清單的最大高度設定為 650px，容納更多品項 */
         .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
-        
-        /* ✅ 優化 2：將統計欄位的字體放大一點點（品項名稱、數量變 16px，人名變 12px） */
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 12px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
@@ -112,20 +107,12 @@
         /* 📱 手機版排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
-            .container { padding: 0 10px; display: flex; flex-direction: column; } /* 開啟彈性盒模型 */
-            .page-title-section { order: 1; }
-            .admin-toolbar { order: 2; }
-            .status-banner { order: 3; }
-            #menuWrapper { order: 4; }
-            .form-section { order: 5; }
-            .table-container:nth-of-type(1) { order: 6; } /* 未付款表格 */
-            .table-container:nth-of-type(2) { order: 7; } /* 已付款表格 */
-            .dashboard { order: 8; flex-direction: column; gap: 10px; } /* 看板排在倒數第二 */
+            .container { padding: 0 10px; display: flex; flex-direction: column; } 
             
-            /* ✅ 修正 3：使用 order: 100 強制讓手機版的「今天也要好好吃飯」排在最底部 */
-            .page-footer { order: 100; } 
+            /* ✅ 強制將頁尾的好好吃飯調整到手機版最末端 */
+            .page-footer { order: 100; }
 
-            .admin-toolbar flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
+            .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; }
             .admin-toolbar button { width: 100%; padding: 12px; font-size: 16px; }
 
