@@ -52,6 +52,7 @@
         .menu-wrapper { width: 100%; display: none; text-align: center; }
         .menu-display { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: block; }
         
+        /* 電腦版儀表板看板基礎樣式 */
         .dashboard { display: flex; gap: 20px; }
         .card { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
         .card h3 { margin: 0 0 10px; color: #64748b; font-size: 16px; font-weight: bold; }
@@ -95,12 +96,16 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
-        .stats-list { max-height: 600px; overflow-y: auto; padding-right: 10px; }
+        
+        /* ✅ 修正 1：統計彈窗高度增高，max-height 從原來的 400px / 600px 調整為 650px */
+        .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
+        
+        /*  */
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
-        .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
+        .stats-user-names { font-size: 14px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
@@ -120,7 +125,9 @@
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 6px 12px; }
             
-            .dashboard { flex-direction: column; gap: 10px; }
+            /* ✅ 修正 3：確保手機版看看板時，也會垂直排列並完美保持在最底端 */
+            .dashboard { flex-direction: column; gap: 10px; order: 99; }
+            
             .form-grid { grid-template-columns: 1fr; gap: 15px; }
             .col-span-2 { grid-column: span 1; }
             
@@ -280,7 +287,7 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 1200; 
+                        const MAX_WIDTH = 1000; 
                         let width = img.width;
                         let height = img.height;
                         if (width > MAX_WIDTH) { height = Math.round(height *= MAX_WIDTH / width); width = MAX_WIDTH; }
@@ -335,7 +342,6 @@
             const pay = parseInt(document.getElementById('pay').value) || 0;
             if(!name || !item) return alert("請填寫姓名與品項內容！");
             
-            // 新增 changeSettled 找零確認欄位，預設為 false
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
             
             document.getElementById('userName').value = ''; document.getElementById('userItem').value = '';
@@ -345,7 +351,6 @@
         
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
         
-        // ✅ 新增：確認找零完成的功能，點擊後會把資料庫中的 changeSettled 改為 true
         function settleChange(id) { database.ref('orders').child(id).update({ changeSettled: true }); }
         
         function startEdit(id) { editingId = id; database.ref('orders').once('value', (s) => renderTable(s.val())); }
@@ -402,18 +407,13 @@
                         } else {
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="readonly-text">🔒 唯讀</span>`;
                             
-                            // ✅ 已付款區邏輯：判斷是否需要找錢、以及團主是否確認找過錢了
                             let changeStatusHtml = '';
                             if (changeAmt <= 0) {
-                                // 不需要找錢，預設打勾
                                 changeStatusHtml = `<span style="color:var(--success); font-weight:bold;">☑ (已清)</span>`;
                             } else {
-                                // 需要找錢
                                 if (o.changeSettled) {
-                                    // 已經按過確認找錢
                                     changeStatusHtml = `<span style="color:var(--success); font-weight:bold;">☑ 已找錢</span>`;
                                 } else {
-                                    // 還沒按過確認找錢，如果是管理者模式就顯示按鈕，非管理者則顯示提示文字
                                     changeStatusHtml = isAdminMode ? 
                                         `<button class="btn-change-done" onclick="settleChange('${id}')">☒ 確認找錢</button>` : 
                                         `<span style="color:var(--danger); font-weight:900;">☒ 待找 $${changeAmt}</span>`;
