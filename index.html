@@ -89,7 +89,6 @@
         .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 6px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; color: var(--danger); }
         
-        /* ✅ 優化：調整鎖頭與打勾圖示的樣式，放大並居中顯示，讓不含文字的圖示更好看 */
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
         .status-icon-only { font-size: 18px; font-weight: bold; }
         
@@ -100,15 +99,13 @@
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         
-        /* ✅ 統計清單最高高度設定為 650px */
         .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
         
-        /* ✅ 修正：統計文字大小精確設定為品項名稱 16px、點餐人名 12px */
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
-        .stats-user-names { font-size: 12px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
+        .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
@@ -286,7 +283,6 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        // ✅ 照片尺寸精確設定為 1000px
                         const MAX_WIDTH = 1000; 
                         let width = img.width;
                         let height = img.height;
@@ -405,15 +401,14 @@
                                 </td>
                             </tr>`;
                         } else {
-                            let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
+                            /* ✅ 修正：把修改前面的筆圖示拿掉，純留文字「修改」 */
+                            let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
                             
                             let changeStatusHtml = '';
                             if (changeAmt <= 0) {
-                                // ✅ 修正：拿掉「(已清)」文字，純留打勾圖示
                                 changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">☑</span>`;
                             } else {
                                 if (o.changeSettled) {
-                                    // ✅ 修正：拿掉「已找錢」文字，純留打勾圖示
                                     changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">☑</span>`;
                                 } else {
                                     changeStatusHtml = isAdminMode ? 
@@ -450,9 +445,9 @@
                             let btnHtml = '';
                             if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> `;
                             if (canEdit) {
-                                btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
+                                /* ✅ 修正：把修改前面的筆圖示拿掉，純留文字「修改」 */
+                                btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
                             } else {
-                                // ✅ 修正：拿掉「唯讀」文字，純留鎖頭圖示
                                 btnHtml += `<span class="status-icon-only">🔒</span>`;
                             }
 
