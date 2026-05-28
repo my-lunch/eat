@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>今天吃什麼</title>
+    <title>午餐吃什麼</title>
     
-    <meta property="og:title" content="今天吃什麼">
+    <meta property="og:title" content="午餐吃什麼">
     <meta property="og:description" content="點餐系統">
     <meta name="description" content="點餐系統">
     <meta property="og:type" content="website">
@@ -83,6 +83,7 @@
 
         .action-btns { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
+        .btn-change-done { background: #45aaf2; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
         .btn-edit { background: #4b5563; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; }
         .btn-save { background: #2563eb; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; }
         .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 6px; white-space: nowrap; }
@@ -96,11 +97,12 @@
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         .stats-list { max-height: 400px; overflow-y: auto; padding-right: 10px; }
         
-        /* ✅ 修正：行距再縮小，Padding 從 12px 縮小到 5px */
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
+
+        .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
         /* 📱 手機版排版 */
         @media (max-width: 768px) {
@@ -140,7 +142,7 @@
     <div class="container">
         
         <div class="page-title-section">
-            <h1>今天吃什麼</h1>
+            <h1>午餐吃什麼</h1>
             <h2>點餐系統</h2>
         </div>
 
@@ -160,7 +162,7 @@
                 <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
-                        <span class="time-label">截止</span>
+                        <span class="time-label">截止時間</span>
                         <span id="timeText" class="time-value">未設定</span>
                     </div>
                     <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
@@ -170,21 +172,6 @@
 
         <div id="menuWrapper" class="menu-wrapper">
             <img id="menuImg" class="menu-display">
-        </div>
-
-        <div class="dashboard">
-            <div class="card">
-                <h3>總金額</h3>
-                <p id="totalNeed">0</p>
-            </div>
-            <div class="card">
-                <h3>已收現金</h3>
-                <p id="totalGet">0</p>
-            </div>
-            <div class="card">
-                <h3>剩餘待收</h3>
-                <p id="totalPending" class="text-red">0</p>
-            </div>
         </div>
 
         <div class="form-section">
@@ -219,6 +206,25 @@
                 <tbody id="paidBody"></tbody>
             </table>
         </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3>總金額</h3>
+                <p id="totalNeed">0</p>
+            </div>
+            <div class="card">
+                <h3>已收現金</h3>
+                <p id="totalGet">0</p>
+            </div>
+            <div class="card">
+                <h3>剩餘待收</h3>
+                <p id="totalPending" class="text-red">0</p>
+            </div>
+        </div>
+
+        <footer class="page-footer">
+            今天也要好好吃飯 🍜 Have a nice lunch
+        </footer>
     </div>
 
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
@@ -329,7 +335,8 @@
             const pay = parseInt(document.getElementById('pay').value) || 0;
             if(!name || !item) return alert("請填寫姓名與品項內容！");
             
-            database.ref('orders').push({ name, item, price, pay, isPaid: false, owner: myId });
+            // 新增 changeSettled 找零確認欄位，預設為 false
+            database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
             
             document.getElementById('userName').value = ''; document.getElementById('userItem').value = '';
             document.getElementById('price').value = ''; document.getElementById('pay').value = '';
@@ -337,6 +344,10 @@
         }
         
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
+        
+        // ✅ 新增：確認找零完成的功能，點擊後會把資料庫中的 changeSettled 改為 true
+        function settleChange(id) { database.ref('orders').child(id).update({ changeSettled: true }); }
+        
         function startEdit(id) { editingId = id; database.ref('orders').once('value', (s) => renderTable(s.val())); }
         function cancelEdit() { editingId = null; database.ref('orders').once('value', (s) => renderTable(s.val())); }
 
@@ -391,12 +402,30 @@
                         } else {
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">✏️ 修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="readonly-text">🔒 唯讀</span>`;
                             
+                            // ✅ 已付款區邏輯：判斷是否需要找錢、以及團主是否確認找過錢了
+                            let changeStatusHtml = '';
+                            if (changeAmt <= 0) {
+                                // 不需要找錢，預設打勾
+                                changeStatusHtml = `<span style="color:var(--success); font-weight:bold;">☑ (已清)</span>`;
+                            } else {
+                                // 需要找錢
+                                if (o.changeSettled) {
+                                    // 已經按過確認找錢
+                                    changeStatusHtml = `<span style="color:var(--success); font-weight:bold;">☑ 已找錢</span>`;
+                                } else {
+                                    // 還沒按過確認找錢，如果是管理者模式就顯示按鈕，非管理者則顯示提示文字
+                                    changeStatusHtml = isAdminMode ? 
+                                        `<button class="btn-change-done" onclick="settleChange('${id}')">☒ 確認找錢</button>` : 
+                                        `<span style="color:var(--danger); font-weight:900;">☒ 待找 $${changeAmt}</span>`;
+                                }
+                            }
+
                             paidBody.innerHTML += `<tr>
                                 <td data-label="姓名"><strong>${o.name}</strong></td>
                                 <td data-label="品項" style="color:#475569">${o.item}</td>
                                 <td data-label="應付">$${o.price}</td>
                                 <td data-label="實收" style="color:var(--success); font-weight:900;">$${o.pay}</td>
-                                <td data-label="找零狀態">${changeText}</td>
+                                <td data-label="找零狀態">${changeStatusHtml}</td>
                                 <td data-label=""><div class="action-btns">${btnHtml}</div></td>
                             </tr>`;
                         }
@@ -444,39 +473,30 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* ✅ 終極防呆統計機制：
-           1. 排除斜線 / 、頓號 、 等符號，絕不拆行。
-           2. 只認 + 進行拆單。
-           3. 如果發現同一個人的獨立訂單內，有沒寫完的括號 ( 造成的斷頭資料，會自動在統計時將其合回同一行！ */
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; 
                 
                 if(orders) {
-                    // 第一步：先把所有訂單轉成陣列，並按照姓名、原始資料排序
                     let orderList = Object.values(orders);
                     let processedItems = [];
 
-                    // 核心防呆：遍歷檢查每個人的點餐，如果發現前一筆有「有左括號沒右括號」，就直接把下一筆拼上來！
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = orderList[i].item.trim();
                         let currentName = orderList[i].name;
 
-                        // 檢查括號是否沒成對（有左沒右）
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
 
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
-                            // 發現斷頭！把下一筆的內容直接用頓號補到目前這一筆後面，合併成一條完整品項
                             currentItem = currentItem + "、" + orderList[i+1].item.trim();
-                            i++; // 跳過被合併的下一筆
+                            i++; 
                         }
                         
                         processedItems.push({ name: currentName, item: currentItem });
                     }
 
-                    // 第二步：依照你指定的規則進行統計（只用加號進行拆分）
                     processedItems.forEach(o => { 
                         o.item.split(/[+＋]/).forEach(singleItem => {
                             const name = singleItem.trim();
