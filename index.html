@@ -89,6 +89,7 @@
         .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 6px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; color: var(--danger); }
         
+        /* 電腦版唯讀與打勾圖示樣式 */
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
         .status-icon-only { font-size: 18px; font-weight: bold; }
         
@@ -98,11 +99,9 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
-        
         .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
-        
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
@@ -133,6 +132,9 @@
             th, td { padding: 10px 4px; font-size: 13px; }
             .action-btns button { padding: 6px 6px; font-size: 11px; }
             .inline-input { padding: 4px; font-size: 12px; }
+            
+            /* ✅ 修正：精確控制手機版上的打勾與鎖頭圖示，將尺寸調小至 14px，比文字更和諧、小小一個 */
+            .status-icon-only { font-size: 14px !important; }
             
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
             .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
@@ -401,7 +403,6 @@
                                 </td>
                             </tr>`;
                         } else {
-                            /* ✅ 修正：把修改前面的筆圖示拿掉，純留文字「修改」 */
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
                             
                             let changeStatusHtml = '';
@@ -445,7 +446,6 @@
                             let btnHtml = '';
                             if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> `;
                             if (canEdit) {
-                                /* ✅ 修正：把修改前面的筆圖示拿掉，純留文字「修改」 */
                                 btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
                             } else {
                                 btnHtml += `<span class="status-icon-only">🔒</span>`;
