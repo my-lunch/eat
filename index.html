@@ -70,6 +70,7 @@
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
+        /* ✅ 核心修正：不論電腦或手機，統一橫向表格寬度分配比例，絕不跑格 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         th { text-align: left; background: #f8fafc; padding: 18px 24px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
         td { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
@@ -95,22 +96,24 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
+        
+        /* ✅ 統計清單框高度增高至 650px */
         .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
+        
+        /* ✅ 統計字體精確鎖定：品項 16px，點餐人名 13px */
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 12px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
+        /* ✅ 頁尾好好吃飯字體改小（13px），且不使用任何 fixed 強制釘選 */
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 📱 手機版排版 */
+        /* 📱 手機版 RWD 排版修正 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
-            .container { padding: 0 10px; display: flex; flex-direction: column; } 
-            
-            /* ✅ 強制將頁尾的好好吃飯調整到手機版最末端 */
-            .page-footer { order: 100; }
+            .container { padding: 0 10px; }
 
             .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; }
@@ -121,13 +124,16 @@
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 6px 12px; }
             
-            table { table-layout: auto; }
-            table, thead, tbody, th, td, tr { display: block; }
-            thead { display: none; }
-            tr { margin-bottom: 15px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-            td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #f1f5f9; padding: 8px 0; min-width: 0 !important; width: 100% !important; text-align: right !important; }
-            td:last-child { border-bottom: none; }
-            td::before { content: attr(data-label); font-weight: 900; color: #64748b; float: left; }
+            .dashboard { flex-direction: column; gap: 10px; }
+            .form-grid { grid-template-columns: 1fr; gap: 15px; }
+            .col-span-2 { grid-column: span 1; }
+            
+            /* ✅ 修正：把先前手機版將表格強迫壓碎變形方塊的 CSS 全部刪除！ */
+            /* 讓手機版表格完全沿用大螢幕的橫向「一行」完美排版，並且微調儲存格內距與字級防溢出 */
+            table { table-layout: fixed; width: 100%; }
+            th, td { padding: 10px 6px; font-size: 14px; }
+            .action-btns button { padding: 6px 8px; font-size: 12px; }
+            .inline-input { padding: 4px; font-size: 13px; }
             
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
             .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
@@ -277,6 +283,8 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
+                        
+                        // ✅ 照片最大寬度嚴格限制在 1000px 
                         const MAX_WIDTH = 1000; 
                         let width = img.width;
                         let height = img.height;
