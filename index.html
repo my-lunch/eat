@@ -46,7 +46,6 @@
         .time-label { font-size: 14px; font-weight: bold; }
         .time-value { font-size: 28px; font-weight: 900; margin: 0 5px; line-height: 1; }
 
-        /* 👑 這就是用來開啟團主選項的隱藏開關 */
         .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
 
@@ -61,37 +60,29 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 👇 絕對精準對齊：強制使用相同百分比 */
-        .form-flex-grid { display: flex; width: 100%; align-items: flex-end; }
-        .form-flex-grid > div { box-sizing: border-box; padding-right: 10px; } /* 統一內距確保對齊 */
-        .form-flex-grid > div:last-child { padding-right: 0; }
-        
-        .fg-name { width: 12%; }
-        .fg-item { width: 46%; }
-        .fg-price { width: 10%; }
-        .fg-pay { width: 10%; }
-        .fg-btn { width: 22%; display: flex; justify-content: flex-end; } 
-
-        .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); text-align: left; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; text-align: left; }
+        .form-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; text-align: left; }
+        .mobile-only-label { display: none; }
 
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
-        /* 👇 表格：移除左邊距，百分比完全映射上方輸入框 */
+        /* 👇 文字大小一致化設定：表頭與點餐區標題完全相同 */
+        .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
+        th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; font-size: 15px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
+        
         td { padding: 15px 10px 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; }
         
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 比例總和100%，嚴格對齊上方的 12% 46% 10% 10% 22% */
+        /* 👇 將實付寬度加大 (10% -> 12%)，並將所有區域做精準映射對齊 */
+        /* 姓名 12% | 品項 44% | 應付 10% | 實付/實收 12% | 按鈕/找零區 22% */
         th:nth-child(1), td:nth-child(1) { width: 12%; } 
-        th:nth-child(2), td:nth-child(2) { width: 46%; white-space: normal; word-break: break-all; } 
-        th:nth-child(3), td:nth-child(3) { width: 10%; text-align: left; } 
-        th:nth-child(4), td:nth-child(4) { width: 10%; text-align: left; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: left; } 
+        th:nth-child(2), td:nth-child(2) { width: 44%; white-space: normal; word-break: break-all; } 
+        th:nth-child(3), td:nth-child(3) { width: 10%; } 
+        th:nth-child(4), td:nth-child(4) { width: 12%; } 
+        th:nth-child(5), td:nth-child(5) { width: 10%; } 
         th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
@@ -101,7 +92,6 @@
         .btn-edit { background: #4b5563; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         .btn-save { background: #2563eb; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         
-        /* 極小化的精緻紅叉叉 */
         .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 10px; padding: 2px 4px; font-weight: 900; border-radius: 4px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; }
         
@@ -123,7 +113,7 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 📱 手機版 RWD 排版 */
+        /* 📱 手機版 RWD 防護排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
@@ -137,11 +127,10 @@
             .time-info { padding: 6px 12px; }
             .dashboard { flex-direction: column; gap: 10px; }
             
-            /* 手機版直式排版以利閱讀 */
-            .form-flex-grid { flex-direction: column; gap: 15px; align-items: stretch; }
-            .form-flex-grid > div { width: 100%; padding-right: 0; }
-            .fg-btn { display: block; }
-            .fg-btn button { width: 100% !important; }
+            .desktop-labels { display: none !important; }
+            .mobile-only-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
+            .form-inputs { flex-direction: column; gap: 15px; }
+            .form-inputs > div { width: 100% !important; padding-right: 0 !important; }
             
             .table-container { overflow-x: auto; padding: 20px 15px; }
             table { table-layout: fixed; width: 650px; } 
@@ -193,12 +182,34 @@
 
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
-            <div class="form-flex-grid">
-                <div class="form-group fg-name"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
-                <div class="form-group fg-item"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
-                <div class="form-group fg-price"><label>應付</label><input type="number" id="price" placeholder="100"></div>
-                <div class="form-group fg-pay"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
-                <div class="fg-btn"><button class="btn-sync" style="height: 48px; width: 120px; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button></div>
+            
+            <div class="desktop-labels">
+                <div style="width: 12%;">姓名</div>
+                <div style="width: 44%;">品項</div>
+                <div style="width: 10%;">應付</div>
+                <div style="width: 12%;">實付</div>
+                <div style="width: 22%;"></div> </div>
+            
+            <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
+                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
+                    <label class="mobile-only-label">姓名</label>
+                    <input type="text" id="userName" placeholder="AMY" class="form-box">
+                </div>
+                <div style="width: 44%; padding-right: 15px; box-sizing: border-box;">
+                    <label class="mobile-only-label">品項</label>
+                    <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
+                </div>
+                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">
+                    <label class="mobile-only-label">應付</label>
+                    <input type="number" id="price" placeholder="100" class="form-box">
+                </div>
+                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
+                    <label class="mobile-only-label">實付</label>
+                    <input type="number" id="pay" placeholder="0" class="form-box">
+                </div>
+                <div style="width: 22%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                    <button class="btn-sync" style="height: 48px; width: 100%; max-width: 120px; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+                </div>
             </div>
         </div>
 
