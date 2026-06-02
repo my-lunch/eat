@@ -60,43 +60,50 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 👇 精準垂直對齊：鎖死百分比寬度 */
-        .form-grid { display: grid; grid-template-columns: 12% 44% 10% 10% 24%; width: 100%; align-items: end; gap: 0; } 
-        .form-group { box-sizing: border-box; padding-right: 15px; }
-        .form-btn-wrapper { box-sizing: border-box; padding-left: 0; }
+        /* 表單完美映射比例 */
+        .form-flex-grid { display: flex; width: 100%; align-items: flex-end; }
+        .form-flex-grid > div { box-sizing: border-box; padding-right: 15px; }
+        .form-flex-grid > div:last-child { padding-right: 0; }
         
+        .fg-name { width: 12%; }
+        .fg-item { width: 52%; } /* 多餘寬度全給品項 */
+        .fg-price { width: 12%; }
+        .fg-pay { width: 12%; }
+        .fg-btn { width: 12%; margin-left: auto; } /* 按鈕與其他格等寬，並向右推齊 */
+
         .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); text-align: left; }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; }
 
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
-        /* 👇 表格：移除左邊距，鎖定百分比，完美映射上方表單 */
+        /* 表格對齊設定 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        th { text-align: left; background: #f8fafc; padding: 15px 15px 15px 0; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
-        td { padding: 15px 15px 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; }
+        th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
+        td { padding: 15px 10px 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; }
         
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 寬度總和 100%，嚴格對齊上方的 12% 44% 10% 10% 24% */
+        /* 表格比例鎖定對齊 */
         th:nth-child(1), td:nth-child(1) { width: 12%; } 
-        th:nth-child(2), td:nth-child(2) { width: 44%; white-space: normal; word-break: break-all; } 
-        th:nth-child(3), td:nth-child(3) { width: 10%; } 
-        th:nth-child(4), td:nth-child(4) { width: 10%; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; } 
-        th:nth-child(6), td:nth-child(6) { width: 14%; text-align: right; } 
+        th:nth-child(2), td:nth-child(2) { width: 52%; white-space: normal; word-break: break-all; } 
+        th:nth-child(3), td:nth-child(3) { width: 12%; } 
+        th:nth-child(4), td:nth-child(4) { width: 12%; } 
+        th:nth-child(5), td:nth-child(5) { width: 6%; text-align: center; } /* 找零窄一點 */
+        th:nth-child(6), td:nth-child(6) { width: 6%; text-align: right; } /* 操作區 */
 
-        .action-btns { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
-        .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
-        .btn-change-done { background: #45aaf2; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
-        .btn-edit { background: #4b5563; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; }
-        .btn-save { background: #2563eb; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; }
-        .btn-del { color: #cbd5e1; background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 6px; white-space: nowrap; }
-        .btn-del:hover { background: #fee2e2; color: var(--danger); }
+        /* 👇 修改這區：極致的按鈕排版 (修改與打叉靠近，打叉極小化) */
+        .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
+        .btn-confirm { background: var(--success); color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 900; font-size: 13px; cursor: pointer; white-space: nowrap; }
+        .btn-change-done { background: #45aaf2; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 900; font-size: 13px; cursor: pointer; white-space: nowrap; }
+        .btn-edit { background: #4b5563; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; }
+        /* 👇 特製的極小化紅色 X 按鈕 */
+        .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 14px; padding: 2px 4px; font-weight: 900; border-radius: 4px; white-space: nowrap; }
+        .btn-del:hover { background: #fee2e2; }
         
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
-        .status-icon-only { font-size: 18px; font-weight: bold; }
+        .status-icon-only { font-size: 16px; font-weight: bold; }
         
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 100%; box-sizing: border-box; font-weight: bold; }
 
@@ -117,33 +124,23 @@
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
-            
             .page-footer { order: 100; }
-
             .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; }
             .admin-toolbar button { width: 100%; padding: 12px; font-size: 16px; }
-
             .announcement-row { flex-direction: column; gap: 12px; align-items: center; text-align: center; }
             .cash-info { font-size: 20px; }
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 6px 12px; }
-            
             .dashboard { flex-direction: column; gap: 10px; }
-            
-            /* 手機版直式排版 */
-            .form-grid { grid-template-columns: 1fr; gap: 15px; } 
-            .form-group { padding-right: 0; }
-            
+            .form-flex-grid { flex-direction: column; gap: 15px; align-items: stretch; }
+            .form-flex-grid > div { width: 100%; padding-right: 0; }
             .table-container { overflow-x: auto; padding: 20px 15px; }
             table { table-layout: fixed; width: 650px; } 
-            
             th, td { padding: 10px 4px; font-size: 13px; }
             .action-btns button { padding: 5px 6px; font-size: 11px; }
             .inline-input { padding: 4px; font-size: 12px; }
-            
             .status-icon-only { font-size: 12px !important; }
-            
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
             .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
         }
@@ -188,14 +185,12 @@
 
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
-            <div class="form-grid">
-                <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
-                <div class="form-group"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
-                <div class="form-group"><label>應付</label><input type="number" id="price" placeholder="100"></div>
-                <div class="form-group"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
-                <div class="form-btn-wrapper">
-                    <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
-                </div>
+            <div class="form-flex-grid">
+                <div class="form-group fg-name"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
+                <div class="form-group fg-item"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
+                <div class="form-group fg-price"><label>應付</label><input type="number" id="price" placeholder="100"></div>
+                <div class="form-group fg-pay"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
+                <div class="fg-btn"><button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button></div>
             </div>
         </div>
 
@@ -210,13 +205,13 @@
         <div class="table-container">
             <h3 style="color:var(--success)">✅ 所有已付款區</h3>
             <table id="paidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零狀態</th><th></th></tr></thead>
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零</th><th></th></tr></thead>
                 <tbody id="paidBody"></tbody>
             </table>
         </div>
 
         <div class="dashboard">
-            <div class="card" style="flex: 3;">
+            <div class="card" style="flex: 2.5;">
                 <h3>總金額</h3>
                 <p id="totalNeed">0</p>
             </div>
@@ -395,8 +390,8 @@
                                 <td>編輯中</td>
                                 <td>
                                     <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
-                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
+                                        <button class="btn-del" onclick="cancelEdit()">❌</button>
                                     </div>
                                 </td>
                             </tr>`;
@@ -412,7 +407,6 @@
                                 if (o.changeSettled) {
                                     changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">☑</span>`;
                                 } else {
-                                    // 👇 修改此處：移除了前方的「☒」符號
                                     changeStatusHtml = isAdminMode ? 
                                         `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : 
                                         `<span style="color:var(--danger); font-weight:900;">待找 ${changeAmt}</span>`;
@@ -424,7 +418,7 @@
                                 <td style="color:#475569">${o.item}</td>
                                 <td>${o.price}</td>
                                 <td style="color:var(--success); font-weight:900;">${o.pay}</td>
-                                <td>${changeStatusHtml}</td>
+                                <td style="text-align: center;">${changeStatusHtml}</td>
                                 <td><div class="action-btns">${btnHtml}</div></td>
                             </tr>`;
                         }
@@ -440,14 +434,14 @@
                                 <td>編輯中</td>
                                 <td>
                                     <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
-                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
+                                        <button class="btn-del" onclick="cancelEdit()">❌</button>
                                     </div>
                                 </td>
                             </tr>`;
                         } else {
                             let btnHtml = '';
-                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> `;
+                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓</button> `;
                             if (canEdit) {
                                 btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
                             } else {
@@ -459,7 +453,7 @@
                                 <td style="color:#475569">${o.item}</td>
                                 <td>${o.price}</td>
                                 <td style="color:#94a3b8">${o.pay}</td>
-                                <td>${changeText}</td>
+                                <td style="text-align: center;">${changeText}</td>
                                 <td><div class="action-btns">${btnHtml}</div></td>
                             </tr>`;
                         }
