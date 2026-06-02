@@ -60,9 +60,17 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 表單網格設定在這裡( inline-style 有另外覆蓋 ) */
-        .form-grid { display: grid; gap: 15px; align-items: end; } 
+        /* 👇 點餐區與表格的垂直對齊核心設定（使用百分比映射） */
+        .form-flex-grid { display: flex; width: 100%; align-items: flex-end; }
+        .form-flex-grid > div { box-sizing: border-box; padding-right: 15px; }
+        .form-flex-grid > div:last-child { padding-right: 0; }
         
+        .fg-name { width: 12%; }
+        .fg-item { width: 48%; }
+        .fg-price { width: 10%; }
+        .fg-pay { width: 10%; }
+        .fg-btn { width: 20%; }
+
         .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; }
         
@@ -72,20 +80,19 @@
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
+        /* 👇 取消表格左側 padding 讓文字與輸入框 0px 精準貼齊 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        th { text-align: left; background: #f8fafc; padding: 15px 10px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
-        td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
-        
-        th:first-child, td:first-child { padding-left: 0; }
+        th { text-align: left; background: #f8fafc; padding: 15px 15px 15px 0; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
+        td { padding: 15px 15px 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 👇 完美對齊表格欄位：品項大幅變寬、數字置中、找零變窄 */
-        th:nth-child(1), td:nth-child(1) { width: 10%; } /* 姓名 */
-        th:nth-child(2), td:nth-child(2) { width: 50%; white-space: normal; word-break: break-all; } /* 品項 */
-        th:nth-child(3), td:nth-child(3) { width: 10%; text-align: center; } /* 應付 */
-        th:nth-child(4), td:nth-child(4) { width: 10%; text-align: center; } /* 實收 */
-        th:nth-child(5), td:nth-child(5) { width: 8%; text-align: center; }  /* 找零狀態 */
-        th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } /* 操作按鈕 */
+        /* 👇 表格寬度與上方程式碼百分比完全一致 */
+        th:nth-child(1), td:nth-child(1) { width: 12%; } /* 姓名對齊 fg-name */
+        th:nth-child(2), td:nth-child(2) { width: 48%; white-space: normal; word-break: break-all; } /* 品項對齊 fg-item */
+        th:nth-child(3), td:nth-child(3) { width: 10%; } /* 應付對齊 fg-price */
+        th:nth-child(4), td:nth-child(4) { width: 10%; } /* 實收對齊 fg-pay */
+        th:nth-child(5), td:nth-child(5) { width: 10%; } /* 找零，佔據剩餘按鈕空間一半 */
+        th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } /* 操作，佔據剩餘按鈕空間一半 */
 
         .action-btns { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
@@ -98,7 +105,7 @@
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
         .status-icon-only { font-size: 18px; font-weight: bold; }
         
-        .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 95%; box-sizing: border-box; font-weight: bold; }
+        .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 15px; width: 100%; box-sizing: border-box; font-weight: bold; }
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
@@ -130,7 +137,10 @@
             .time-info { padding: 6px 12px; }
             
             .dashboard { flex-direction: column; gap: 10px; }
-            .form-grid { grid-template-columns: 1fr !important; gap: 15px; } 
+            
+            /* 手機版表單變回垂直排列以利閱讀 */
+            .form-flex-grid { flex-direction: column; gap: 15px; } 
+            .form-flex-grid > div { width: 100%; padding-right: 0; }
             
             .table-container { overflow-x: auto; padding: 20px 15px; }
             table { table-layout: fixed; width: 650px; } 
@@ -185,12 +195,12 @@
 
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
-            <div class="form-grid" style="grid-template-columns: 1fr 5fr 1fr 1fr 1fr;">
-                <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
-                <div class="form-group"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
-                <div class="form-group"><label>應付</label><input type="number" id="price" placeholder="100"></div>
-                <div class="form-group"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
-                <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+            <div class="form-flex-grid">
+                <div class="form-group fg-name"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
+                <div class="form-group fg-item"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
+                <div class="form-group fg-price"><label>應付</label><input type="number" id="price" placeholder="100"></div>
+                <div class="form-group fg-pay"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
+                <div class="fg-btn"><button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button></div>
             </div>
         </div>
 
@@ -385,8 +395,8 @@
                             paidBody.innerHTML += `<tr>
                                 <td data-label="姓名"><strong>${o.name}</strong></td>
                                 <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
-                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
-                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
+                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}"></td>
+                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}"></td>
                                 <td data-label="找零狀態">編輯中</td>
                                 <td data-label="">
                                     <div class="action-btns">
@@ -429,8 +439,8 @@
                             unpaidBody.innerHTML += `<tr>
                                 <td data-label="姓名"><strong>${o.name}</strong></td>
                                 <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
-                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
-                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
+                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}"></td>
+                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}"></td>
                                 <td data-label="找零狀態">編輯中</td>
                                 <td data-label="">
                                     <div class="action-btns">
