@@ -60,10 +60,9 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 👇 完美對齊：設定精確的網格比例 */
-        .form-grid { display: grid; grid-template-columns: 1.2fr 4fr 1.2fr 1.2fr 2.4fr; gap: 15px; align-items: end; } 
+        /* 表單網格設定在這裡( inline-style 有另外覆蓋 ) */
+        .form-grid { display: grid; gap: 15px; align-items: end; } 
         
-        .col-span-2 { grid-column: span 2; } 
         .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; }
         
@@ -77,17 +76,16 @@
         th { text-align: left; background: #f8fafc; padding: 15px 10px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
         td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
         
-        /* 👇 完美對齊：取消左右內縮，使其貼齊表單邊界 */
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 👇 完美對齊：與 .form-grid 的 1.2fr : 4fr : 1.2fr : 1.2fr : 2.4fr 比例互相呼應 */
-        th:nth-child(1), td:nth-child(1) { width: 12%; } 
-        th:nth-child(2), td:nth-child(2) { width: 40%; white-space: normal; word-break: break-all; } 
-        th:nth-child(3), td:nth-child(3) { width: 12%; } 
-        th:nth-child(4), td:nth-child(4) { width: 12%; } 
-        th:nth-child(5), td:nth-child(5) { width: 12%; } 
-        th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } 
+        /* 👇 完美對齊表格欄位：品項大幅變寬、數字置中、找零變窄 */
+        th:nth-child(1), td:nth-child(1) { width: 10%; } /* 姓名 */
+        th:nth-child(2), td:nth-child(2) { width: 50%; white-space: normal; word-break: break-all; } /* 品項 */
+        th:nth-child(3), td:nth-child(3) { width: 10%; text-align: center; } /* 應付 */
+        th:nth-child(4), td:nth-child(4) { width: 10%; text-align: center; } /* 實收 */
+        th:nth-child(5), td:nth-child(5) { width: 8%; text-align: center; }  /* 找零狀態 */
+        th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } /* 操作按鈕 */
 
         .action-btns { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
@@ -187,7 +185,7 @@
 
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
-            <div class="form-grid">
+            <div class="form-grid" style="grid-template-columns: 1fr 5fr 1fr 1fr 1fr;">
                 <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
                 <div class="form-group"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
                 <div class="form-group"><label>應付</label><input type="number" id="price" placeholder="100"></div>
