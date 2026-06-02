@@ -66,7 +66,6 @@
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
-        /* 👇 文字大小一致化設定：表頭與點餐區標題完全相同 */
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; font-size: 15px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
@@ -76,11 +75,9 @@
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 👇 全新寬度分配：拉大品項與價錢的間距，加寬應付實付 (13%) */
-        /* 姓名 12% | 品項 42% | 應付 13% | 實付/實收 13% | 找零 8% | 操作 12% */
+        /* 姓名 12% | 品項 44% | 應付 13% | 實付/實收 13% | 找零 8% | 操作 12% */
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
-        /* 👇 加大了品項的 padding-right，確保跟價錢有一段舒適的安全距離 */
-        th:nth-child(2), td:nth-child(2) { width: 42%; padding-right: 25px; white-space: normal; word-break: break-all; } 
+        th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
         th:nth-child(3), td:nth-child(3) { width: 13%; } 
         th:nth-child(4), td:nth-child(4) { width: 13%; } 
         th:nth-child(5), td:nth-child(5) { width: 8%; } 
@@ -97,7 +94,9 @@
         .btn-del:hover { background: #fee2e2; }
         
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
-        .status-icon-only { font-size: 16px; font-weight: bold; }
+        
+        /* 👇 確保打勾符號粗細與大小完美 */
+        .status-icon-only { font-size: 16px; font-weight: 900; }
         
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: left; }
 
@@ -186,17 +185,18 @@
             
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
-                <div style="width: 42%; padding-right: 25px; box-sizing: border-box;">品項</div>
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
-                <div style="width: 20%;"></div> </div>
+                <div style="width: 20%;"></div> 
+            </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 42%; padding-right: 25px; box-sizing: border-box;">
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
                 </div>
@@ -391,8 +391,6 @@
                     
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
-                    
-                    // 👇 拿掉「待」字，變成「找 XX」
                     const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
 
                     if (o.isPaid) {
@@ -422,14 +420,14 @@
                             
                             let changeStatusHtml = '';
                             if (changeAmt <= 0) {
-                                changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">☑</span>`;
+                                // 👇 這裡換成了純文字勾號「✓」，徹底解決手機版變 Emoji 的問題
+                                changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">✓</span>`;
                             } else {
                                 const toggleStatus = !o.changeSettled;
                                 const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
                                 if (o.changeSettled) {
-                                    changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">☑</span>`;
+                                    changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">✓</span>`;
                                 } else {
-                                    // 👇 拿掉「待」字
                                     changeStatusHtml = isAdminMode ? 
                                         `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : 
                                         `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
@@ -464,7 +462,6 @@
                             </tr>`;
                         } else {
                             let btnHtml = '';
-                            // 👇 拿掉收款前面的打勾 ✓
                             if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">收款</button> `;
                             if (canEdit) {
                                 btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
