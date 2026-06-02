@@ -10,77 +10,65 @@
 
     <style>
         :root { --primary: #ff9f43; --danger: #e11d48; --success: #26de81; --bg: #f1f5f9; --dark: #1e293b; }
-        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--dark); }
+        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--dark); overflow-x: hidden; }
         .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
         
-        .admin-toolbar { display: none; background: var(--dark); padding: 15px; border-radius: 12px; color: white; gap: 10px; overflow-x: auto; white-space: nowrap; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        
-        .form-grid { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr auto; gap: 20px; align-items: end; }
-        input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; }
-        button { padding: 12px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-submit { background: var(--primary); color: white; }
-        
-        .table-wrapper { overflow-x: auto; }
-        table { width: 100%; min-width: 600px; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        .btn-confirm { background: var(--success); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
-        
-        .dashboard { display: flex; gap: 20px; }
-        .stat-card { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
-        .stat-card p { font-size: 32px; font-weight: 900; margin: 10px 0 0 0; }
+        /* 頁面標題與 Toolbar */
+        .admin-toolbar { display: none; background: var(--dark); padding: 12px 20px; border-radius: 12px; align-items: center; justify-content: center; color: white; gap: 12px; }
+        .admin-toolbar input { padding: 8px; border-radius: 6px; border: none; }
+        .admin-toolbar button { padding: 6px 15px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
 
-        @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-        }
+        /* 表單區域 */
+        .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .form-grid { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr auto; gap: 20px; align-items: end; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 900; color: #64748b; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; }
+        
+        /* 表格區 */
+        .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; }
+        table { width: 100%; min-width: 600px; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; background: #f8fafc; padding: 15px; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
+
+        /* 統計 Modal */
+        #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; z-index: 100; width: 90%; max-width: 500px; }
+        .stats-item { display: flex; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; }
+        
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>午餐吃什麼</h1>
+        <div style="text-align:center;"><h1>午餐吃什麼</h1></div>
         
-        <div><input type="checkbox" id="adminToggle" onclick="toggleAdminMode()"> 團主模式</div>
         <div id="adminToolbar" class="admin-toolbar">
             <button onclick="showStats()">📊 統計</button>
             <button onclick="clearOrders()">🧹 清空</button>
         </div>
+        <div><input type="checkbox" id="adminToggle" onclick="toggleAdminMode()"> 團主模式</div>
 
-        <div class="card">
-            <h3>📝 新增點餐</h3>
+        <div class="form-section">
             <div class="form-grid">
-                <div>姓名<input type="text" id="userName"></div>
-                <div>品項<input type="text" id="userItem"></div>
-                <div>應付<input type="number" id="price"></div>
-                <div>實付<input type="number" id="pay"></div>
-                <button class="btn-submit" onclick="submitOrder()">送出</button>
+                <div><label>姓名</label><input type="text" id="userName"></div>
+                <div><label>品項</label><input type="text" id="userItem"></div>
+                <div><label>應付</label><input type="number" id="price"></div>
+                <div><label>實付</label><input type="number" id="pay"></div>
+                <button class="btn-submit" style="background:#ff9f43; color:white; height:48px;" onclick="submitOrder()">送出</button>
             </div>
         </div>
 
-        <div class="card">
-            <h3>📝 所有未付款區</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實付</th><th>管理</th></tr></thead>
-                    <tbody id="unpaidBody"></tbody>
-                </table>
-            </div>
+        <div class="table-container">
+            <h3>📝 未付款</h3>
+            <table><thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實付</th><th>管理</th></tr></thead><tbody id="unpaidBody"></tbody></table>
         </div>
 
-        <div class="card">
-            <h3>✅ 所有已付款區</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實付</th><th>找零狀態</th><th>管理</th></tr></thead>
-                    <tbody id="paidBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="dashboard">
-            <div class="stat-card"><h3>總金額</h3><p id="totalNeed">0</p></div>
-            <div class="stat-card"><h3>未付款金額</h3><p id="totalPending" style="color:var(--danger)">0</p></div>
+        <div class="table-container">
+            <h3>✅ 已付款</h3>
+            <table><thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實付</th><th>找零狀態</th><th>管理</th></tr></thead><tbody id="paidBody"></tbody></table>
         </div>
     </div>
+
+    <div id="statsModal"><div id="statsContent"></div><button onclick="closeModal()">關閉</button></div>
 
     <script>
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
@@ -88,12 +76,8 @@
         const database = firebase.database();
         let isAdmin = false;
 
-        function toggleAdminMode() {
-            isAdmin = document.getElementById('adminToggle').checked;
-            document.getElementById('adminToolbar').style.display = isAdmin ? 'flex' : 'none';
-            renderTable();
-        }
-
+        function toggleAdminMode() { isAdmin = document.getElementById('adminToggle').checked; document.getElementById('adminToolbar').style.display = isAdmin ? 'flex' : 'none'; renderTable(); }
+        
         function submitOrder() {
             const name = document.getElementById('userName').value.trim();
             const item = document.getElementById('userItem').value.trim();
@@ -101,10 +85,7 @@
             const pay = parseInt(document.getElementById('pay').value) || 0;
             if(!name || !item) return alert("請填寫資料");
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false });
-            document.getElementById('userName').value = '';
-            document.getElementById('userItem').value = '';
-            document.getElementById('price').value = '';
-            document.getElementById('pay').value = '';
+            document.getElementById('userName').value = document.getElementById('userItem').value = document.getElementById('price').value = document.getElementById('pay').value = '';
         }
 
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
@@ -118,47 +99,40 @@
                 const uBody = document.getElementById('unpaidBody');
                 const pBody = document.getElementById('paidBody');
                 uBody.innerHTML = pBody.innerHTML = '';
-                let tNeed = 0, tUnpaid = 0;
-                
                 if(orders) {
                     Object.keys(orders).forEach(id => {
                         const o = orders[id];
-                        tNeed += o.price;
-                        if(!o.isPaid) tUnpaid += o.price;
-                        
                         if(o.isPaid) {
                             let change = o.pay - o.price;
-                            let changeStatus = "";
-                            if(change > 0) {
-                                changeStatus = o.changeSettled ? 
-                                    `<span onclick="toggleChange('${id}', false)" style="color:var(--success); cursor:pointer;">☑</span>` : 
-                                    (isAdmin ? `<button class="btn-confirm" onclick="toggleChange('${id}', true)">找 ${change}</button>` : `找 ${change}`);
-                            }
+                            let changeStatus = change > 0 ? (o.changeSettled ? `<span onclick="toggleChange('${id}', false)" style="color:var(--success); cursor:pointer;">☑</span>` : (isAdmin ? `<button onclick="toggleChange('${id}', true)">找 ${change}</button>` : `找 ${change}`)) : "";
                             pBody.innerHTML += `<tr><td>${o.name}</td><td>${o.item}</td><td>${o.price}</td><td>${o.pay}</td><td>${changeStatus}</td><td>${isAdmin ? `<button onclick="deleteOrder('${id}')">❌</button>` : '🔒'}</td></tr>`;
                         } else {
-                            uBody.innerHTML += `<tr><td>${o.name}</td><td>${o.item}</td><td>${o.price}</td><td>${o.pay}</td><td>⏳</td><td>${isAdmin ? `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> <button onclick="deleteOrder('${id}')">❌</button>` : '🔒'}</td></tr>`;
+                            uBody.innerHTML += `<tr><td>${o.name}</td><td>${o.item}</td><td>${o.price}</td><td>${o.pay}</td><td>${isAdmin ? `<button onclick="markPaid('${id}')">收錢</button> <button onclick="deleteOrder('${id}')">❌</button>` : '⏳'}</td></tr>`;
                         }
                     });
                 }
-                document.getElementById('totalNeed').innerText = tNeed;
-                document.getElementById('totalPending').innerText = tUnpaid;
             });
         }
-        
+
         function showStats() {
             database.ref('orders').once('value', (s) => {
-                const orders = s.val();
-                let stats = {};
+                const orders = s.val(); let stats = {};
                 if(orders) {
                     Object.values(orders).forEach(o => {
-                        if(!stats[o.item]) stats[o.item] = 0;
-                        stats[o.item]++;
+                        let items = o.item.split(/[+＋、]/);
+                        items.forEach(i => {
+                            let item = i.trim();
+                            if(!stats[item]) stats[item] = { count: 0, users: [] };
+                            stats[item].count++;
+                            stats[item].users.push(o.name);
+                        });
                     });
-                    alert("叫餐統計:\n" + Object.entries(stats).map(([k,v]) => `${k}: ${v}份`).join('\n'));
+                    document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `<div class="stats-item">🍱 ${k} × ${v.count} (${v.users.join('、')})</div>`).join('');
+                    document.getElementById('statsModal').style.display = 'block';
                 }
             });
         }
-        
+        function closeModal() { document.getElementById('statsModal').style.display = 'none'; }
         renderTable();
     </script>
 </body>
