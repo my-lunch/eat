@@ -107,19 +107,38 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
+        /* 📱 手機版 RWD 排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
+            
+            .page-footer { order: 100; }
+
             .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; }
             .admin-toolbar button { width: 100%; padding: 12px; font-size: 16px; }
+
             .announcement-row { flex-direction: column; gap: 12px; align-items: center; text-align: center; }
+            .cash-info { font-size: 20px; }
+            .time-info-wrapper { justify-content: center; width: 100%; }
+            .time-info { padding: 6px 12px; }
+            
             .dashboard { flex-direction: column; gap: 10px; }
             .form-grid { grid-template-columns: 1fr; gap: 15px; }
+            .col-span-2 { grid-column: span 1; }
+            
             .table-container { overflow-x: auto; padding: 20px 15px; }
             table { table-layout: fixed; width: 650px; } 
+            
             th, td { padding: 10px 4px; font-size: 13px; }
+            .action-btns button { padding: 5px 6px; font-size: 11px; }
+            .inline-input { padding: 4px; font-size: 12px; }
+            
+            /* ✅ 修正：手機版圖示極小化 */
             .status-icon-only { font-size: 12px !important; }
+            
+            .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
+            .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; }
         }
     </style>
 </head>
@@ -266,13 +285,18 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
+                        
                         const MAX_WIDTH = 1000; 
-                        let width = img.width, height = img.height;
+                        let width = img.width;
+                        let height = img.height;
                         if (width > MAX_WIDTH) { height = Math.round(height *= MAX_WIDTH / width); width = MAX_WIDTH; }
                         canvas.width = width; canvas.height = height;
                         ctx.drawImage(img, 0, 0, width, height);
                         const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-                        database.ref('config/menuImage').set(dataUrl).then(() => alert("菜單照片上傳成功！")).catch(err => alert("上傳失敗：" + err.message));
+                        
+                        database.ref('config/menuImage').set(dataUrl)
+                            .then(() => alert("菜單照片上傳成功！"))
+                            .catch(err => alert("上傳失敗：" + err.message));
                     };
                     img.src = e.target.result;
                 };
@@ -283,7 +307,12 @@
         database.ref('config/menuImage').on('value', (s) => {
             const img = document.getElementById('menuImg');
             const wrapper = document.getElementById('menuWrapper');
-            if (s.val()) { img.src = s.val(); wrapper.style.display = 'block'; } else { wrapper.style.display = 'none'; }
+            if (s.val()) { 
+                img.src = s.val(); 
+                wrapper.style.display = 'block'; 
+            } else {
+                wrapper.style.display = 'none';
+            }
         });
 
         database.ref('config/announcement').on('value', (s) => {
@@ -298,7 +327,10 @@
             const updates = {};
             if(text) updates.text = text;
             if(time) updates.deadline = time + " 截止";
-            if(text || time) database.ref('config/announcement').update(updates).then(() => alert("公告同步成功！"));
+            if(text || time) {
+                database.ref('config/announcement').update(updates)
+                    .then(() => alert("公告同步成功！"));
+            }
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
 
@@ -308,13 +340,18 @@
             const price = parseInt(document.getElementById('price').value) || 0;
             const pay = parseInt(document.getElementById('pay').value) || 0;
             if(!name || !item) return alert("請填寫姓名與品項內容！");
+            
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
-            document.getElementById('userName').value = document.getElementById('userItem').value = document.getElementById('price').value = document.getElementById('pay').value = '';
+            
+            document.getElementById('userName').value = ''; document.getElementById('userItem').value = '';
+            document.getElementById('price').value = ''; document.getElementById('pay').value = '';
             calculateLiveChange();
         }
         
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
-        function settleChange(id, status) { database.ref('orders').child(id).update({ changeSettled: status }); }
+        
+        function settleChange(id) { database.ref('orders').child(id).update({ changeSettled: true }); }
+        
         function startEdit(id) { editingId = id; database.ref('orders').once('value', (s) => renderTable(s.val())); }
         function cancelEdit() { editingId = null; database.ref('orders').once('value', (s) => renderTable(s.val())); }
 
@@ -324,13 +361,18 @@
             const elPay = document.getElementById(`editPay_${id}`);
             if (!elItem) return;
             editingId = null;
-            database.ref('orders').child(id).update({ item: elItem.value.trim(), price: parseInt(elPrice.value) || 0, pay: parseInt(elPay.value) || 0 });
+            database.ref('orders').child(id).update({
+                item: elItem.value.trim(),
+                price: parseInt(elPrice.value) || 0,
+                pay: parseInt(elPay.value) || 0
+            });
         }
 
         function renderTable(orders) {
             const unpaidBody = document.getElementById('unpaidBody');
             const paidBody = document.getElementById('paidBody');
             unpaidBody.innerHTML = paidBody.innerHTML = '';
+            
             let tNeed = 0, tGet = 0, tUnpaid = 0;
             let isAdminMode = document.getElementById('adminToggle').checked;
 
@@ -338,47 +380,163 @@
                 Object.keys(orders).forEach(id => {
                     const o = orders[id];
                     tNeed += o.price;
-                    const changeAmt = o.pay - o.price;
                     
+                    const isEditing = (editingId === id);
+                    const changeAmt = o.pay - o.price;
+                    const safeItem = o.item.replace(/"/g, '&quot;');
+                    
+                    const isOwner = (o.owner === myId);
+                    const canEdit = isOwner || isAdminMode;
+                    const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找零 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
+
                     if (o.isPaid) {
-                        tGet += (changeAmt <= 0 || o.changeSettled) ? o.price : o.pay;
-                        let changeStatus = "";
-                        if(changeAmt > 0) {
-                            changeStatus = o.changeSettled ? `<span onclick="settleChange('${id}', false)" style="color:var(--success); cursor:pointer;" class="status-icon-only">☑</span>` : (isAdminMode ? `<button class="btn-change-done" onclick="settleChange('${id}', true)">☒ 找 ${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900;">☒ 待找 ${changeAmt}</span>`);
+                        if (changeAmt <= 0 || o.changeSettled) {
+                            tGet += o.price;
+                        } else {
+                            tGet += o.pay;
                         }
-                        paidBody.innerHTML += `<tr><td>${o.name}</td><td>${o.item}</td><td>${o.price}</td><td>${o.pay}</td><td>${changeStatus}</td><td>${isAdminMode ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : '🔒'}</td></tr>`;
+
+                        if (isEditing) {
+                            paidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
+                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
+                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
+                                <td data-label="找零狀態">編輯中</td>
+                                <td data-label="">
+                                    <div class="action-btns">
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
+                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                        } else {
+                            let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
+                            
+                            let changeStatusHtml = '';
+                            if (changeAmt <= 0) {
+                                changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">☑</span>`;
+                            } else {
+                                const toggleStatus = !o.changeSettled;
+                                const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
+                                if (o.changeSettled) {
+                                    changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">☑</span>`;
+                                } else {
+                                    changeStatusHtml = isAdminMode ? 
+                                        `<button class="btn-change-done" onclick="${toggleFn}">☒ 找 ${changeAmt}</button>` : 
+                                        `<span style="color:var(--danger); font-weight:900;">☒ 待找 ${changeAmt}</span>`;
+                                }
+                            }
+
+                            paidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項" style="color:#475569">${o.item}</td>
+                                <td data-label="應付">${o.price}</td>
+                                <td data-label="實收" style="color:var(--success); font-weight:900;">${o.pay}</td>
+                                <td data-label="找零狀態">${changeStatusHtml}</td>
+                                <td data-label=""><div class="action-btns">${btnHtml}</div></td>
+                            </tr>`;
+                        }
                     } else {
                         tUnpaid += o.price;
-                        unpaidBody.innerHTML += `<tr><td>${o.name}</td><td>${o.item}</td><td>${o.price}</td><td>${o.pay}</td><td>${changeAmt > 0 ? '找 ' + changeAmt : '0'}</td><td>${isAdminMode ? `<button class="btn-confirm" onclick="markPaid('${id}')">收錢</button> <button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : '⏳'}</td></tr>`;
+
+                        if (isEditing) {
+                            unpaidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
+                                <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
+                                <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
+                                <td data-label="找零狀態">編輯中</td>
+                                <td data-label="">
+                                    <div class="action-btns">
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
+                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                        } else {
+                            let btnHtml = '';
+                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> `;
+                            if (canEdit) {
+                                btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
+                            } else {
+                                btnHtml += `<span class="status-icon-only">🔒</span>`;
+                            }
+
+                            unpaidBody.innerHTML += `<tr>
+                                <td data-label="姓名"><strong>${o.name}</strong></td>
+                                <td data-label="品項" style="color:#475569">${o.item}</td>
+                                <td data-label="應付">${o.price}</td>
+                                <td data-label="實收" style="color:#94a3b8">${o.pay}</td>
+                                <td data-label="找零狀態">${changeText}</td>
+                                <td data-label=""><div class="action-btns">${btnHtml}</div></td>
+                            </tr>`;
+                        }
                     }
                 });
             }
+            
             document.getElementById('totalNeed').innerText = tNeed;
             document.getElementById('totalGet').innerText = tGet;
             document.getElementById('totalPending').innerText = tUnpaid;
         }
 
-        database.ref('orders').on('value', (s) => renderTable(s.val()));
+        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
         function showStats() {
             database.ref('orders').once('value', (s) => {
-                const orders = s.val(); let stats = {}, total = 0;
+                const orders = s.val(); 
+                const stats = {}; let total = 0; 
+                
                 if(orders) {
-                    Object.values(orders).forEach(o => {
-                        o.item.split(/[+＋、]/).forEach(i => {
-                            let item = i.trim();
-                            if(!stats[item]) stats[item] = { count: 0, users: [] };
-                            stats[item].count++;
-                            if(!stats[item].users.includes(o.name)) stats[item].users.push(o.name);
-                            total++;
+                    let orderList = Object.values(orders);
+                    let processedItems = [];
+
+                    for(let i = 0; i < orderList.length; i++) {
+                        let currentItem = orderList[i].item.trim();
+                        let currentName = orderList[i].name;
+
+                        let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
+                        let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
+
+                        if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
+                            currentItem = currentItem + "、" + orderList[i+1].item.trim();
+                            i++; 
+                        }
+                        
+                        processedItems.push({ name: currentName, item: currentItem });
+                    }
+
+                    processedItems.forEach(o => { 
+                        o.item.split(/[+＋]/).forEach(singleItem => {
+                            const name = singleItem.trim();
+                            if(name) { 
+                                if (!stats[name]) {
+                                    stats[name] = { count: 0, users: [] };
+                                }
+                                stats[name].count++;
+                                if (!stats[name].users.includes(o.name)) {
+                                    stats[name].users.push(o.name);
+                                }
+                                total++; 
+                            }
                         });
-                    });
-                    document.getElementById('statsTotal').innerText = `總計：${total} 份`;
-                    document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `<div class="stats-item"><div class="stats-item-left">🍱 ${k}</div><span class="stats-count">× ${v.count}</span><span class="stats-user-names">${v.users.join('、')}</span></div>`).join('');
-                    document.getElementById('statsModal').style.display = 'block'; document.getElementById('modalOverlay').style.display = 'block';
+                    }); 
                 }
+                
+                document.getElementById('statsTotal').innerText = `總計：${total} 份`;
+                document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `
+                    <div class="stats-item">
+                        <div class="stats-item-left">🍱 ${k}</div>
+                        <span class="stats-count">× ${v.count}</span>
+                        <span class="stats-user-names">${v.users.join('、')}</span>
+                    </div>
+                `).join('');
+                document.getElementById('statsModal').style.display = 'block'; 
+                document.getElementById('modalOverlay').style.display = 'block';
             });
         }
+
         function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
         function deleteOrder(id) { if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); }
         function clearOrders() { if(confirm("確定清空所有數據？")) database.ref('orders').remove(); }
