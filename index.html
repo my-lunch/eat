@@ -76,13 +76,14 @@
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 👇 將實付寬度加大 (10% -> 12%)，並將所有區域做精準映射對齊 */
-        /* 姓名 12% | 品項 44% | 應付 10% | 實付/實收 12% | 按鈕/找零區 22% */
-        th:nth-child(1), td:nth-child(1) { width: 12%; } 
-        th:nth-child(2), td:nth-child(2) { width: 44%; white-space: normal; word-break: break-all; } 
-        th:nth-child(3), td:nth-child(3) { width: 10%; } 
-        th:nth-child(4), td:nth-child(4) { width: 12%; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; } 
+        /* 👇 全新寬度分配：拉大品項與價錢的間距，加寬應付實付 (13%) */
+        /* 姓名 12% | 品項 42% | 應付 13% | 實付/實收 13% | 找零 8% | 操作 12% */
+        th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
+        /* 👇 加大了品項的 padding-right，確保跟價錢有一段舒適的安全距離 */
+        th:nth-child(2), td:nth-child(2) { width: 42%; padding-right: 25px; white-space: normal; word-break: break-all; } 
+        th:nth-child(3), td:nth-child(3) { width: 13%; } 
+        th:nth-child(4), td:nth-child(4) { width: 13%; } 
+        th:nth-child(5), td:nth-child(5) { width: 8%; } 
         th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
@@ -184,30 +185,30 @@
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
             
             <div class="desktop-labels">
-                <div style="width: 12%;">姓名</div>
-                <div style="width: 44%;">品項</div>
-                <div style="width: 10%;">應付</div>
-                <div style="width: 12%;">實付</div>
-                <div style="width: 22%;"></div> </div>
+                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
+                <div style="width: 42%; padding-right: 25px; box-sizing: border-box;">品項</div>
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
+                <div style="width: 20%;"></div> </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 44%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 42%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
                 </div>
-                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="100" class="form-box">
                 </div>
-                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="0" class="form-box">
                 </div>
-                <div style="width: 22%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                <div style="width: 20%; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button class="btn-sync" style="height: 48px; width: 100%; max-width: 120px; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -224,7 +225,7 @@
         <div class="table-container">
             <h3 style="color:var(--success)">✅ 所有已付款區</h3>
             <table id="paidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零狀態</th><th></th></tr></thead>
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零</th><th></th></tr></thead>
                 <tbody id="paidBody"></tbody>
             </table>
         </div>
@@ -390,7 +391,9 @@
                     
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
-                    const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">待找 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
+                    
+                    // 👇 拿掉「待」字，變成「找 XX」
+                    const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
 
                     if (o.isPaid) {
                         if (changeAmt <= 0 || o.changeSettled) {
@@ -426,9 +429,10 @@
                                 if (o.changeSettled) {
                                     changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">☑</span>`;
                                 } else {
+                                    // 👇 拿掉「待」字
                                     changeStatusHtml = isAdminMode ? 
                                         `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : 
-                                        `<span style="color:var(--danger); font-weight:900;">待找 ${changeAmt}</span>`;
+                                        `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
                                 }
                             }
 
@@ -460,7 +464,8 @@
                             </tr>`;
                         } else {
                             let btnHtml = '';
-                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">✓ 收款</button> `;
+                            // 👇 拿掉收款前面的打勾 ✓
+                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">收款</button> `;
                             if (canEdit) {
                                 btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
                             } else {
