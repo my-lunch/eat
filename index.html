@@ -59,7 +59,7 @@
         .text-red { color: var(--danger); }
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .form-grid { display: grid; grid-template-columns: 1.2fr 2fr 1fr 1fr 1.2fr; gap: 25px; align-items: end; } 
+        .form-grid { display: grid; grid-template-columns: 1.2fr 2fr 1fr 1fr 1fr 1.2fr; gap: 25px; align-items: end; } 
         .col-span-2 { grid-column: span 2; } 
         .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; }
@@ -124,8 +124,8 @@
             .time-info { padding: 6px 12px; }
             
             .dashboard { flex-direction: column; gap: 10px; }
-            .form-grid { grid-template-columns: 1fr; gap: 15px; }
-            .col-span-2 { grid-column: span 1; }
+            /* 手機版表單依然變直的比較好閱讀，保留原設定 */
+            .form-grid { grid-template-columns: 1fr !important; gap: 15px; } 
             
             .table-container { overflow-x: auto; padding: 20px 15px; }
             table { table-layout: fixed; width: 650px; } 
@@ -134,7 +134,6 @@
             .action-btns button { padding: 5px 6px; font-size: 11px; }
             .inline-input { padding: 4px; font-size: 12px; }
             
-            /* ✅ 修正：手機版圖示極小化 */
             .status-icon-only { font-size: 12px !important; }
             
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
@@ -181,12 +180,11 @@
 
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
-            <div class="form-grid" style="grid-template-columns: 1.2fr 2fr 1fr 1fr 1.2fr;">
+            <div class="form-grid" style="grid-template-columns: 1fr 3fr 1fr 1fr 1.2fr;">
                 <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
-                <div class="form-group col-span-2"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
+                <div class="form-group"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
                 <div class="form-group"><label>應付</label><input type="number" id="price" placeholder="100"></div>
                 <div class="form-group"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
-                
                 <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
             </div>
         </div>
@@ -208,15 +206,15 @@
         </div>
 
         <div class="dashboard">
-            <div class="card">
+            <div class="card" style="flex: 4;">
                 <h3>總金額</h3>
                 <p id="totalNeed">0</p>
             </div>
-            <div class="card">
+            <div class="card" style="flex: 1;">
                 <h3>已收現金</h3>
                 <p id="totalGet">0</p>
             </div>
-            <div class="card">
+            <div class="card" style="flex: 1;">
                 <h3>待找金額</h3>
                 <p id="totalPending" class="text-red">0</p>
             </div>
@@ -256,8 +254,6 @@
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
-
-        /* 移除了 calculateLiveChange 函式，因為點餐區不再需要即時計算找零 */
 
         function uploadMenu(input) {
             if (input.files && input.files[0]) {
@@ -376,8 +372,7 @@
                             tGet += o.price;
                         } else {
                             tGet += o.pay;
-                            // 累加待找金額
-                            tPendingChange += changeAmt;
+                            tPendingChange += changeAmt; 
                         }
 
                         if (isEditing) {
@@ -461,7 +456,6 @@
             
             document.getElementById('totalNeed').innerText = tNeed;
             document.getElementById('totalGet').innerText = tGet;
-            // 更新儀表板待找金額
             document.getElementById('totalPending').innerText = tPendingChange;
         }
 
