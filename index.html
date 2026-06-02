@@ -134,6 +134,7 @@
             .action-btns button { padding: 5px 6px; font-size: 11px; }
             .inline-input { padding: 4px; font-size: 12px; }
             
+            /* ✅ 修正：手機版圖示極小化 */
             .status-icon-only { font-size: 12px !important; }
             
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
@@ -180,12 +181,12 @@
 
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
-            <div class="form-grid" style="grid-template-columns: 1fr 3fr 1fr 1fr 1.2fr;">
+            <div class="form-grid" style="grid-template-columns: 0.8fr 4fr 0.8fr 0.8fr 0.8fr;">
                 <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
                 <div class="form-group"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
                 <div class="form-group"><label>應付</label><input type="number" id="price" placeholder="100"></div>
                 <div class="form-group"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
-                <button class="btn-sync" style="height: 48px; width: 80%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+                <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
             </div>
         </div>
 
@@ -206,7 +207,7 @@
         </div>
 
         <div class="dashboard">
-            <div class="card" style="flex: 4;">
+            <div class="card" style="flex: 2.2;">
                 <h3>總金額</h3>
                 <p id="totalNeed">0</p>
             </div>
@@ -351,7 +352,8 @@
             const paidBody = document.getElementById('paidBody');
             unpaidBody.innerHTML = paidBody.innerHTML = '';
             
-            let tNeed = 0, tGet = 0, tPendingChange = 0;
+            let tNeed = 0, tGet = 0, tUnpaid = 0;
+            let tPendingChange = 0; 
             let isAdminMode = document.getElementById('adminToggle').checked;
 
             if (orders) {
@@ -417,6 +419,7 @@
                             </tr>`;
                         }
                     } else {
+                        tUnpaid += o.price;
 
                         if (isEditing) {
                             unpaidBody.innerHTML += `<tr>
@@ -456,7 +459,7 @@
             
             document.getElementById('totalNeed').innerText = tNeed;
             document.getElementById('totalGet').innerText = tGet;
-            document.getElementById('totalPending').innerText = tPendingChange;
+            document.getElementById('totalPending').innerText = tPendingChange; 
         }
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
