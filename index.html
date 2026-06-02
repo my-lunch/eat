@@ -59,7 +59,7 @@
         .text-red { color: var(--danger); }
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .form-grid { display: grid; grid-template-columns: 1.2fr 2fr 1fr 1fr 1fr 1.2fr; gap: 25px; align-items: end; } 
+        .form-grid { display: grid; grid-template-columns: 1.2fr 2fr 1fr 1fr 1.2fr; gap: 25px; align-items: end; } 
         .col-span-2 { grid-column: span 2; } 
         .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; }
@@ -74,12 +74,11 @@
         th { text-align: left; background: #f8fafc; padding: 18px 24px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
         td { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
         
-        th:nth-child(1), td:nth-child(1) { width: 10%; } 
-        th:nth-child(2), td:nth-child(2) { width: 38%; white-space: normal; word-break: break-all; } 
-        th:nth-child(3), td:nth-child(3) { width: 10%; } 
-        th:nth-child(4), td:nth-child(4) { width: 10%; } 
-        th:nth-child(5), td:nth-child(5) { width: 14%; } 
-        th:nth-child(6), td:nth-child(6) { width: 18%; text-align: right; } 
+        th:nth-child(1), td:nth-child(1) { width: 12%; } 
+        th:nth-child(2), td:nth-child(2) { width: 40%; white-space: normal; word-break: break-all; } 
+        th:nth-child(3), td:nth-child(3) { width: 12%; } 
+        th:nth-child(4), td:nth-child(4) { width: 14%; } 
+        th:nth-child(5), td:nth-child(5) { width: 22%; text-align: right; } 
 
         .action-btns { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 900; cursor: pointer; white-space: nowrap; }
@@ -134,7 +133,6 @@
             .action-btns button { padding: 5px 6px; font-size: 11px; }
             .inline-input { padding: 4px; font-size: 12px; }
             
-            /* ✅ 修正：手機版圖示極小化 */
             .status-icon-only { font-size: 12px !important; }
             
             .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 5px 0; }
@@ -192,14 +190,14 @@
                     <div id="liveChangeDisplay" class="live-change-box">0</div>
                 </div>
 
-                <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+                <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900; grid-column: span 5;" onclick="submitOrder()">送出點餐</button>
             </div>
         </div>
 
         <div class="table-container">
             <h3 style="color:var(--danger)">📝 所有未付款區</h3>
             <table id="unpaidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零狀態</th><th></th></tr></thead>
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th></th></tr></thead>
                 <tbody id="unpaidBody"></tbody>
             </table>
         </div>
@@ -207,7 +205,7 @@
         <div class="table-container">
             <h3 style="color:var(--success)">✅ 所有已付款區</h3>
             <table id="paidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零狀態</th><th></th></tr></thead>
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零狀態</th></tr></thead>
                 <tbody id="paidBody"></tbody>
             </table>
         </div>
@@ -387,7 +385,6 @@
                     
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
-                    const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找零 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
 
                     if (o.isPaid) {
                         if (changeAmt <= 0 || o.changeSettled) {
@@ -403,12 +400,6 @@
                                 <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
                                 <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
                                 <td data-label="找零狀態">編輯中</td>
-                                <td data-label="">
-                                    <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
-                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
-                                    </div>
-                                </td>
                             </tr>`;
                         } else {
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
@@ -434,7 +425,6 @@
                                 <td data-label="應付">${o.price}</td>
                                 <td data-label="實收" style="color:var(--success); font-weight:900;">${o.pay}</td>
                                 <td data-label="找零狀態">${changeStatusHtml}</td>
-                                <td data-label=""><div class="action-btns">${btnHtml}</div></td>
                             </tr>`;
                         }
                     } else {
@@ -446,13 +436,7 @@
                                 <td data-label="品項"><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
                                 <td data-label="應付"><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:60px"></td>
                                 <td data-label="實收"><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:60px"></td>
-                                <td data-label="找零狀態">編輯中</td>
-                                <td data-label="">
-                                    <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button>
-                                        <button class="btn-del" onclick="cancelEdit()">取消</button>
-                                    </div>
-                                </td>
+                                <td data-label=""><button class="btn-save" onclick="saveEdit('${id}')">💾 儲存</button></td>
                             </tr>`;
                         } else {
                             let btnHtml = '';
@@ -468,7 +452,6 @@
                                 <td data-label="品項" style="color:#475569">${o.item}</td>
                                 <td data-label="應付">${o.price}</td>
                                 <td data-label="實收" style="color:#94a3b8">${o.pay}</td>
-                                <td data-label="找零狀態">${changeText}</td>
                                 <td data-label=""><div class="action-btns">${btnHtml}</div></td>
                             </tr>`;
                         }
