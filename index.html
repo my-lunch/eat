@@ -60,46 +60,54 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 👇 回歸自然網格，並利用比例完美映射下方表格 */
-        .form-grid { display: grid; grid-template-columns: 1.3fr 4fr 1.1fr 1.1fr 2.5fr; gap: 15px; align-items: end; } 
+        /* 👇 絕對精準對齊：強制使用相同百分比 */
+        .form-flex-grid { display: flex; width: 100%; align-items: flex-end; }
+        .form-flex-grid > div { box-sizing: border-box; padding-right: 15px; }
+        .form-flex-grid > div:last-child { padding-right: 0; }
         
-        .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; text-align: center; }
-        .form-group:first-child input { text-align: left; }
-        .form-group:nth-child(2) input { text-align: left; }
+        .fg-name { width: 12%; }
+        .fg-item { width: 48%; }
+        .fg-price { width: 10%; }
+        .fg-pay { width: 10%; }
+        .fg-btn { width: 20%; display: flex; justify-content: flex-end; } /* 容器佔滿剩餘，按鈕向右靠 */
+
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 900; font-size: 15px; color: var(--dark); text-align: left; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; text-align: left; }
 
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
+        /* 👇 表格：強制無左邊距，百分比映射上方輸入框 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        th { text-align: left; background: #f8fafc; padding: 15px 10px; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
-        td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; }
+        th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
+        td { padding: 15px 10px 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; }
         
-        /* 👇 表格欄位嚴格設定：應付、實收、找零 等距並置中！ */
-        th:nth-child(1), td:nth-child(1) { width: 13%; } /* 姓名 */
-        th:nth-child(2), td:nth-child(2) { width: 40%; white-space: normal; word-break: break-all; } /* 品項 */
-        th:nth-child(3), td:nth-child(3) { width: 11%; text-align: center; } /* 應付 */
-        th:nth-child(4), td:nth-child(4) { width: 11%; text-align: center; } /* 實收 */
-        th:nth-child(5), td:nth-child(5) { width: 11%; text-align: center; } /* 找零 */
-        th:nth-child(6), td:nth-child(6) { width: 14%; text-align: right; } /* 操作區 */
+        th:first-child, td:first-child { padding-left: 0; }
+        th:last-child, td:last-child { padding-right: 0; }
+        
+        /* 比例總和100%，1~4欄完美對應上方程式碼的 12/48/10/10 */
+        th:nth-child(1), td:nth-child(1) { width: 12%; } /* 姓名 */
+        th:nth-child(2), td:nth-child(2) { width: 48%; white-space: normal; word-break: break-all; } /* 品項 */
+        th:nth-child(3), td:nth-child(3) { width: 10%; text-align: left; } /* 應付 */
+        th:nth-child(4), td:nth-child(4) { width: 10%; text-align: left; } /* 實收 */
+        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: left; } /* 找零 */
+        th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } /* 操作區 */
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         
-        /* 👇 按鈕微調：精緻化 */
-        .btn-confirm { background: var(--success); color: white; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
-        .btn-change-done { background: #45aaf2; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
-        .btn-edit { background: #4b5563; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
-        .btn-save { background: #2563eb; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .btn-confirm { background: var(--success); color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .btn-change-done { background: #45aaf2; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .btn-edit { background: #4b5563; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .btn-save { background: #2563eb; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         
-        /* 👇 超精巧的紅色小叉叉 */
-        .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 10px; padding: 2px 4px; font-weight: bold; border-radius: 4px; white-space: nowrap; }
+        /* 極小化的紅色小叉叉 */
+        .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 10px; padding: 2px 4px; font-weight: 900; border-radius: 4px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; }
         
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
         .status-icon-only { font-size: 16px; font-weight: bold; }
         
-        .inline-input { padding: 6px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: center; }
-        td:nth-child(2) .inline-input { text-align: left; }
+        .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: left; }
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
@@ -127,7 +135,13 @@
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 6px 12px; }
             .dashboard { flex-direction: column; gap: 10px; }
-            .form-grid { grid-template-columns: 1fr; gap: 15px; } 
+            
+            /* 手機版直式排版以利閱讀 */
+            .form-flex-grid { flex-direction: column; gap: 15px; align-items: stretch; }
+            .form-flex-grid > div { width: 100%; padding-right: 0; }
+            .fg-btn { display: block; }
+            .fg-btn button { width: 100% !important; }
+            
             .table-container { overflow-x: auto; padding: 20px 15px; }
             table { table-layout: fixed; width: 650px; } 
             th, td { padding: 10px 4px; font-size: 13px; }
@@ -178,12 +192,16 @@
 
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
-            <div class="form-grid">
-                <div class="form-group"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
-                <div class="form-group"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
-                <div class="form-group"><label style="text-align:center;">應付</label><input type="number" id="price" placeholder="100"></div>
-                <div class="form-group"><label style="text-align:center;">實付</label><input type="number" id="pay" placeholder="0"></div>
-                <button class="btn-sync" style="height: 48px; width: 100%; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+            <!-- 👇 嚴格百分比對齊設定 -->
+            <div class="form-flex-grid">
+                <div class="form-group fg-name"><label>姓名</label><input type="text" id="userName" placeholder="AMY"></div>
+                <div class="form-group fg-item"><label>品項</label><input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵"></div>
+                <div class="form-group fg-price"><label>應付</label><input type="number" id="price" placeholder="100"></div>
+                <div class="form-group fg-pay"><label>實付</label><input type="number" id="pay" placeholder="0"></div>
+                <!-- 👇 按鈕變小(120px)並靠右對齊 -->
+                <div class="fg-btn">
+                    <button class="btn-sync" style="height: 48px; width: 120px; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
+                </div>
             </div>
         </div>
 
@@ -204,7 +222,7 @@
         </div>
 
         <div class="dashboard">
-            <div class="card" style="flex: 2.5;">
+            <div class="card" style="flex: 3;">
                 <h3>總金額</h3>
                 <p id="totalNeed">0</p>
             </div>
@@ -380,7 +398,7 @@
                                 <td><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
                                 <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}"></td>
                                 <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}"></td>
-                                <td style="text-align:center;">編輯中</td>
+                                <td>編輯中</td>
                                 <td>
                                     <div class="action-btns">
                                         <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
@@ -424,7 +442,7 @@
                                 <td><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
                                 <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}"></td>
                                 <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}"></td>
-                                <td style="text-align:center;">編輯中</td>
+                                <td>編輯中</td>
                                 <td>
                                     <div class="action-btns">
                                         <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
