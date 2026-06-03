@@ -231,7 +231,7 @@
         <div class="dashboard">
             <div class="card" style="flex: 3;">
                 <h3>總金額</h3>
-                <p id="totalNeed">0</p>
+                <p id="totalNeed" class="text-red">0</p>
             </div>
             <div class="card" style="flex: 1;">
                 <h3>已收現金</h3>
@@ -239,7 +239,7 @@
             </div>
             <div class="card" style="flex: 1;">
                 <h3>未付款金額</h3>
-                <p id="totalUnpaid" class="text-red">0</p>
+                <p id="totalUnpaid">0</p>
             </div>
         </div>
 
@@ -444,7 +444,6 @@
                             </tr>`;
                         }
                     } else {
-                        // 👇 計算所有還未付款的金額總和
                         tUnpaid += o.price;
 
                         if (isEditing) {
@@ -485,7 +484,6 @@
             
             document.getElementById('totalNeed').innerText = tNeed;
             document.getElementById('totalGet').innerText = tGet;
-            // 👇 更新儀表板數字為未付款金額
             document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
 
