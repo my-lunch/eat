@@ -66,7 +66,6 @@
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
-        /* 標題與表頭字體大小顏色完全一致 */
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; font-size: 15px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
@@ -76,7 +75,6 @@
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 精準比例：姓名 12% | 品項 44% | 應付 13% | 實付 13% | 找零 8% | 按鈕區 10% */
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
         th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
         th:nth-child(3), td:nth-child(3) { width: 13%; } 
@@ -240,8 +238,8 @@
                 <p id="totalGet">0</p>
             </div>
             <div class="card" style="flex: 1;">
-                <h3>待找金額</h3>
-                <p id="totalPending" class="text-red">0</p>
+                <h3>未付款金額</h3>
+                <p id="totalUnpaid" class="text-red">0</p>
             </div>
         </div>
 
@@ -338,7 +336,6 @@
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
 
-        // 👇 保持原本邏輯：實付沒填自動帶入應付金額當作實付
         function submitOrder() {
             const name = document.getElementById('userName').value.trim();
             const item = document.getElementById('userItem').value.trim();
@@ -383,7 +380,6 @@
             unpaidBody.innerHTML = paidBody.innerHTML = '';
             
             let tNeed = 0, tGet = 0, tUnpaid = 0;
-            let tPendingChange = 0; 
             let isAdminMode = document.getElementById('adminToggle').checked;
 
             if (orders) {
@@ -404,7 +400,6 @@
                             tGet += o.price;
                         } else {
                             tGet += o.pay;
-                            tPendingChange += changeAmt; 
                         }
 
                         if (isEditing) {
@@ -449,6 +444,7 @@
                             </tr>`;
                         }
                     } else {
+                        // 👇 計算所有還未付款的金額總和
                         tUnpaid += o.price;
 
                         if (isEditing) {
@@ -489,7 +485,8 @@
             
             document.getElementById('totalNeed').innerText = tNeed;
             document.getElementById('totalGet').innerText = tGet;
-            document.getElementById('totalPending').innerText = tPendingChange; 
+            // 👇 更新儀表板數字為未付款金額
+            document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
