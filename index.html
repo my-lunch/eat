@@ -66,6 +66,7 @@
         .table-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 4px solid var(--bg); font-weight: 900; }
         
+        /* 標題與表頭字體大小顏色完全一致 */
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; font-size: 15px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
@@ -75,13 +76,13 @@
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 姓名 12% | 品項 44% | 應付 13% | 實付/實收 13% | 找零 8% | 操作 12% */
+        /* 精準比例：姓名 12% | 品項 44% | 應付 13% | 實付 13% | 找零 8% | 按鈕區 10% */
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
         th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
         th:nth-child(3), td:nth-child(3) { width: 13%; } 
         th:nth-child(4), td:nth-child(4) { width: 13%; } 
         th:nth-child(5), td:nth-child(5) { width: 8%; } 
-        th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } 
+        th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         
@@ -95,7 +96,6 @@
         
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
         
-        /* 👇 確保打勾符號粗細與大小完美 */
         .status-icon-only { font-size: 16px; font-weight: 900; }
         
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: left; }
@@ -160,7 +160,7 @@
             <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button class="btn-stats" onclick="showStats()">📊 統計</button>
-            <button class="btn-clear" onclick="clearOrders()">🧹 淨空訂單</button>
+            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空訂單</button>
         </div>
         
         <div class="status-banner">
@@ -188,7 +188,7 @@
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
-                <div style="width: 20%;"></div> 
+                <div style="width: 18%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
@@ -206,9 +206,9 @@
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
-                    <input type="number" id="pay" placeholder="0" class="form-box">
+                    <input type="number" id="pay" placeholder="100" class="form-box">
                 </div>
-                <div style="width: 20%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                <div style="width: 18%; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button class="btn-sync" style="height: 48px; width: 100%; max-width: 120px; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -338,17 +338,23 @@
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
 
+        // 👇 保持原本邏輯：實付沒填自動帶入應付金額當作實付
         function submitOrder() {
             const name = document.getElementById('userName').value.trim();
             const item = document.getElementById('userItem').value.trim();
             const price = parseInt(document.getElementById('price').value) || 0;
-            const pay = parseInt(document.getElementById('pay').value) || 0;
+            const payInput = document.getElementById('pay').value.trim();
+            
+            const pay = payInput === '' ? price : (parseInt(payInput) || 0);
+            
             if(!name || !item) return alert("請填寫姓名與品項內容！");
             
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
             
-            document.getElementById('userName').value = ''; document.getElementById('userItem').value = '';
-            document.getElementById('price').value = ''; document.getElementById('pay').value = '';
+            document.getElementById('userName').value = ''; 
+            document.getElementById('userItem').value = '';
+            document.getElementById('price').value = ''; 
+            document.getElementById('pay').value = '';
         }
         
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
@@ -420,7 +426,6 @@
                             
                             let changeStatusHtml = '';
                             if (changeAmt <= 0) {
-                                // 👇 這裡換成了純文字勾號「✓」，徹底解決手機版變 Emoji 的問題
                                 changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">✓</span>`;
                             } else {
                                 const toggleStatus = !o.changeSettled;
