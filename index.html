@@ -489,6 +489,7 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
+        // 👇 統計清單自動按筆畫/拼音排序
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
@@ -531,7 +532,11 @@
                 }
                 
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
-                document.getElementById('statsContent').innerHTML = Object.entries(stats).map(([k,v]) => `
+                
+                // 這裡加入了 localeCompare 自動排序
+                const sortedStats = Object.entries(stats).sort((a, b) => a[0].localeCompare(b[0], 'zh-TW'));
+                
+                document.getElementById('statsContent').innerHTML = sortedStats.map(([k,v]) => `
                     <div class="stats-item">
                         <div class="stats-item-left">🍱 ${k}</div>
                         <span class="stats-count">× ${v.count}</span>
