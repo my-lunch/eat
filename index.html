@@ -489,7 +489,16 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        // 👇 統計清單自動按筆畫/拼音排序
+        // 👇 針對叫餐統計清單，加入 AI 關鍵字分類與筆畫排序引擎
+        function getCategoryWeight(name) {
+            // 權重 1: 主食類 (排在最上方)
+            if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) return 1;
+            // 權重 3: 飲品類 (排在最下方)
+            if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) return 3;
+            // 權重 2: 其餘視為單點配餐 (排在中間)
+            return 2;
+        }
+
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
@@ -533,8 +542,24 @@
                 
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
                 
-                // 這裡加入了 localeCompare 自動排序
-                const sortedStats = Object.entries(stats).sort((a, b) => a[0].localeCompare(b[0], 'zh-TW'));
+                // 👇 使用自訂邏輯進行排序
+                const sortedStats = Object.entries(stats).sort((a, b) => {
+                    const weightA = getCategoryWeight(a[0]);
+                    const weightB = getCategoryWeight(b[0]);
+                    
+                    // 1. 先比較分類權重 (主食 -> 單點 -> 飲品)
+                    if (weightA !== weightB) {
+                        return weightA - weightB;
+                    }
+                    
+                    // 2. 權重相同時，優先比字數長度 (長的放上面，通常字多代表口味修飾詞較多)
+                    if (b[0].length !== a[0].length) {
+                        return b[0].length - a[0].length;
+                    }
+                    
+                    // 3. 字數也相同時，比較筆畫與編碼反向排列 (筆畫多的放上面)
+                    return b[0].localeCompare(a[0], 'zh-TW');
+                });
                 
                 document.getElementById('statsContent').innerHTML = sortedStats.map(([k,v]) => `
                     <div class="stats-item">
