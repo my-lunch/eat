@@ -30,12 +30,17 @@
         
         .ann-input { width: 150px; }
         .time-input { width: 110px; }
-        .file-input { width: 150px; color: #cbd5e1; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
+        .file-input { width: 180px; color: #cbd5e1; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
 
         .admin-toolbar button { padding: 0 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; height: 36px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
+
+        /* 👇 免金鑰方案：團主純文字建檔區 */
+        .admin-menu-setup { display: none; background: var(--dark); padding: 15px 20px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
+        .admin-menu-setup textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2d3748; color: white; font-size: 14px; box-sizing: border-box; resize: vertical; line-height: 1.5; }
+        .admin-menu-setup textarea::placeholder { color: #94a3b8; }
 
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
@@ -87,12 +92,12 @@
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 比例鎖定：姓名 12% | 品項 48% | 應付 10% | 實收 10% | 找零 10% */
+        /* 比例鎖定：姓名 12% | 品項 44% | 應付 13% | 實收 13% | 找零 8% | 操作 10% */
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 48%; padding-right: 25px; white-space: normal; word-break: break-all; } 
-        th:nth-child(3), td:nth-child(3) { width: 10%; } 
-        th:nth-child(4), td:nth-child(4) { width: 10%; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; } 
+        th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
+        th:nth-child(3), td:nth-child(3) { width: 13%; } 
+        th:nth-child(4), td:nth-child(4) { width: 13%; } 
+        th:nth-child(5), td:nth-child(5) { width: 8%; } 
         th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
@@ -121,15 +126,6 @@
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
-
-        /* 客製化進度視窗樣式 */
-        .custom-alert-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 9999; }
-        .custom-alert-box { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center; min-width: 320px; max-width: 90%; }
-        .custom-alert-text { font-size: 18px; font-weight: bold; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
-        .custom-alert-btn { color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; transition: 0.2s; }
-        .custom-alert-btn:hover { filter: brightness(1.1); }
-        .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
@@ -168,7 +164,7 @@
 </head>
 <body>
 
-    <!-- 👇 客製化進度視窗 -->
+    <!-- 👇 進度視窗 -->
     <div id="customAlertOverlay" class="custom-alert-overlay"></div>
     <div id="customAlertBox" class="custom-alert-box">
         <div id="customAlertSpinner" class="spinner" style="display: none;"></div>
@@ -188,10 +184,17 @@
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
             <button class="btn-sync" onclick="updateAnnouncement()">同步公告</button>
-            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">AI 掃描菜單：</span>
-            <input type="file" accept="image/*" class="file-input" onchange="uploadAndScanMenu(this)">
+            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單照片：</span>
+            <input type="file" accept="image/*" class="file-input" onchange="uploadMenuImageOnly(this)">
             <button class="btn-stats" onclick="showStats()">📊 統計</button>
             <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空</button>
+        </div>
+
+        <!-- 👇 免金鑰方案：團主純文字建檔區 -->
+        <div class="admin-menu-setup" id="adminMenuSetup">
+            <div style="color: #cbd5e1; font-weight: bold; margin-bottom: 8px; font-size: 14px;">📋 貼上菜單文字，自動生成 POS 按鈕 (格式：品項,價格)</div>
+            <textarea id="menuTextInput" rows="4" placeholder="請將菜單文字複製貼上，例如：&#10;經典原味純牛堡,120&#10;美式脆薯,50&#10;紅茶,30"></textarea>
+            <button class="btn-sync" style="margin-top: 10px; width: 100%; height: 36px; background:#a55eea;" onclick="generatePOSMenu()">自動分類並產生 POS 按鈕</button>
         </div>
         
         <div class="status-banner">
@@ -202,7 +205,6 @@
                         <span class="time-label">截止時間</span>
                         <span id="timeText" class="time-value">未設定</span>
                     </div>
-                    <!-- 👑 神秘的隱藏小方塊開關 -->
                     <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
                 </div>
             </div>
@@ -225,10 +227,10 @@
 
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
-                <div style="width: 48%; padding-right: 25px; box-sizing: border-box;">品項</div>
-                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">應付</div>
-                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">實付</div>
-                <div style="width: 20%;"></div> 
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
+                <div style="width: 18%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
@@ -236,19 +238,19 @@
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 48%; padding-right: 25px; box-sizing: border-box;">
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
-                    <input type="text" id="userItem" placeholder="上方點選按鈕，或手動輸入..." class="form-box">
+                    <input type="text" id="userItem" placeholder="上方點選菜單，或手動輸入..." class="form-box">
                 </div>
-                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="100" class="form-box">
                 </div>
-                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="100" class="form-box">
                 </div>
-                <div style="width: 20%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                <div style="width: 18%; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button class="btn-sync" style="height: 48px; width: 100%; max-width: 120px; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -290,21 +292,7 @@
         </footer>
     </div>
 
-    <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
-    <div id="statsModal">
-        <div class="stats-header">📞 叫餐統計</div>
-        <div id="statsTotal" class="stats-total">總計：0 份</div>
-        <div id="statsContent" class="stats-list"></div>
-        <button class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px;" onclick="closeModal()">關閉</button>
-    </div>
-
     <script>
-        // =========================================================================
-        // 🔑 請在這裡貼上你用「個人 Gmail 帳號」申請的 AIzaSy 開頭金鑰！
-        // 如果沒有填入這個，AI 就無法幫你看菜單！
-        // =========================================================================
-        const GEMINI_API_KEY = "AQ.Ab8RN6JxiceGwobruLS3PLCW4HCWln72QLenXa5TCTxgG25E9A"; 
-
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -315,35 +303,24 @@
         let activeCategory = null;
         let posMenuData = null;
 
-        // 🎨 客製化彈出視窗控制函數
         function showCustomAlert(message, type = 'info') {
             const overlay = document.getElementById('customAlertOverlay');
             const box = document.getElementById('customAlertBox');
             const text = document.getElementById('customAlertText');
             const btn = document.getElementById('customAlertBtn');
             const spinner = document.getElementById('customAlertSpinner');
-
             text.innerHTML = message;
             overlay.style.display = 'block';
             box.style.display = 'block';
-
             if (type === 'processing') {
                 btn.style.display = 'none';
                 spinner.style.display = 'block';
             } else {
                 btn.style.display = 'inline-block';
                 spinner.style.display = 'none';
-                
-                if (type === 'success') {
-                    btn.style.background = 'var(--success)';
-                    btn.innerText = '完成 (關閉)';
-                } else if (type === 'error') {
-                    btn.style.background = 'var(--danger)';
-                    btn.innerText = '關閉';
-                } else {
-                    btn.style.background = 'var(--primary)';
-                    btn.innerText = '確定';
-                }
+                if (type === 'success') { btn.style.background = 'var(--success)'; btn.innerText = '完成 (關閉)'; } 
+                else if (type === 'error') { btn.style.background = 'var(--danger)'; btn.innerText = '關閉'; } 
+                else { btn.style.background = 'var(--primary)'; btn.innerText = '確定'; }
             }
         }
 
@@ -356,36 +333,28 @@
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
             document.getElementById('adminToggle').checked = isAdm;
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
+            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
         });
 
         function toggleAdminMode() {
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
+            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
 
-        // 👑 讀取並動態渲染 POS 機按鈕面板
+        // POS 面板動態讀取
         database.ref('config/posMenu').on('value', (snapshot) => {
             let data = snapshot.val();
             const panel = document.getElementById('posPanel');
             const catContainer = document.getElementById('posCategories');
-            
             posMenuData = [];
-            if (Array.isArray(data)) {
-                posMenuData = data.filter(item => item && item.category);
-            } else if (data && typeof data === 'object') {
-                posMenuData = Object.values(data).filter(item => item && item.category);
-            }
-            
-            if (!posMenuData || posMenuData.length === 0) {
-                panel.style.display = 'none';
-                return;
-            }
-            
+            if (Array.isArray(data)) { posMenuData = data.filter(item => item && item.category); } 
+            else if (data && typeof data === 'object') { posMenuData = Object.values(data).filter(item => item && item.category); }
+            if (!posMenuData || posMenuData.length === 0) { panel.style.display = 'none'; return; }
             panel.style.display = 'block';
             catContainer.innerHTML = '';
-            
             posMenuData.forEach((cat, index) => {
                 const btn = document.createElement('button');
                 btn.className = `pos-cat-btn ${index === 0 && !activeCategory ? 'active' : (activeCategory === cat.category ? 'active' : '')}`;
@@ -393,10 +362,7 @@
                 btn.onclick = () => selectCategory(cat.category);
                 catContainer.appendChild(btn);
             });
-            
-            if (!activeCategory && posMenuData.length > 0) {
-                activeCategory = posMenuData[0].category;
-            }
+            if (!activeCategory && posMenuData.length > 0) activeCategory = posMenuData[0].category;
             renderPosItems();
         });
 
@@ -411,12 +377,9 @@
             const grid = document.getElementById('posItemsGrid');
             grid.innerHTML = '';
             if (!posMenuData || !activeCategory) return;
-            
             const targetCat = posMenuData.find(c => c.category === activeCategory);
             if (!targetCat || !targetCat.items) return;
-            
             let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items || {});
-            
             itemsArray.forEach(item => {
                 if (!item || !item.name) return;
                 const card = document.createElement('div');
@@ -431,18 +394,70 @@
             });
         }
 
-        function uploadAndScanMenu(input) {
-            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY.startsWith("AIza")) {
-                showCustomAlert("⚠️ <b>注意：</b>您的 Gemini API Key 無效！<br><br><span style='font-size:14px;color:#64748b;'>請確定您有到 aistudio.google.com 申請，且開頭必須是「AIza」。<br>照片仍會上傳供大家檢視，但無法啟用 AI 自動產生 POS 按鈕功能。</span>", "error");
-            }
+        // 👇 智能分類排序引擎 (將同類食材綁在一起)
+        function getSubSortWeight(name) {
+            let subCat = "99";
+            if (name.includes('牛')) subCat = "01";
+            else if (name.includes('豬')) subCat = "02";
+            else if (name.includes('雞')) subCat = "03";
+            else if (name.includes('魚') || name.includes('鮭') || name.includes('鱈') || name.includes('蝦')) subCat = "04";
+            else if (name.includes('堡')) subCat = "05";
+            else if (name.includes('吐司') || name.includes('三明治')) subCat = "06";
+            else if (name.includes('蛋餅')) subCat = "07";
+            else if (name.includes('麵')) subCat = "08";
+            else if (name.includes('飯')) subCat = "09";
+            return subCat + "-" + name;
+        }
 
+        // 👇 將團主貼上的文字自動分類為 POS 按鈕陣列 (無須 AI 金鑰)
+        function generatePOSMenu() {
+            const text = document.getElementById('menuTextInput').value.trim();
+            if (!text) {
+                database.ref('config/posMenu').remove();
+                alert("已清空 POS 選單！");
+                return;
+            }
+            
+            const lines = text.split('\n');
+            const categories = { "主食": [], "單點": [], "飲品": [] };
+
+            lines.forEach(line => {
+                const parts = line.split(/[,，\$]/);
+                if (parts.length >= 2) {
+                    const name = parts[0].trim();
+                    const priceStr = parts[1].replace(/[^\d]/g, '');
+                    const price = parseInt(priceStr) || 0;
+                    
+                    if (name) {
+                        let cat = "單點";
+                        if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "主食";
+                        else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "飲品";
+                        
+                        categories[cat].push({ name, price });
+                    }
+                }
+            });
+
+            // 對分類內的項目進行智能排序
+            Object.keys(categories).forEach(cat => {
+                categories[cat].sort((a, b) => getSubSortWeight(b.name).localeCompare(getSubSortWeight(a.name), 'zh-TW'));
+            });
+
+            const finalPosMenu = [];
+            if (categories["主食"].length > 0) finalPosMenu.push({ category: "主食", items: categories["主食"] });
+            if (categories["單點"].length > 0) finalPosMenu.push({ category: "單點", items: categories["單點"] });
+            if (categories["飲品"].length > 0) finalPosMenu.push({ category: "飲品", items: categories["飲品"] });
+
+            database.ref('config/posMenu').set(finalPosMenu)
+                .then(() => alert("🎉 POS 機按鈕建立成功！系統已自動幫您分類好囉！"));
+        }
+
+        // 單純上傳圖片給團員看
+        function uploadMenuImageOnly(input) {
             if (input.files && input.files[0]) {
                 showCustomAlert("⏳ <b>照片上傳中...</b>", "processing");
-                
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    const base64DataUrl = e.target.result;
-                    
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
@@ -456,98 +471,25 @@
                         
                         database.ref('config/menuImage').set(optimizedUrl)
                             .then(() => {
-                                if (GEMINI_API_KEY && GEMINI_API_KEY.startsWith("AIza")) {
-                                    runAiOcr(optimizedUrl);
-                                } else {
-                                    showCustomAlert("✅ 照片已更新", "success");
-                                    input.value = '';
-                                }
+                                showCustomAlert("✅ 菜單照片上傳成功！<br><br><span style='font-size:14px;color:#64748b;'>如果您需要設定 POS 按鈕，請將菜單文字複製貼上到上方的輸入框中。</span>", "success");
+                                input.value = '';
                             })
                             .catch(err => {
                                 showCustomAlert("❌ 照片上傳失敗：" + err.message, "error");
                                 input.value = '';
                             });
                     };
-                    img.src = base64DataUrl;
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        async function runAiOcr(base64DataUrl) {
-            showCustomAlert("✨ <b>AI 正在掃描並分析菜單中</b><br><br><span style='font-size:14px;color:#64748b;'>大約需要 5-10 秒，請勿關閉網頁...</span>", "processing");
-            
-            const base64Content = base64DataUrl.split(',')[1];
-            const mimeType = base64DataUrl.split(',')[0].split(':')[1].split(';')[0];
-
-            const promptText = `這是一張餐廳菜單。請將所有餐點整理出來。
-            1. 將品項分為大類（如：主食、單點、飲料）。
-            2. 遇到有不同口味、大小（如：大/小、各種口味），必須拆開成獨立的品項，例如「陽春麵(大)」、「陽春麵(小)」。
-            請絕對只回傳一個合法的 JSON 陣列，格式範例如下：
-            [
-              {
-                "category": "主食",
-                "items": [
-                  {"name": "陽春麵(小)", "price": 40},
-                  {"name": "陽春麵(大)", "price": 50}
-                ]
-              }
-            ]
-            請不要加上 \`\`\`json 標籤，只要純文字陣列。`;
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
-            
-            const payload = {
-                contents: [{
-                    parts: [
-                        { text: promptText },
-                        { inlineData: { mimeType: mimeType, data: base64Content } }
-                    ]
-                }]
-            };
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error?.message || `HTTP 錯誤碼: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                let textResult = data.candidates[0].content.parts[0].text;
-                
-                let match = textResult.match(/\[[\s\S]*\]/);
-                if (match) {
-                    textResult = match[0];
-                }
-                
-                const parsedMenu = JSON.parse(textResult);
-                await database.ref('config/posMenu').set(parsedMenu);
-                
-                showCustomAlert("🎉 <b>AI 辨識成功！</b><br><br><span style='font-size:14px;color:#64748b;'>菜單已自動轉為 POS 點餐按鈕。<br>大家現在可以直接點選按鈕點餐囉！</span>", "success");
-                document.querySelector('.file-input').value = '';
-                
-            } catch (error) {
-                console.error("AI 錯誤:", error);
-                showCustomAlert("❌ <b>AI 辨識失敗</b><br><br><span style='font-size:14px;color:#e11d48;word-break:break-all;text-align:left;display:inline-block;'>可能原因：<br>1. 菜單照片畫質過低<br>2. API Key 權限不足或失效<br><br>系統回報錯誤：<br>" + error.message + "</span>", "error");
-                document.querySelector('.file-input').value = '';
             }
         }
 
         database.ref('config/menuImage').on('value', (s) => {
             const img = document.getElementById('menuImg');
             const wrapper = document.getElementById('menuWrapper');
-            if (s.val()) { 
-                img.src = s.val(); 
-                wrapper.style.display = 'block'; 
-            } else {
-                wrapper.style.display = 'none';
-            }
+            if (s.val()) { img.src = s.val(); wrapper.style.display = 'block'; } 
+            else { wrapper.style.display = 'none'; }
         });
 
         database.ref('config/announcement').on('value', (s) => {
@@ -583,11 +525,8 @@
             }
             
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
-            
-            document.getElementById('userName').value = ''; 
-            document.getElementById('userItem').value = '';
-            document.getElementById('price').value = ''; 
-            document.getElementById('pay').value = '';
+            document.getElementById('userName').value = ''; document.getElementById('userItem').value = '';
+            document.getElementById('price').value = ''; document.getElementById('pay').value = '';
         }
         
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
@@ -620,21 +559,16 @@
                 Object.keys(orders).forEach(id => {
                     const o = orders[id];
                     tNeed += o.price;
-                    
                     const isEditing = (editingId === id);
                     const changeAmt = o.pay - o.price;
                     const safeItem = o.item.replace(/"/g, '&quot;');
-                    
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
                     const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
 
                     if (o.isPaid) {
-                        if (changeAmt <= 0 || o.changeSettled) {
-                            tGet += o.price;
-                        } else {
-                            tGet += o.pay;
-                        }
+                        if (changeAmt <= 0 || o.changeSettled) tGet += o.price;
+                        else tGet += o.pay;
 
                         if (isEditing) {
                             paidBody.innerHTML += `<tr>
@@ -643,31 +577,18 @@
                                 <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:100%"></td>
                                 <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:100%"></td>
                                 <td>編輯中</td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
-                                        <button class="btn-del" onclick="cancelEdit()">❌</button>
-                                    </div>
-                                </td>
+                                <td><div class="action-btns"><button class="btn-save" onclick="saveEdit('${id}')">💾</button><button class="btn-del" onclick="cancelEdit()">❌</button></div></td>
                             </tr>`;
                         } else {
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
-                            
                             let changeStatusHtml = '';
-                            if (changeAmt <= 0) {
-                                changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">✓</span>`;
-                            } else {
+                            if (changeAmt <= 0) changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">✓</span>`;
+                            else {
                                 const toggleStatus = !o.changeSettled;
                                 const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
-                                if (o.changeSettled) {
-                                    changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">✓</span>`;
-                                } else {
-                                    changeStatusHtml = isAdminMode ? 
-                                        `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : 
-                                        `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
-                                }
+                                if (o.changeSettled) changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">✓</span>`;
+                                else changeStatusHtml = isAdminMode ? `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
                             }
-
                             paidBody.innerHTML += `<tr>
                                 <td><strong>${o.name}</strong></td>
                                 <td style="color:#475569">${o.item}</td>
@@ -679,7 +600,6 @@
                         }
                     } else {
                         tUnpaid += o.price;
-
                         if (isEditing) {
                             unpaidBody.innerHTML += `<tr>
                                 <td><strong>${o.name}</strong></td>
@@ -687,22 +607,13 @@
                                 <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:100%"></td>
                                 <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:100%"></td>
                                 <td>編輯中</td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
-                                        <button class="btn-del" onclick="cancelEdit()">❌</button>
-                                    </div>
-                                </td>
+                                <td><div class="action-btns"><button class="btn-save" onclick="saveEdit('${id}')">💾</button><button class="btn-del" onclick="cancelEdit()">❌</button></div></td>
                             </tr>`;
                         } else {
                             let btnHtml = '';
                             if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">收款</button> `;
-                            if (canEdit) {
-                                btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
-                            } else {
-                                btnHtml += `<span class="status-icon-only">🔒</span>`;
-                            }
-
+                            if (canEdit) btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
+                            else btnHtml += `<span class="status-icon-only">🔒</span>`;
                             unpaidBody.innerHTML += `<tr>
                                 <td><strong>${o.name}</strong></td>
                                 <td style="color:#475569">${o.item}</td>
@@ -715,19 +626,15 @@
                     }
                 });
             }
-            
             document.getElementById('totalNeed').innerText = tNeed;
             document.getElementById('totalGet').innerText = tGet;
             document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
 
-        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
-
         function getSortKey(name) {
             let cat = "2"; 
             if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "1";
             if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "3";
-
             let subCat = "99";
             if (name.includes('牛')) subCat = "01";
             else if (name.includes('豬')) subCat = "02";
@@ -741,7 +648,6 @@
             else if (name.includes('套餐')) subCat = "10";
             else if (name.includes('薯')) subCat = "11";
             else if (name.includes('蛋')) subCat = "12";
-
             return cat + "-" + subCat + "-" + name;
         }
 
@@ -749,49 +655,34 @@
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; 
-                
                 if(orders) {
                     let orderList = Object.values(orders);
                     let processedItems = [];
-
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = orderList[i].item.trim();
                         let currentName = orderList[i].name;
-
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
-
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
                             currentItem = currentItem + "、" + orderList[i+1].item.trim();
                             i++; 
                         }
-                        
                         processedItems.push({ name: currentName, item: currentItem });
                     }
-
                     processedItems.forEach(o => { 
                         o.item.split(/[+＋]/).forEach(singleItem => {
                             const name = singleItem.trim();
                             if(name) { 
-                                if (!stats[name]) {
-                                    stats[name] = { count: 0, users: [] };
-                                }
+                                if (!stats[name]) stats[name] = { count: 0, users: [] };
                                 stats[name].count++;
-                                if (!stats[name].users.includes(o.name)) {
-                                    stats[name].users.push(o.name);
-                                }
+                                if (!stats[name].users.includes(o.name)) stats[name].users.push(o.name);
                                 total++; 
                             }
                         });
                     }); 
                 }
-                
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
-                
-                const sortedStats = Object.entries(stats).sort((a, b) => {
-                    return getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW');
-                });
-                
+                const sortedStats = Object.entries(stats).sort((a, b) => getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW'));
                 document.getElementById('statsContent').innerHTML = sortedStats.map(([k,v]) => `
                     <div class="stats-item">
                         <div class="stats-item-left">🍱 ${k}</div>
@@ -805,13 +696,8 @@
         }
 
         function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
-        
-        function deleteOrder(id) { 
-            if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); 
-        }
-        function clearOrders() { 
-            if(confirm("確定清空所有數據？")) database.ref('orders').remove(); 
-        }
+        function deleteOrder(id) { if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); }
+        function clearOrders() { if(confirm("確定清空所有數據？")) database.ref('orders').remove(); }
     </script>
 </body>
 </html>
