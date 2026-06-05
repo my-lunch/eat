@@ -13,8 +13,6 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <!-- 👇 引入前端純 JS 掃描引擎 (完全免金鑰、不被公司擋) -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 
     <style>
         :root { --primary: #ff9f43; --danger: #e11d48; --success: #26de81; --bg: #f1f5f9; --dark: #1e293b; }
@@ -26,8 +24,8 @@
         .page-title-section h1 { margin: 0; font-size: 32px; font-weight: 900; color: var(--dark); letter-spacing: 2px; }
         .page-title-section h2 { margin: 6px 0 0 0; font-size: 16px; font-weight: bold; color: #64748b; letter-spacing: 5px; }
 
-        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: var(--dark); padding: 12px 20px; border-radius: 12px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; }
-        .admin-toolbar input[type="text"] { padding: 8px 12px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; height: 36px; box-sizing: border-box; }
+        .admin-toolbar { display: none; flex-direction: row; flex-wrap: nowrap; background: var(--dark); padding: 12px 20px; border-radius: 12px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; white-space: nowrap; overflow-x: auto; }
+        .admin-toolbar input { padding: 8px 12px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; height: 36px; box-sizing: border-box; }
         .admin-toolbar input::placeholder { color: #a0aec0; }
         
         .ann-input { width: 150px; }
@@ -38,11 +36,6 @@
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
-
-        /* 👇 修改為進階版的照片掃描與容錯區塊 */
-        .admin-menu-setup { display: none; background: var(--dark); padding: 15px 20px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
-        .admin-menu-setup textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2d3748; color: white; font-size: 14px; box-sizing: border-box; resize: vertical; line-height: 1.5; }
-        .admin-menu-setup textarea::placeholder { color: #94a3b8; }
 
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
@@ -67,18 +60,6 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 🏪 POS 機按鈕面板樣式 */
-        .pos-panel { display: none; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
-        .pos-layout { display: flex; gap: 20px; }
-        .pos-categories { width: 20%; display: flex; flex-direction: column; gap: 10px; border-right: 2px solid #e2e8f0; padding-right: 15px; }
-        .pos-cat-btn { background: white; border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-align: left; transition: 0.2s; color: var(--dark); }
-        .pos-cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .pos-items-grid { width: 80%; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; max-height: 350px; overflow-y: auto; padding-right: 5px; }
-        .pos-item-card { background: white; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; gap: 8px; text-align: left; }
-        .pos-item-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255,159,67,0.15); }
-        .pos-item-name { font-weight: bold; font-size: 14px; color: var(--dark); word-break: break-all; white-space: normal; line-height: 1.4; }
-        .pos-item-price { color: var(--danger); font-weight: 900; font-size: 15px; text-align: right; }
-
         .form-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; text-align: left; }
         .mobile-only-label { display: none; }
 
@@ -94,7 +75,6 @@
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
-        /* 比例鎖定：姓名 12% | 品項 44% | 應付 13% | 實收 13% | 找零 8% | 操作 10% */
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
         th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
         th:nth-child(3), td:nth-child(3) { width: 13%; } 
@@ -109,11 +89,11 @@
         .btn-edit { background: #4b5563; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         .btn-save { background: #2563eb; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         
-        /* 極小化小紅叉 */
         .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 10px; padding: 2px 4px; font-weight: 900; border-radius: 4px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; }
         
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
+        
         .status-icon-only { font-size: 16px; font-weight: 900; }
         
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: left; }
@@ -131,6 +111,7 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
+        /* 📱 手機版 RWD 防護排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
@@ -144,10 +125,6 @@
             .time-info { padding: 6px 12px; }
             .dashboard { flex-direction: column; gap: 10px; }
             
-            .pos-layout { flex-direction: column; }
-            .pos-categories { width: 100%; flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; padding-right: 0; }
-            .pos-items-grid { width: 100%; }
-
             .desktop-labels { display: none !important; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
             .form-inputs { flex-direction: column; gap: 15px; }
@@ -166,14 +143,6 @@
 </head>
 <body>
 
-    <!-- 👇 進度視窗 -->
-    <div id="customAlertOverlay" class="custom-alert-overlay"></div>
-    <div id="customAlertBox" class="custom-alert-box">
-        <div id="customAlertSpinner" class="spinner" style="display: none;"></div>
-        <div id="customAlertText" class="custom-alert-text"></div>
-        <button id="customAlertBtn" class="custom-alert-btn" onclick="closeCustomAlert()">確定</button>
-    </div>
-
     <div class="container">
         
         <div class="page-title-section">
@@ -185,24 +154,11 @@
             <span style="font-weight:bold; color:var(--primary); font-size: 15px;">👑 團主：</span>
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
-            <button class="btn-sync" onclick="updateAnnouncement()">同步公告</button>
-            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">純上傳照片：</span>
-            <input type="file" accept="image/*" class="file-input" onchange="uploadMenuImageOnly(this)">
+            <button class="btn-sync" onclick="updateAnnouncement()">同步</button>
+            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
+            <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button class="btn-stats" onclick="showStats()">📊 統計</button>
-            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空</button>
-        </div>
-
-        <!-- 👇 完全免金鑰：照片直接掃描 & 超強容錯文字區 -->
-        <div class="admin-menu-setup" id="adminMenuSetup">
-            <div style="color: #cbd5e1; font-weight: bold; margin-bottom: 8px; font-size: 14px;">
-                📋 步驟一：讓系統讀取菜單文字 (不需再打逗號！)
-            </div>
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <input type="file" id="ocrFileInput" accept="image/*" style="color: white; font-size: 13px;">
-                <button class="btn-sync" style="background: #2563eb;" onclick="scanImageToText()">🔍 自動讀取照片文字</button>
-            </div>
-            <textarea id="menuTextInput" rows="6" placeholder="您可以點擊上方按鈕掃描照片，或是直接在這裡貼上文字。&#10;格式超級自由 (有空格就可以)：&#10;炒涼麵 小 70&#10;味噌湯 20&#10;1. 牛肉麵 120元"></textarea>
-            <button class="btn-sync" style="margin-top: 10px; width: 100%; height: 36px; background:#a55eea;" onclick="generatePOSMenu()">🪄 步驟二：自動分類並產生 POS 按鈕</button>
+            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空訂單</button>
         </div>
         
         <div class="status-banner">
@@ -225,14 +181,6 @@
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
             
-            <!-- 🏪 POS 按鈕面板區 -->
-            <div class="pos-panel" id="posPanel">
-                <div class="pos-layout">
-                    <div class="pos-categories" id="posCategories"></div>
-                    <div class="pos-items-grid" id="posItemsGrid"></div>
-                </div>
-            </div>
-
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
@@ -248,7 +196,7 @@
                 </div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
-                    <input type="text" id="userItem" placeholder="上方點選菜單，或手動輸入..." class="form-box">
+                    <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
@@ -300,6 +248,14 @@
         </footer>
     </div>
 
+    <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
+    <div id="statsModal">
+        <div class="stats-header">📞 叫餐統計</div>
+        <div id="statsTotal" class="stats-total">總計：0 份</div>
+        <div id="statsContent" class="stats-list"></div>
+        <button class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px;" onclick="closeModal()">關閉</button>
+    </div>
+
     <script>
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
@@ -308,232 +264,41 @@
         let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
         localStorage.setItem('myDeviceId', myId);
         let editingId = null;
-        let activeCategory = null;
-        let posMenuData = null;
-
-        function showCustomAlert(message, type = 'info') {
-            const overlay = document.getElementById('customAlertOverlay');
-            const box = document.getElementById('customAlertBox');
-            const text = document.getElementById('customAlertText');
-            const btn = document.getElementById('customAlertBtn');
-            const spinner = document.getElementById('customAlertSpinner');
-            text.innerHTML = message;
-            overlay.style.display = 'block';
-            box.style.display = 'block';
-            if (type === 'processing') {
-                btn.style.display = 'none';
-                spinner.style.display = 'block';
-            } else {
-                btn.style.display = 'inline-block';
-                spinner.style.display = 'none';
-                if (type === 'success') { btn.style.background = 'var(--success)'; btn.innerText = '完成 (關閉)'; } 
-                else if (type === 'error') { btn.style.background = 'var(--danger)'; btn.innerText = '關閉'; } 
-                else { btn.style.background = 'var(--primary)'; btn.innerText = '確定'; }
-            }
-        }
-
-        function closeCustomAlert() {
-            document.getElementById('customAlertOverlay').style.display = 'none';
-            document.getElementById('customAlertBox').style.display = 'none';
-        }
 
         window.addEventListener('load', () => {
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
             document.getElementById('adminToggle').checked = isAdm;
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
-            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
         });
 
         function toggleAdminMode() {
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
-            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
 
-        // POS 面板動態讀取
-        database.ref('config/posMenu').on('value', (snapshot) => {
-            let data = snapshot.val();
-            const panel = document.getElementById('posPanel');
-            const catContainer = document.getElementById('posCategories');
-            posMenuData = [];
-            if (Array.isArray(data)) { posMenuData = data.filter(item => item && item.category); } 
-            else if (data && typeof data === 'object') { posMenuData = Object.values(data).filter(item => item && item.category); }
-            if (!posMenuData || posMenuData.length === 0) { panel.style.display = 'none'; return; }
-            panel.style.display = 'block';
-            catContainer.innerHTML = '';
-            posMenuData.forEach((cat, index) => {
-                const btn = document.createElement('button');
-                btn.className = `pos-cat-btn ${index === 0 && !activeCategory ? 'active' : (activeCategory === cat.category ? 'active' : '')}`;
-                btn.innerText = cat.category;
-                btn.onclick = () => selectCategory(cat.category);
-                catContainer.appendChild(btn);
-            });
-            if (!activeCategory && posMenuData.length > 0) activeCategory = posMenuData[0].category;
-            renderPosItems();
-        });
-
-        function selectCategory(catName) {
-            activeCategory = catName;
-            const btns = document.querySelectorAll('.pos-cat-btn');
-            btns.forEach(btn => btn.classList.toggle('active', btn.innerText === catName));
-            renderPosItems();
-        }
-
-        function renderPosItems() {
-            const grid = document.getElementById('posItemsGrid');
-            grid.innerHTML = '';
-            if (!posMenuData || !activeCategory) return;
-            const targetCat = posMenuData.find(c => c.category === activeCategory);
-            if (!targetCat || !targetCat.items) return;
-            let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items || {});
-            itemsArray.forEach(item => {
-                if (!item || !item.name) return;
-                const card = document.createElement('div');
-                card.className = 'pos-item-card';
-                card.onclick = () => {
-                    document.getElementById('userItem').value = item.name;
-                    document.getElementById('price').value = item.price;
-                    document.getElementById('pay').value = item.price;
-                };
-                card.innerHTML = `<div class="pos-item-name">${item.name}</div><div class="pos-item-price">$${item.price}</div>`;
-                grid.appendChild(card);
-            });
-        }
-
-        // 👇 Tesseract.js 本機端照片掃描 (完全免金鑰)
-        async function scanImageToText() {
-            const fileInput = document.getElementById('ocrFileInput');
-            const file = fileInput.files[0];
-            if(!file) {
-                showCustomAlert("⚠️ 請先點擊按鈕左側的『選擇檔案』，上傳一張菜單照片", "error");
-                return;
-            }
-
-            showCustomAlert("⏳ <b>正在啟動本機端 AI 掃描...</b><br><br><span style='font-size:14px;color:#64748b;'>此功能完全免費且安全，大約需要 10~20 秒，請勿關閉網頁。</span>", "processing");
-
-            try {
-                // 初始化 Tesseract (指定繁體中文)
-                const worker = await Tesseract.createWorker('chi_tra');
-                const ret = await worker.recognize(file);
-                
-                // 將掃描結果放入文字框
-                const scannedText = ret.data.text;
-                const textArea = document.getElementById('menuTextInput');
-                
-                // 如果原本有字就換行加上去
-                if (textArea.value.trim() !== '') {
-                    textArea.value += '\n\n' + scannedText;
-                } else {
-                    textArea.value = scannedText;
-                }
-
-                await worker.terminate();
-
-                showCustomAlert("✅ <b>照片文字掃描完成！</b><br><br><span style='font-size:14px;color:#64748b;'>請在文字框內檢查內容，您可以隨意修改錯字或排版。<br>確認沒問題後，點擊『自動分類並產生 POS 按鈕』即可！</span>", "success");
-            } catch(e) {
-                showCustomAlert("❌ 照片掃描失敗：" + e.message, "error");
-            }
-        }
-
-        // 👇 智能分類排序引擎
-        function getSubSortWeight(name) {
-            let subCat = "99";
-            if (name.includes('牛')) subCat = "01";
-            else if (name.includes('豬')) subCat = "02";
-            else if (name.includes('雞')) subCat = "03";
-            else if (name.includes('魚') || name.includes('鮭') || name.includes('鱈') || name.includes('蝦')) subCat = "04";
-            else if (name.includes('堡')) subCat = "05";
-            else if (name.includes('吐司') || name.includes('三明治')) subCat = "06";
-            else if (name.includes('蛋餅')) subCat = "07";
-            else if (name.includes('麵')) subCat = "08";
-            else if (name.includes('飯')) subCat = "09";
-            return subCat + "-" + name;
-        }
-
-        // 👇 超強容錯的智能文字轉換器 (不需要逗號了)
-        function generatePOSMenu() {
-            const text = document.getElementById('menuTextInput').value.trim();
-            if (!text) {
-                database.ref('config/posMenu').remove();
-                alert("已清空 POS 選單！");
-                return;
-            }
-            
-            const lines = text.split('\n');
-            const categories = { "主食": [], "單點": [], "飲品": [] };
-
-            lines.forEach(line => {
-                line = line.trim();
-                if (!line) return;
-
-                // 🌟 新的超強容錯判斷：不管你打「炒涼麵 小 70」、「位曾湯 20」、「大薯 $50」、「牛肉麵 120元」
-                // 它會自動抓出前面的「品項」和最後面的「數字價格」
-                const match = line.match(/^[\d\.\-\*]*\s*(.*?)\s*[:：,，\$]?\s*(\d+)\s*[元塊]?$/);
-
-                if (match && match.length >= 3) {
-                    const name = match[1].trim();
-                    const priceStr = match[2];
-                    const price = parseInt(priceStr) || 0;
-                    
-                    if (name && price > 0) {
-                        let cat = "單點";
-                        // 包含「湯」也算進飲品/湯類大項
-                        if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "主食";
-                        else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|湯)/.test(name)) cat = "飲品";
-                        
-                        categories[cat].push({ name, price });
-                    }
-                }
-            });
-
-            // 如果全部沒解析成功，提醒一下
-            if (categories["主食"].length === 0 && categories["單點"].length === 0 && categories["飲品"].length === 0) {
-                showCustomAlert("⚠️ <b>找不到有效的品項！</b><br><br><span style='font-size:14px;color:#64748b;'>請確定文字裡面有「品名」跟「價格 (數字)」。<br>範例：炒涼麵 小 70</span>", "error");
-                return;
-            }
-
-            // 對分類內的項目進行智能排序
-            Object.keys(categories).forEach(cat => {
-                categories[cat].sort((a, b) => getSubSortWeight(b.name).localeCompare(getSubSortWeight(a.name), 'zh-TW'));
-            });
-
-            const finalPosMenu = [];
-            if (categories["主食"].length > 0) finalPosMenu.push({ category: "主食", items: categories["主食"] });
-            if (categories["單點"].length > 0) finalPosMenu.push({ category: "單點", items: categories["單點"] });
-            if (categories["飲品"].length > 0) finalPosMenu.push({ category: "飲品", items: categories["飲品"] });
-
-            database.ref('config/posMenu').set(finalPosMenu)
-                .then(() => showCustomAlert("🎉 <b>POS 機按鈕建立成功！</b><br><br><span style='font-size:14px;color:#64748b;'>系統已自動忽略亂碼，並把品項與價格分類完畢！</span>", "success"));
-        }
-
-        // 單純上傳圖片給團員看
-        function uploadMenuImageOnly(input) {
+        function uploadMenu(input) {
             if (input.files && input.files[0]) {
-                showCustomAlert("⏳ <b>照片上傳中...</b>", "processing");
+                alert("照片處理中，請稍候..."); 
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
+                        
                         const MAX_WIDTH = 1000; 
-                        let width = img.width; let height = img.height;
+                        let width = img.width;
+                        let height = img.height;
                         if (width > MAX_WIDTH) { height = Math.round(height *= MAX_WIDTH / width); width = MAX_WIDTH; }
                         canvas.width = width; canvas.height = height;
                         ctx.drawImage(img, 0, 0, width, height);
-                        const optimizedUrl = canvas.toDataURL('image/jpeg', 0.85);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
                         
-                        database.ref('config/menuImage').set(optimizedUrl)
-                            .then(() => {
-                                showCustomAlert("✅ 菜單照片上傳成功！", "success");
-                                input.value = '';
-                            })
-                            .catch(err => {
-                                showCustomAlert("❌ 照片上傳失敗：" + err.message, "error");
-                                input.value = '';
-                            });
+                        database.ref('config/menuImage').set(dataUrl)
+                            .then(() => alert("菜單照片上傳成功！"))
+                            .catch(err => alert("上傳失敗：" + err.message));
                     };
                     img.src = e.target.result;
                 };
@@ -544,8 +309,12 @@
         database.ref('config/menuImage').on('value', (s) => {
             const img = document.getElementById('menuImg');
             const wrapper = document.getElementById('menuWrapper');
-            if (s.val()) { img.src = s.val(); wrapper.style.display = 'block'; } 
-            else { wrapper.style.display = 'none'; }
+            if (s.val()) { 
+                img.src = s.val(); 
+                wrapper.style.display = 'block'; 
+            } else {
+                wrapper.style.display = 'none';
+            }
         });
 
         database.ref('config/announcement').on('value', (s) => {
@@ -562,7 +331,7 @@
             if(time) updates.deadline = time + " 截止";
             if(text || time) {
                 database.ref('config/announcement').update(updates)
-                    .then(() => showCustomAlert("公告同步成功！", "success"));
+                    .then(() => alert("公告同步成功！"));
             }
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
@@ -575,18 +344,20 @@
             
             const pay = payInput === '' ? price : (parseInt(payInput) || 0);
             
-            if(!name || !item) {
-                showCustomAlert("⚠️ 請確實填寫姓名與品項內容！", "error");
-                return;
-            }
+            if(!name || !item) return alert("請填寫姓名與品項內容！");
             
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
-            document.getElementById('userName').value = ''; document.getElementById('userItem').value = '';
-            document.getElementById('price').value = ''; document.getElementById('pay').value = '';
+            
+            document.getElementById('userName').value = ''; 
+            document.getElementById('userItem').value = '';
+            document.getElementById('price').value = ''; 
+            document.getElementById('pay').value = '';
         }
         
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
+        
         function settleChange(id) { database.ref('orders').child(id).update({ changeSettled: true }); }
+        
         function startEdit(id) { editingId = id; database.ref('orders').once('value', (s) => renderTable(s.val())); }
         function cancelEdit() { editingId = null; database.ref('orders').once('value', (s) => renderTable(s.val())); }
 
@@ -615,16 +386,21 @@
                 Object.keys(orders).forEach(id => {
                     const o = orders[id];
                     tNeed += o.price;
+                    
                     const isEditing = (editingId === id);
                     const changeAmt = o.pay - o.price;
                     const safeItem = o.item.replace(/"/g, '&quot;');
+                    
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
                     const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
 
                     if (o.isPaid) {
-                        if (changeAmt <= 0 || o.changeSettled) tGet += o.price;
-                        else tGet += o.pay;
+                        if (changeAmt <= 0 || o.changeSettled) {
+                            tGet += o.price;
+                        } else {
+                            tGet += o.pay;
+                        }
 
                         if (isEditing) {
                             paidBody.innerHTML += `<tr>
@@ -633,18 +409,31 @@
                                 <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:100%"></td>
                                 <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:100%"></td>
                                 <td>編輯中</td>
-                                <td><div class="action-btns"><button class="btn-save" onclick="saveEdit('${id}')">💾</button><button class="btn-del" onclick="cancelEdit()">❌</button></div></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
+                                        <button class="btn-del" onclick="cancelEdit()">❌</button>
+                                    </div>
+                                </td>
                             </tr>`;
                         } else {
                             let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
+                            
                             let changeStatusHtml = '';
-                            if (changeAmt <= 0) changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">✓</span>`;
-                            else {
+                            if (changeAmt <= 0) {
+                                changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">✓</span>`;
+                            } else {
                                 const toggleStatus = !o.changeSettled;
                                 const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
-                                if (o.changeSettled) changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">✓</span>`;
-                                else changeStatusHtml = isAdminMode ? `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
+                                if (o.changeSettled) {
+                                    changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">✓</span>`;
+                                } else {
+                                    changeStatusHtml = isAdminMode ? 
+                                        `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : 
+                                        `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
+                                }
                             }
+
                             paidBody.innerHTML += `<tr>
                                 <td><strong>${o.name}</strong></td>
                                 <td style="color:#475569">${o.item}</td>
@@ -656,6 +445,7 @@
                         }
                     } else {
                         tUnpaid += o.price;
+
                         if (isEditing) {
                             unpaidBody.innerHTML += `<tr>
                                 <td><strong>${o.name}</strong></td>
@@ -663,13 +453,22 @@
                                 <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:100%"></td>
                                 <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:100%"></td>
                                 <td>編輯中</td>
-                                <td><div class="action-btns"><button class="btn-save" onclick="saveEdit('${id}')">💾</button><button class="btn-del" onclick="cancelEdit()">❌</button></div></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-save" onclick="saveEdit('${id}')">💾</button>
+                                        <button class="btn-del" onclick="cancelEdit()">❌</button>
+                                    </div>
+                                </td>
                             </tr>`;
                         } else {
                             let btnHtml = '';
                             if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">收款</button> `;
-                            if (canEdit) btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
-                            else btnHtml += `<span class="status-icon-only">🔒</span>`;
+                            if (canEdit) {
+                                btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
+                            } else {
+                                btnHtml += `<span class="status-icon-only">🔒</span>`;
+                            }
+
                             unpaidBody.innerHTML += `<tr>
                                 <td><strong>${o.name}</strong></td>
                                 <td style="color:#475569">${o.item}</td>
@@ -682,15 +481,23 @@
                     }
                 });
             }
+            
             document.getElementById('totalNeed').innerText = tNeed;
             document.getElementById('totalGet').innerText = tGet;
             document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
 
+        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
+
+        // 👇 智能點餐分類排序引擎
         function getSortKey(name) {
-            let cat = "2"; 
+            let cat = "2"; // 預設：中間 (單點配餐)
+            // 判斷是否為主食 (最上面)
             if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "1";
+            // 判斷是否為飲料 (最下面)
             if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "3";
+
+            // 👇 核心食材群聚 (強制把相關肉類綁在一起)
             let subCat = "99";
             if (name.includes('牛')) subCat = "01";
             else if (name.includes('豬')) subCat = "02";
@@ -704,6 +511,7 @@
             else if (name.includes('套餐')) subCat = "10";
             else if (name.includes('薯')) subCat = "11";
             else if (name.includes('蛋')) subCat = "12";
+
             return cat + "-" + subCat + "-" + name;
         }
 
@@ -711,34 +519,50 @@
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; 
+                
                 if(orders) {
                     let orderList = Object.values(orders);
                     let processedItems = [];
+
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = orderList[i].item.trim();
                         let currentName = orderList[i].name;
+
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
+
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
                             currentItem = currentItem + "、" + orderList[i+1].item.trim();
                             i++; 
                         }
+                        
                         processedItems.push({ name: currentName, item: currentItem });
                     }
+
                     processedItems.forEach(o => { 
                         o.item.split(/[+＋]/).forEach(singleItem => {
                             const name = singleItem.trim();
                             if(name) { 
-                                if (!stats[name]) stats[name] = { count: 0, users: [] };
+                                if (!stats[name]) {
+                                    stats[name] = { count: 0, users: [] };
+                                }
                                 stats[name].count++;
-                                if (!stats[name].users.includes(o.name)) stats[name].users.push(o.name);
+                                if (!stats[name].users.includes(o.name)) {
+                                    stats[name].users.push(o.name);
+                                }
                                 total++; 
                             }
                         });
                     }); 
                 }
+                
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
-                const sortedStats = Object.entries(stats).sort((a, b) => getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW'));
+                
+                // 👇 使用智能引擎進行排序：先比大分類，再比食材，最後回歸純粹的文字拼音排序
+                const sortedStats = Object.entries(stats).sort((a, b) => {
+                    return getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW');
+                });
+                
                 document.getElementById('statsContent').innerHTML = sortedStats.map(([k,v]) => `
                     <div class="stats-item">
                         <div class="stats-item-left">🍱 ${k}</div>
