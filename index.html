@@ -122,7 +122,7 @@
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
-        /* 全新客製化進度視窗樣式 */
+        /* 客製化進度視窗樣式 */
         .custom-alert-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 9999; }
         .custom-alert-box { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center; min-width: 320px; max-width: 90%; }
         .custom-alert-text { font-size: 18px; font-weight: bold; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
@@ -300,9 +300,10 @@
 
     <script>
         // =========================================================================
-        // ✅ 已經為您設定好正確的 Apps Script 中繼網址，您完全不需要修改！
+        // 🔑 請在這裡貼上你用「個人 Gmail 帳號」申請的 AIzaSy 開頭金鑰！
+        // 如果沒有填入這個，AI 就無法幫你看菜單！
         // =========================================================================
-        const PROXY_URL = "https://script.google.com/macros/s/AKfycbwjoqtvRXrA9VROhvTRwktXqoQ701UBUDNV-P6oIVPIkSTlpft1o-_xaa8pZlEO5q0w/exec"; 
+        const GEMINI_API_KEY = "AQ.Ab8RN6JxiceGwobruLS3PLCW4HCWln72QLenXa5TCTxgG25E9A"; 
 
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
@@ -370,7 +371,6 @@
             const panel = document.getElementById('posPanel');
             const catContainer = document.getElementById('posCategories');
             
-            // 終極防護：不管 Firebase 傳來什麼詭異格式，強制將它轉回乾淨的陣列
             posMenuData = [];
             if (Array.isArray(data)) {
                 posMenuData = data.filter(item => item && item.category);
@@ -415,7 +415,6 @@
             const targetCat = posMenuData.find(c => c.category === activeCategory);
             if (!targetCat || !targetCat.items) return;
             
-            // 防護二：確保 items 也絕對是陣列
             let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items || {});
             
             itemsArray.forEach(item => {
@@ -433,6 +432,10 @@
         }
 
         function uploadAndScanMenu(input) {
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY.startsWith("AIza")) {
+                showCustomAlert("⚠️ <b>注意：</b>您的 Gemini API Key 無效！<br><br><span style='font-size:14px;color:#64748b;'>請確定您有到 aistudio.google.com 申請，且開頭必須是「AIza」。<br>照片仍會上傳供大家檢視，但無法啟用 AI 自動產生 POS 按鈕功能。</span>", "error");
+            }
+
             if (input.files && input.files[0]) {
                 showCustomAlert("⏳ <b>照片上傳中...</b>", "processing");
                 
@@ -453,7 +456,12 @@
                         
                         database.ref('config/menuImage').set(optimizedUrl)
                             .then(() => {
-                                runAiOcr(optimizedUrl);
+                                if (GEMINI_API_KEY && GEMINI_API_KEY.startsWith("AIza")) {
+                                    runAiOcr(optimizedUrl);
+                                } else {
+                                    showCustomAlert("✅ 照片已更新", "success");
+                                    input.value = '';
+                                }
                             })
                             .catch(err => {
                                 showCustomAlert("❌ 照片上傳失敗：" + err.message, "error");
@@ -466,36 +474,53 @@
             }
         }
 
-        // ==========================================
-        // ✅ 已修復：正確連接你的 Apps Script 中繼站
-        // ==========================================
         async function runAiOcr(base64DataUrl) {
             showCustomAlert("✨ <b>AI 正在掃描並分析菜單中</b><br><br><span style='font-size:14px;color:#64748b;'>大約需要 5-10 秒，請勿關閉網頁...</span>", "processing");
             
             const base64Content = base64DataUrl.split(',')[1];
+            const mimeType = base64DataUrl.split(',')[0].split(':')[1].split(';')[0];
+
+            const promptText = `這是一張餐廳菜單。請將所有餐點整理出來。
+            1. 將品項分為大類（如：主食、單點、飲料）。
+            2. 遇到有不同口味、大小（如：大/小、各種口味），必須拆開成獨立的品項，例如「陽春麵(大)」、「陽春麵(小)」。
+            請絕對只回傳一個合法的 JSON 陣列，格式範例如下：
+            [
+              {
+                "category": "主食",
+                "items": [
+                  {"name": "陽春麵(小)", "price": 40},
+                  {"name": "陽春麵(大)", "price": 50}
+                ]
+              }
+            ]
+            請不要加上 \`\`\`json 標籤，只要純文字陣列。`;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+            
+            const payload = {
+                contents: [{
+                    parts: [
+                        { text: promptText },
+                        { inlineData: { mimeType: mimeType, data: base64Content } }
+                    ]
+                }]
+            };
 
             try {
-                // 將圖片傳送到您的 Apps Script
-                const response = await fetch(PROXY_URL, {
+                const response = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ image: base64Content })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP 錯誤碼: ${response.status}`);
+                    const errData = await response.json();
+                    throw new Error(errData.error?.message || `HTTP 錯誤碼: ${response.status}`);
                 }
                 
                 const data = await response.json();
-                
-                // 檢查從 Apps Script 回來的 Gemini 資料
-                if (data.error) {
-                    throw new Error(data.error.message || "未知的 API 錯誤");
-                }
-                
                 let textResult = data.candidates[0].content.parts[0].text;
                 
-                // 利用 Regex 強制挖出 JSON 陣列，過濾掉 AI 廢話
                 let match = textResult.match(/\[[\s\S]*\]/);
                 if (match) {
                     textResult = match[0];
@@ -509,7 +534,7 @@
                 
             } catch (error) {
                 console.error("AI 錯誤:", error);
-                showCustomAlert("❌ <b>AI 辨識失敗</b><br><br><span style='font-size:14px;color:#e11d48;word-break:break-all;text-align:left;display:inline-block;'>可能原因：<br>1. Apps Script 設定未設為所有人存取<br>2. 菜單內容過於複雜<br><br>系統回報錯誤：<br>" + error.message + "</span>", "error");
+                showCustomAlert("❌ <b>AI 辨識失敗</b><br><br><span style='font-size:14px;color:#e11d48;word-break:break-all;text-align:left;display:inline-block;'>可能原因：<br>1. 菜單照片畫質過低<br>2. API Key 權限不足或失效<br><br>系統回報錯誤：<br>" + error.message + "</span>", "error");
                 document.querySelector('.file-input').value = '';
             }
         }
