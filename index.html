@@ -37,6 +37,11 @@
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
 
+        /* 👇 團主建立文字選單的區塊設計 */
+        .admin-menu-setup { display: none; background: var(--dark); padding: 15px 20px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .admin-menu-setup textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2d3748; color: white; font-size: 14px; box-sizing: border-box; resize: vertical; }
+        .admin-menu-setup textarea::placeholder { color: #94a3b8; }
+
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
         .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); } 
@@ -155,10 +160,17 @@
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
             <button class="btn-sync" onclick="updateAnnouncement()">同步</button>
-            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
+            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳照片：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button class="btn-stats" onclick="showStats()">📊 統計</button>
             <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空訂單</button>
+        </div>
+        
+        <!-- 👇 新增：團主專屬的文字選單建檔區 -->
+        <div class="admin-menu-setup" id="adminMenuSetup">
+            <div style="margin-bottom: 8px; font-size: 14px; color: #cbd5e1; font-weight: bold;">📋 建立菜單快捷下拉選項 (格式：品項,價格) (換行代表不同品項)</div>
+            <textarea id="menuTextInput" rows="4" placeholder="請貼上 AI 整理好的菜單，範例：&#10;蒜香雞胸麵,100&#10;青醬蛤蜊麵,120&#10;鮮奶茶,40"></textarea>
+            <button class="btn-sync" style="margin-top: 10px; width: 100%; height: 36px; background:#a55eea;" onclick="updateTextMenu()">上傳至下拉選單</button>
         </div>
         
         <div class="status-banner">
@@ -196,7 +208,9 @@
                 </div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
-                    <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
+                    <!-- 👇 綁定 list="menuDataList"，讓它變成可以打字也可以下拉的超級輸入框 -->
+                    <input list="menuDataList" type="text" id="userItem" placeholder="可下拉選擇或手動輸入..." class="form-box">
+                    <datalist id="menuDataList"></datalist>
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
@@ -264,18 +278,75 @@
         let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
         localStorage.setItem('myDeviceId', myId);
         let editingId = null;
+        let globalMenuItems = []; // 存放從資料庫抓下來的文字選單
 
         window.addEventListener('load', () => {
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
             document.getElementById('adminToggle').checked = isAdm;
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
+            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
         });
 
         function toggleAdminMode() {
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
+            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
             database.ref('orders').once('value', s => renderTable(s.val()));
+        }
+
+        // 👇 讀取快捷文字菜單，並產生 Datalsit 下拉選項
+        database.ref('config/menuItems').on('value', (s) => {
+            const items = s.val();
+            const datalist = document.getElementById('menuDataList');
+            datalist.innerHTML = '';
+            globalMenuItems = [];
+            
+            if (items) {
+                items.forEach(item => {
+                    globalMenuItems.push(item);
+                    const opt = document.createElement('option');
+                    opt.value = item.name;
+                    datalist.appendChild(opt);
+                });
+                // 同步文字回到團主設定區，方便日後修改
+                const text = items.map(i => `${i.name},${i.price}`).join('\n');
+                document.getElementById('menuTextInput').value = text;
+            } else {
+                document.getElementById('menuTextInput').value = '';
+            }
+        });
+
+        // 👇 監聽品項輸入框，只要使用者點選下拉選單的項目，價格瞬間連動！
+        document.getElementById('userItem').addEventListener('input', (e) => {
+            const val = e.target.value;
+            const matchedItem = globalMenuItems.find(i => i.name === val);
+            if(matchedItem) {
+                document.getElementById('price').value = matchedItem.price;
+                document.getElementById('pay').value = matchedItem.price; // 實付一併自動填上
+            }
+        });
+
+        // 👇 團主點擊「上傳至下拉選單」時的處理邏輯
+        function updateTextMenu() {
+            const text = document.getElementById('menuTextInput').value.trim();
+            if (!text) {
+                database.ref('config/menuItems').remove();
+                alert("已清空快捷選單！");
+                return;
+            }
+            const lines = text.split('\n');
+            const menuItems = [];
+            lines.forEach(line => {
+                const parts = line.split(/[,，]/); // 支援半形或全形的逗號
+                if (parts.length >= 2) {
+                    const name = parts[0].trim();
+                    const price = parseInt(parts[1].trim()) || 0;
+                    if (name) menuItems.push({ name, price });
+                }
+            });
+            database.ref('config/menuItems').set(menuItems)
+                .then(() => alert("快捷選單建立成功！大家現在可以直接從選單點餐了！"));
         }
 
         function uploadMenu(input) {
@@ -497,7 +568,7 @@
             // 判斷是否為飲料 (最下面)
             if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "3";
 
-            // 👇 核心食材群聚 (強制把相關肉類綁在一起)
+            // 👇 核心食材群聚 (強制把相關肉類與種類綁在一起，保證經典原味純牛堡絕對會在一起)
             let subCat = "99";
             if (name.includes('牛')) subCat = "01";
             else if (name.includes('豬')) subCat = "02";
@@ -558,7 +629,7 @@
                 
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
                 
-                // 👇 使用智能引擎進行排序：先比大分類，再比食材，最後回歸純粹的文字拼音排序
+                // 👇 使用智能引擎進行排序：先比大分類，再比食材，最後回歸純粹的文字拼音排序 (取消了字數干擾)
                 const sortedStats = Object.entries(stats).sort((a, b) => {
                     return getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW');
                 });
