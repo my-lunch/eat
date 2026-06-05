@@ -300,11 +300,9 @@
 
     <script>
         // =========================================================================
-        // 🔑 請在這裡貼上你的 Gemini API Key 🔑
-        // 將 YOUR_GEMINI_API_KEY_HERE 換成你申請到的密碼，記得保留前後的雙引號 ("")
-        // 例如： const GEMINI_API_KEY = "https://script.google.com/macros/s/AKfycbwjoqtvRXrA9VROhvTRwktXqoQ701UBUDNV-P6oIVPIkSTlpft1o-_xaa8pZlEO5q0w/exec";
+        // ✅ 已經為您設定好正確的 Apps Script 中繼網址，您完全不需要修改！
         // =========================================================================
-        const GEMINI_API_KEY = "https://script.google.com/macros/s/AKfycbwjoqtvRXrA9VROhvTRwktXqoQ701UBUDNV-P6oIVPIkSTlpft1o-_xaa8pZlEO5q0w/exec"; 
+        const PROXY_URL = "https://script.google.com/macros/s/AKfycbwjoqtvRXrA9VROhvTRwktXqoQ701UBUDNV-P6oIVPIkSTlpft1o-_xaa8pZlEO5q0w/exec"; 
 
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
@@ -359,7 +357,6 @@
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
         });
 
-        // 👇 已修復：刪除了多餘的 adminMenuSetup 引用，確保控制台可以正常開關！
         function toggleAdminMode() {
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
@@ -436,10 +433,6 @@
         }
 
         function uploadAndScanMenu(input) {
-            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
-                showCustomAlert("⚠️ <b>注意：</b>您尚未設定 Gemini API Key！<br><br><span style='font-size:14px;color:#64748b;'>照片仍會上傳供大家檢視，但無法啟用 AI 自動產生 POS 按鈕功能。<br>請在程式碼中修改 GEMINI_API_KEY 的值。</span>", "error");
-            }
-
             if (input.files && input.files[0]) {
                 showCustomAlert("⏳ <b>照片上傳中...</b>", "processing");
                 
@@ -460,12 +453,7 @@
                         
                         database.ref('config/menuImage').set(optimizedUrl)
                             .then(() => {
-                                if (GEMINI_API_KEY && GEMINI_API_KEY !== "YOUR_GEMINI_API_KEY_HERE") {
-                                    runAiOcr(optimizedUrl);
-                                } else {
-                                    showCustomAlert("✅ 照片已更新", "success");
-                                    input.value = '';
-                                }
+                                runAiOcr(optimizedUrl);
                             })
                             .catch(err => {
                                 showCustomAlert("❌ 照片上傳失敗：" + err.message, "error");
@@ -478,51 +466,33 @@
             }
         }
 
+        // ==========================================
+        // ✅ 已修復：正確連接你的 Apps Script 中繼站
+        // ==========================================
         async function runAiOcr(base64DataUrl) {
             showCustomAlert("✨ <b>AI 正在掃描並分析菜單中</b><br><br><span style='font-size:14px;color:#64748b;'>大約需要 5-10 秒，請勿關閉網頁...</span>", "processing");
             
             const base64Content = base64DataUrl.split(',')[1];
-            const mimeType = base64DataUrl.split(',')[0].split(':')[1].split(';')[0];
-
-            const promptText = `這是一張餐廳菜單。請將所有餐點整理出來。
-            1. 將品項分為大類（如：主食、單點、飲料）。
-            2. 遇到有不同口味、大小（如：大/小、各種口味），必須拆開成獨立的品項，例如「陽春麵(大)」、「陽春麵(小)」。
-            請絕對只回傳一個合法的 JSON 陣列，格式範例如下：
-            [
-              {
-                "category": "主食",
-                "items": [
-                  {"name": "陽春麵(小)", "price": 40},
-                  {"name": "陽春麵(大)", "price": 50}
-                ]
-              }
-            ]
-            請不要加上 \`\`\`json 標籤，只要純文字陣列。`;
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
-            
-            const payload = {
-                contents: [{
-                    parts: [
-                        { text: promptText },
-                        { inlineData: { mimeType: mimeType, data: base64Content } }
-                    ]
-                }]
-            };
 
             try {
-                const response = await fetch(url, {
+                // 將圖片傳送到您的 Apps Script
+                const response = await fetch(PROXY_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ image: base64Content })
                 });
                 
                 if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error?.message || `HTTP 錯誤碼: ${response.status}`);
+                    throw new Error(`HTTP 錯誤碼: ${response.status}`);
                 }
                 
                 const data = await response.json();
+                
+                // 檢查從 Apps Script 回來的 Gemini 資料
+                if (data.error) {
+                    throw new Error(data.error.message || "未知的 API 錯誤");
+                }
+                
                 let textResult = data.candidates[0].content.parts[0].text;
                 
                 // 利用 Regex 強制挖出 JSON 陣列，過濾掉 AI 廢話
@@ -539,7 +509,7 @@
                 
             } catch (error) {
                 console.error("AI 錯誤:", error);
-                showCustomAlert("❌ <b>AI 辨識失敗</b><br><br><span style='font-size:14px;color:#e11d48;word-break:break-all;text-align:left;display:inline-block;'>可能原因：<br>1. 菜單照片畫質過低<br>2. API Key 權限不足或失效<br><br>系統回報錯誤：<br>" + error.message + "</span>", "error");
+                showCustomAlert("❌ <b>AI 辨識失敗</b><br><br><span style='font-size:14px;color:#e11d48;word-break:break-all;text-align:left;display:inline-block;'>可能原因：<br>1. Apps Script 設定未設為所有人存取<br>2. 菜單內容過於複雜<br><br>系統回報錯誤：<br>" + error.message + "</span>", "error");
                 document.querySelector('.file-input').value = '';
             }
         }
@@ -811,7 +781,6 @@
 
         function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
         
-        // 刪除或清空時也套用精緻彈窗
         function deleteOrder(id) { 
             if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); 
         }
