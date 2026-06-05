@@ -13,6 +13,8 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- 👇 引入前端純 JS 掃描引擎 (完全免金鑰、不被公司擋) -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 
     <style>
         :root { --primary: #ff9f43; --danger: #e11d48; --success: #26de81; --bg: #f1f5f9; --dark: #1e293b; }
@@ -37,7 +39,7 @@
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
 
-        /* 👇 免金鑰方案：團主純文字建檔區 */
+        /* 👇 修改為進階版的照片掃描與容錯區塊 */
         .admin-menu-setup { display: none; background: var(--dark); padding: 15px 20px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
         .admin-menu-setup textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2d3748; color: white; font-size: 14px; box-sizing: border-box; resize: vertical; line-height: 1.5; }
         .admin-menu-setup textarea::placeholder { color: #94a3b8; }
@@ -184,17 +186,23 @@
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
             <button class="btn-sync" onclick="updateAnnouncement()">同步公告</button>
-            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單照片：</span>
+            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">純上傳照片：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenuImageOnly(this)">
             <button class="btn-stats" onclick="showStats()">📊 統計</button>
             <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空</button>
         </div>
 
-        <!-- 👇 免金鑰方案：團主純文字建檔區 -->
+        <!-- 👇 完全免金鑰：照片直接掃描 & 超強容錯文字區 -->
         <div class="admin-menu-setup" id="adminMenuSetup">
-            <div style="color: #cbd5e1; font-weight: bold; margin-bottom: 8px; font-size: 14px;">📋 貼上菜單文字，自動生成 POS 按鈕 (格式：品項,價格)</div>
-            <textarea id="menuTextInput" rows="4" placeholder="請將菜單文字複製貼上，例如：&#10;經典原味純牛堡,120&#10;美式脆薯,50&#10;紅茶,30"></textarea>
-            <button class="btn-sync" style="margin-top: 10px; width: 100%; height: 36px; background:#a55eea;" onclick="generatePOSMenu()">自動分類並產生 POS 按鈕</button>
+            <div style="color: #cbd5e1; font-weight: bold; margin-bottom: 8px; font-size: 14px;">
+                📋 步驟一：讓系統讀取菜單文字 (不需再打逗號！)
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input type="file" id="ocrFileInput" accept="image/*" style="color: white; font-size: 13px;">
+                <button class="btn-sync" style="background: #2563eb;" onclick="scanImageToText()">🔍 自動讀取照片文字</button>
+            </div>
+            <textarea id="menuTextInput" rows="6" placeholder="您可以點擊上方按鈕掃描照片，或是直接在這裡貼上文字。&#10;格式超級自由 (有空格就可以)：&#10;炒涼麵 小 70&#10;味噌湯 20&#10;1. 牛肉麵 120元"></textarea>
+            <button class="btn-sync" style="margin-top: 10px; width: 100%; height: 36px; background:#a55eea;" onclick="generatePOSMenu()">🪄 步驟二：自動分類並產生 POS 按鈕</button>
         </div>
         
         <div class="status-banner">
@@ -394,7 +402,42 @@
             });
         }
 
-        // 👇 智能分類排序引擎 (將同類食材綁在一起)
+        // 👇 Tesseract.js 本機端照片掃描 (完全免金鑰)
+        async function scanImageToText() {
+            const fileInput = document.getElementById('ocrFileInput');
+            const file = fileInput.files[0];
+            if(!file) {
+                showCustomAlert("⚠️ 請先點擊按鈕左側的『選擇檔案』，上傳一張菜單照片", "error");
+                return;
+            }
+
+            showCustomAlert("⏳ <b>正在啟動本機端 AI 掃描...</b><br><br><span style='font-size:14px;color:#64748b;'>此功能完全免費且安全，大約需要 10~20 秒，請勿關閉網頁。</span>", "processing");
+
+            try {
+                // 初始化 Tesseract (指定繁體中文)
+                const worker = await Tesseract.createWorker('chi_tra');
+                const ret = await worker.recognize(file);
+                
+                // 將掃描結果放入文字框
+                const scannedText = ret.data.text;
+                const textArea = document.getElementById('menuTextInput');
+                
+                // 如果原本有字就換行加上去
+                if (textArea.value.trim() !== '') {
+                    textArea.value += '\n\n' + scannedText;
+                } else {
+                    textArea.value = scannedText;
+                }
+
+                await worker.terminate();
+
+                showCustomAlert("✅ <b>照片文字掃描完成！</b><br><br><span style='font-size:14px;color:#64748b;'>請在文字框內檢查內容，您可以隨意修改錯字或排版。<br>確認沒問題後，點擊『自動分類並產生 POS 按鈕』即可！</span>", "success");
+            } catch(e) {
+                showCustomAlert("❌ 照片掃描失敗：" + e.message, "error");
+            }
+        }
+
+        // 👇 智能分類排序引擎
         function getSubSortWeight(name) {
             let subCat = "99";
             if (name.includes('牛')) subCat = "01";
@@ -409,7 +452,7 @@
             return subCat + "-" + name;
         }
 
-        // 👇 將團主貼上的文字自動分類為 POS 按鈕陣列 (無須 AI 金鑰)
+        // 👇 超強容錯的智能文字轉換器 (不需要逗號了)
         function generatePOSMenu() {
             const text = document.getElementById('menuTextInput').value.trim();
             if (!text) {
@@ -422,21 +465,34 @@
             const categories = { "主食": [], "單點": [], "飲品": [] };
 
             lines.forEach(line => {
-                const parts = line.split(/[,，\$]/);
-                if (parts.length >= 2) {
-                    const name = parts[0].trim();
-                    const priceStr = parts[1].replace(/[^\d]/g, '');
+                line = line.trim();
+                if (!line) return;
+
+                // 🌟 新的超強容錯判斷：不管你打「炒涼麵 小 70」、「位曾湯 20」、「大薯 $50」、「牛肉麵 120元」
+                // 它會自動抓出前面的「品項」和最後面的「數字價格」
+                const match = line.match(/^[\d\.\-\*]*\s*(.*?)\s*[:：,，\$]?\s*(\d+)\s*[元塊]?$/);
+
+                if (match && match.length >= 3) {
+                    const name = match[1].trim();
+                    const priceStr = match[2];
                     const price = parseInt(priceStr) || 0;
                     
-                    if (name) {
+                    if (name && price > 0) {
                         let cat = "單點";
+                        // 包含「湯」也算進飲品/湯類大項
                         if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "主食";
-                        else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "飲品";
+                        else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|湯)/.test(name)) cat = "飲品";
                         
                         categories[cat].push({ name, price });
                     }
                 }
             });
+
+            // 如果全部沒解析成功，提醒一下
+            if (categories["主食"].length === 0 && categories["單點"].length === 0 && categories["飲品"].length === 0) {
+                showCustomAlert("⚠️ <b>找不到有效的品項！</b><br><br><span style='font-size:14px;color:#64748b;'>請確定文字裡面有「品名」跟「價格 (數字)」。<br>範例：炒涼麵 小 70</span>", "error");
+                return;
+            }
 
             // 對分類內的項目進行智能排序
             Object.keys(categories).forEach(cat => {
@@ -449,7 +505,7 @@
             if (categories["飲品"].length > 0) finalPosMenu.push({ category: "飲品", items: categories["飲品"] });
 
             database.ref('config/posMenu').set(finalPosMenu)
-                .then(() => alert("🎉 POS 機按鈕建立成功！系統已自動幫您分類好囉！"));
+                .then(() => showCustomAlert("🎉 <b>POS 機按鈕建立成功！</b><br><br><span style='font-size:14px;color:#64748b;'>系統已自動忽略亂碼，並把品項與價格分類完畢！</span>", "success"));
         }
 
         // 單純上傳圖片給團員看
@@ -471,7 +527,7 @@
                         
                         database.ref('config/menuImage').set(optimizedUrl)
                             .then(() => {
-                                showCustomAlert("✅ 菜單照片上傳成功！<br><br><span style='font-size:14px;color:#64748b;'>如果您需要設定 POS 按鈕，請將菜單文字複製貼上到上方的輸入框中。</span>", "success");
+                                showCustomAlert("✅ 菜單照片上傳成功！", "success");
                                 input.value = '';
                             })
                             .catch(err => {
