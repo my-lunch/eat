@@ -60,13 +60,12 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        /* 🏪 POS 機按鈕面板樣式 */
         .pos-panel { display: none; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
         .pos-layout { display: flex; gap: 20px; }
         .pos-categories { width: 20%; display: flex; flex-direction: column; gap: 10px; border-right: 2px solid #e2e8f0; padding-right: 15px; }
         .pos-cat-btn { background: white; border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-align: left; transition: 0.2s; color: var(--dark); }
         .pos-cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .pos-items-grid { width: 80%; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; max-height: 300px; overflow-y: auto; padding-right: 5px; }
+        .pos-items-grid { width: 80%; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; max-height: 350px; overflow-y: auto; padding-right: 5px; }
         .pos-item-card { background: white; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; gap: 8px; text-align: left; }
         .pos-item-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255,159,67,0.15); }
         .pos-item-name { font-weight: bold; font-size: 14px; color: var(--dark); word-break: break-all; white-space: normal; line-height: 1.4; }
@@ -87,11 +86,12 @@
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
+        /* 比例鎖定：姓名 12% | 品項 48% | 應付 10% | 實收 10% | 找零 10% */
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
-        th:nth-child(3), td:nth-child(3) { width: 13%; } 
-        th:nth-child(4), td:nth-child(4) { width: 13%; } 
-        th:nth-child(5), td:nth-child(5) { width: 8%; } 
+        th:nth-child(2), td:nth-child(2) { width: 48%; padding-right: 25px; white-space: normal; word-break: break-all; } 
+        th:nth-child(3), td:nth-child(3) { width: 10%; } 
+        th:nth-child(4), td:nth-child(4) { width: 10%; } 
+        th:nth-child(5), td:nth-child(5) { width: 10%; } 
         th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
@@ -101,11 +101,11 @@
         .btn-edit { background: #4b5563; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         .btn-save { background: #2563eb; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         
+        /* 極小化小紅叉 */
         .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 10px; padding: 2px 4px; font-weight: 900; border-radius: 4px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; }
         
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
-        
         .status-icon-only { font-size: 16px; font-weight: 900; }
         
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: left; }
@@ -121,7 +121,7 @@
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
-        /* 👇 全新客製化進度視窗樣式 */
+        /* 全新客製化進度視窗樣式 */
         .custom-alert-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 9999; }
         .custom-alert-box { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center; min-width: 320px; max-width: 90%; }
         .custom-alert-text { font-size: 18px; font-weight: bold; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
@@ -132,7 +132,6 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 📱 手機版 RWD 防護排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
@@ -168,7 +167,7 @@
 </head>
 <body>
 
-    <!-- 👇 新增的客製化進度視窗 (取代醜醜的 alert) -->
+    <!-- 👇 新增的客製化進度視窗 -->
     <div id="customAlertOverlay" class="custom-alert-overlay"></div>
     <div id="customAlertBox" class="custom-alert-box">
         <div id="customAlertSpinner" class="spinner" style="display: none;"></div>
@@ -177,7 +176,6 @@
     </div>
 
     <div class="container">
-        
         <div class="page-title-section">
             <h1>午餐吃什麼</h1>
             <h2>點餐系統</h2>
@@ -214,7 +212,7 @@
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
             
-            <!-- 🏪 POS 機按鈕面板區 -->
+            <!-- 🏪 POS 按鈕面板區 -->
             <div class="pos-panel" id="posPanel">
                 <div class="pos-layout">
                     <div class="pos-categories" id="posCategories"></div>
@@ -224,10 +222,10 @@
 
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
-                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
-                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
-                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
-                <div style="width: 18%;"></div> 
+                <div style="width: 48%; padding-right: 25px; box-sizing: border-box;">品項</div>
+                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">應付</div>
+                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">實付</div>
+                <div style="width: 20%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
@@ -235,19 +233,19 @@
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
+                <div style="width: 48%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
-                    <input type="text" id="userItem" placeholder="上方點選菜單，或手動輸入..." class="form-box">
+                    <input type="text" id="userItem" placeholder="上方點選按鈕，或手動輸入..." class="form-box">
                 </div>
-                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="100" class="form-box">
                 </div>
-                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 10%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="100" class="form-box">
                 </div>
-                <div style="width: 18%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                <div style="width: 20%; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button class="btn-sync" style="height: 48px; width: 100%; max-width: 120px; border-radius: 8px; font-weight: 900;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -354,7 +352,6 @@
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
         });
 
-        // 💡 修正 BUG：移除了對不存在的 adminMenuSetup 元素的呼叫！
         function toggleAdminMode() {
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
@@ -364,9 +361,12 @@
 
         // 👑 讀取並動態渲染 POS 機按鈕面板
         database.ref('config/posMenu').on('value', (snapshot) => {
-            posMenuData = snapshot.val();
+            let data = snapshot.val();
             const panel = document.getElementById('posPanel');
             const catContainer = document.getElementById('posCategories');
+            
+            // 防呆處理：Firebase 有時會把陣列轉成物件，這裡強制轉換回來
+            posMenuData = Array.isArray(data) ? data : (data ? Object.values(data) : null);
             
             if (!posMenuData || posMenuData.length === 0) {
                 panel.style.display = 'none';
@@ -405,7 +405,10 @@
             const targetCat = posMenuData.find(c => c.category === activeCategory);
             if (!targetCat || !targetCat.items) return;
             
-            targetCat.items.forEach(item => {
+            // 防呆處理：確保 items 也是陣列
+            let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items);
+            
+            itemsArray.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'pos-item-card';
                 card.onclick = () => {
@@ -418,9 +421,8 @@
             });
         }
 
-        // 🤖 上傳圖片並自動呼叫 API 進行辨識
         function uploadAndScanMenu(input) {
-            if (!GEMINI_API_KEY || GEMINI_API_KEY === "AQ.Ab8RN6I0nkCVgEvhbWbmqNXwWIHFJJO8xITzHfz9-EFL8CSC-A") {
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_AQ.Ab8RN6I0nkCVgEvhbWbmqNXwWIHFJJO8xITzHfz9-EFL8CSC-A_HERE") {
                 showCustomAlert("⚠️ <b>注意：</b>您尚未設定 Gemini API Key！<br><br><span style='font-size:14px;color:#64748b;'>照片仍會上傳供大家檢視，但無法啟用 AI 自動產生 POS 按鈕功能。</span>", "error");
             }
 
@@ -462,7 +464,6 @@
             }
         }
 
-        // 呼叫 Gemini AI (降版為最穩定相容的 flash-latest 並套用強制 JSON 輸出)
         async function runAiOcr(base64DataUrl) {
             showCustomAlert("✨ <b>AI 正在掃描並分析菜單中</b><br><br><span style='font-size:14px;color:#64748b;'>大約需要 5-10 秒，請勿關閉網頁...</span>", "processing");
             
@@ -471,6 +472,7 @@
 
             const promptText = "這是一張餐廳菜單。請仔細辨識所有的品項、口味組合與價格。請依據餐點類型進行大分類（例如：主食、單點、飲料）。【極重要指令】：如果某個品項有分多種口味、盎司、或規格（例如：義大利麵有分紅醬/青醬/白醬；漢堡有分3oz/4oz/沙拉；套餐有分A餐/B餐），請不要把它們縮寫在一起，請必須將每一種口味規格與餐點名稱組合成『獨立的品項個體』完整條列出來！";
 
+            // 使用最相容且穩定的 flash-latest 版本，並透過 JSON 模式強迫輸出格式
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
             
             const payload = {
@@ -480,7 +482,6 @@
                         { inlineData: { mimeType: mimeType, data: base64Content } }
                     ]
                 }],
-                // 強制 AI 輸出 JSON 格式，解決解析失敗問題
                 generationConfig: {
                     responseMimeType: "application/json"
                 }
