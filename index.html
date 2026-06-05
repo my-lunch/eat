@@ -300,9 +300,11 @@
 
     <script>
         // =========================================================================
-        // 🔑 已經為您設定好專屬的 Google Gemini API Key
+        // 🔑 請在這裡貼上你的 Gemini API Key 🔑
+        // 將 YOUR_GEMINI_API_KEY_HERE 換成你申請到的密碼，記得保留前後的雙引號 ("")
+        // 例如： const GEMINI_API_KEY = "https://script.google.com/macros/s/AKfycbwjoqtvRXrA9VROhvTRwktXqoQ701UBUDNV-P6oIVPIkSTlpft1o-_xaa8pZlEO5q0w/exec";
         // =========================================================================
-        const GEMINI_API_KEY = "AQ.Ab8RN6JmuRKlSFbJPnM6p2Ffp1JOEx-L3Cz34kHmpdsK-jFAXg"; 
+        const GEMINI_API_KEY = "https://script.google.com/macros/s/AKfycbwjoqtvRXrA9VROhvTRwktXqoQ701UBUDNV-P6oIVPIkSTlpft1o-_xaa8pZlEO5q0w/exec"; 
 
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
@@ -434,9 +436,8 @@
         }
 
         function uploadAndScanMenu(input) {
-            // 移除了錯誤的 AIzaSy 檢查，不再阻擋您的正確金鑰！
             if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
-                showCustomAlert("⚠️ <b>注意：</b>您的 Gemini API Key 無效！<br><br><span style='font-size:14px;color:#64748b;'>照片仍會上傳，但無法啟用 AI 自動產生 POS 按鈕功能。</span>", "error");
+                showCustomAlert("⚠️ <b>注意：</b>您尚未設定 Gemini API Key！<br><br><span style='font-size:14px;color:#64748b;'>照片仍會上傳供大家檢視，但無法啟用 AI 自動產生 POS 按鈕功能。<br>請在程式碼中修改 GEMINI_API_KEY 的值。</span>", "error");
             }
 
             if (input.files && input.files[0]) {
@@ -459,8 +460,7 @@
                         
                         database.ref('config/menuImage').set(optimizedUrl)
                             .then(() => {
-                                // 移除舊有的開頭檢查，只要有設定就放行
-                                if (GEMINI_API_KEY && GEMINI_API_KEY !== "YOUR_GEMINI_API_KEY_HERE" && GEMINI_API_KEY !== "請換成AIzaSy開頭的密碼") {
+                                if (GEMINI_API_KEY && GEMINI_API_KEY !== "YOUR_GEMINI_API_KEY_HERE") {
                                     runAiOcr(optimizedUrl);
                                 } else {
                                     showCustomAlert("✅ 照片已更新", "success");
