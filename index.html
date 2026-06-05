@@ -60,6 +60,7 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
+        /* 🏪 POS 機按鈕面板樣式 */
         .pos-panel { display: none; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
         .pos-layout { display: flex; gap: 20px; }
         .pos-categories { width: 20%; display: flex; flex-direction: column; gap: 10px; border-right: 2px solid #e2e8f0; padding-right: 15px; }
@@ -176,6 +177,7 @@
     </div>
 
     <div class="container">
+        
         <div class="page-title-section">
             <h1>午餐吃什麼</h1>
             <h2>點餐系統</h2>
@@ -307,7 +309,7 @@
         let posMenuData = null;
 
         // 👇 在這裡貼上你的 Gemini API Key！
-        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
+        const AQ.Ab8RN6I0nkCVgEvhbWbmqNXwWIHFJJO8xITzHfz9-EFL8CSC-A = "AQ.Ab8RN6I0nkCVgEvhbWbmqNXwWIHFJJO8xITzHfz9-EFL8CSC-A"; 
 
         // 🎨 客製化彈出視窗控制函數
         function showCustomAlert(message, type = 'info') {
@@ -365,8 +367,13 @@
             const panel = document.getElementById('posPanel');
             const catContainer = document.getElementById('posCategories');
             
-            // 防呆處理：Firebase 有時會把陣列轉成物件，這裡強制轉換回來
-            posMenuData = Array.isArray(data) ? data : (data ? Object.values(data) : null);
+            // 👇 終極防護：不管 Firebase 傳來什麼詭異格式，強制將它轉回乾淨的陣列
+            posMenuData = [];
+            if (Array.isArray(data)) {
+                posMenuData = data.filter(item => item && item.category);
+            } else if (data && typeof data === 'object') {
+                posMenuData = Object.values(data).filter(item => item && item.category);
+            }
             
             if (!posMenuData || posMenuData.length === 0) {
                 panel.style.display = 'none';
@@ -405,10 +412,11 @@
             const targetCat = posMenuData.find(c => c.category === activeCategory);
             if (!targetCat || !targetCat.items) return;
             
-            // 防呆處理：確保 items 也是陣列
-            let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items);
+            // 👇 防護二：確保 items 也絕對是陣列
+            let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items || {});
             
             itemsArray.forEach(item => {
+                if (!item || !item.name) return;
                 const card = document.createElement('div');
                 card.className = 'pos-item-card';
                 card.onclick = () => {
@@ -446,7 +454,7 @@
                         
                         database.ref('config/menuImage').set(optimizedUrl)
                             .then(() => {
-                                if (GEMINI_API_KEY && GEMINI_API_KEY !== "YOUR_GEMINI_API_KEY_HERE") {
+                                if (GEMINI_API_KEY && AQ.Ab8RN6I0nkCVgEvhbWbmqNXwWIHFJJO8xITzHfz9-EFL8CSC-A !== "YOUR_AQ.Ab8RN6I0nkCVgEvhbWbmqNXwWIHFJJO8xITzHfz9-EFL8CSC-A_HERE") {
                                     runAiOcr(optimizedUrl);
                                 } else {
                                     showCustomAlert("✅ 照片已更新", "success");
@@ -470,10 +478,24 @@
             const base64Content = base64DataUrl.split(',')[1];
             const mimeType = base64DataUrl.split(',')[0].split(':')[1].split(';')[0];
 
-            const promptText = "這是一張餐廳菜單。請仔細辨識所有的品項、口味組合與價格。請依據餐點類型進行大分類（例如：主食、單點、飲料）。【極重要指令】：如果某個品項有分多種口味、盎司、或規格（例如：義大利麵有分紅醬/青醬/白醬；漢堡有分3oz/4oz/沙拉；套餐有分A餐/B餐），請不要把它們縮寫在一起，請必須將每一種口味規格與餐點名稱組合成『獨立的品項個體』完整條列出來！";
+            // 👇 強化過濾器的 Prompt，確保 AI 只吐出乾淨的內容
+            const promptText = `這是一張餐廳菜單。請將所有餐點整理出來。
+            1. 將品項分為大類（如：主食、單點、飲料）。
+            2. 遇到有不同口味、大小（如：大/小、各種口味），必須拆開成獨立的品項，例如「陽春麵(大)」、「陽春麵(小)」。
+            請絕對只回傳一個合法的 JSON 陣列，格式範例如下：
+            [
+              {
+                "category": "主食",
+                "items": [
+                  {"name": "陽春麵(小)", "price": 40},
+                  {"name": "陽春麵(大)", "price": 50}
+                ]
+              }
+            ]
+            請不要加上 \`\`\`json 標籤，只要純文字陣列。`;
 
-            // 使用最相容且穩定的 flash-latest 版本，並透過 JSON 模式強迫輸出格式
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+            // 👇 改回穩定版本，不強制限定 responseMimeType 以避免發生 not supported 錯誤
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${AQ.Ab8RN6I0nkCVgEvhbWbmqNXwWIHFJJO8xITzHfz9-EFL8CSC-A}`;
             
             const payload = {
                 contents: [{
@@ -481,10 +503,7 @@
                         { text: promptText },
                         { inlineData: { mimeType: mimeType, data: base64Content } }
                     ]
-                }],
-                generationConfig: {
-                    responseMimeType: "application/json"
-                }
+                }]
             };
 
             try {
@@ -502,8 +521,13 @@
                 const data = await response.json();
                 let textResult = data.candidates[0].content.parts[0].text;
                 
-                const parsedMenu = JSON.parse(textResult);
+                // 👇 利用 Regex 強制挖出 JSON 陣列，過濾掉 AI 廢話
+                let match = textResult.match(/\[[\s\S]*\]/);
+                if (match) {
+                    textResult = match[0];
+                }
                 
+                const parsedMenu = JSON.parse(textResult);
                 await database.ref('config/posMenu').set(parsedMenu);
                 
                 showCustomAlert("🎉 <b>AI 辨識成功！</b><br><br><span style='font-size:14px;color:#64748b;'>菜單已自動轉為 POS 點餐按鈕。<br>大家現在可以直接點選按鈕點餐囉！</span>", "success");
