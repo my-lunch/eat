@@ -30,6 +30,7 @@
         
         .ann-input { width: 150px; }
         .time-input { width: 110px; }
+        .file-input { width: 180px; color: #cbd5e1; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
 
         .admin-toolbar button { padding: 0 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; height: 36px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
         .btn-sync { background: var(--primary); color: white; }
@@ -47,6 +48,9 @@
 
         .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
+
+        .menu-wrapper { width: 100%; display: none; text-align: center; }
+        .menu-display { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: block; margin-top: 10px; }
 
         .dashboard { display: flex; gap: 20px; }
         .card { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
@@ -71,11 +75,11 @@
         th:last-child, td:last-child { padding-right: 0; }
         
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 40%; padding-right: 25px; white-space: normal; word-break: break-all; } 
+        th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
         th:nth-child(3), td:nth-child(3) { width: 13%; } 
         th:nth-child(4), td:nth-child(4) { width: 13%; } 
         th:nth-child(5), td:nth-child(5) { width: 8%; } 
-        th:nth-child(6), td:nth-child(6) { width: 14%; text-align: right; } 
+        th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
@@ -100,7 +104,8 @@
 
         .custom-alert-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 9999; }
         .custom-alert-box { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center; min-width: 320px; max-width: 90%; }
-        .custom-alert-text { font-size: 16px; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
+        /* 提醒文字大小調小 */
+        .custom-alert-text { font-size: 14px; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
         .custom-alert-btn { color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; transition: 0.2s; }
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
@@ -148,10 +153,12 @@
         </div>
 
         <div class="admin-toolbar" id="adminToolbar">
-            <span style="font-weight:bold; color:var(--primary); font-size: 15px;">👑 團主：</span>
+            <span style="font-weight:bold; color:var(--primary); font-size: 15px;">團主：</span>
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
             <button type="button" class="btn-sync" onclick="updateAnnouncement()">同步</button>
+            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
+            <input type="file" accept="image/*" class="file-input" onchange="uploadMenuImageOnly(this)">
             <button type="button" class="btn-stats" onclick="showStats()">統計</button>
             <button type="button" class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空</button>
         </div>
@@ -161,6 +168,7 @@
                 <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
+                        <span id="secretLockBtn" style="cursor:pointer; opacity: 0.3; font-size: 14px; margin-right: 6px;" onclick="toggleOrderLock()" title="切換鎖定狀態">🔓</span>
                         <span class="time-label">截止時間</span>
                         <span id="timeText" class="time-value">未設定</span>
                     </div>
@@ -169,15 +177,19 @@
             </div>
         </div>
 
+        <div id="menuWrapper" class="menu-wrapper">
+            <img id="menuImg" class="menu-display">
+        </div>
+
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
             
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
-                <div style="width: 40%; padding-right: 25px; box-sizing: border-box;">品項</div>
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
-                <div style="width: 22%;"></div> 
+                <div style="width: 18%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
@@ -185,7 +197,7 @@
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 40%; padding-right: 25px; box-sizing: border-box;">
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
                 </div>
@@ -197,9 +209,8 @@
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 22%; display: flex; justify-content: flex-end; gap: 8px; box-sizing: border-box;">
-                    <button type="button" id="lockSystemBtn" class="btn-sync" style="display: none; height: 48px; padding: 0 12px; border-radius: 8px; font-weight: bold; background: var(--danger); transition: 0.3s;" onclick="toggleOrderLock()">鎖定</button>
-                    <button type="button" id="submitOrderBtn" class="btn-sync" style="height: 48px; flex: 1; max-width: 120px; border-radius: 8px; font-weight: 900; transition: 0.3s;" onclick="submitOrder()">送出點餐</button>
+                <div style="width: 18%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                    <button type="button" id="submitOrderBtn" class="btn-sync" style="height: 48px; width: 100%; max-width: 120px; border-radius: 8px; font-weight: 900; transition: 0.3s;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
         </div>
@@ -294,22 +305,71 @@
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
             document.getElementById('adminToggle').checked = isAdm;
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
-            document.getElementById('lockSystemBtn').style.display = isAdm ? 'inline-block' : 'none';
         });
 
         function toggleAdminMode() {
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
-            document.getElementById('lockSystemBtn').style.display = isAdm ? 'inline-block' : 'none';
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
+
+        function uploadMenuImageOnly(input) {
+            if (input.files && input.files[0]) {
+                const overlay = document.getElementById('customAlertOverlay');
+                const box = document.getElementById('customAlertBox');
+                const text = document.getElementById('customAlertText');
+                const btn = document.getElementById('customAlertBtn');
+                text.innerHTML = "<span style='font-size:13px;'>⏳ 照片上傳中...</span>";
+                overlay.style.display = 'block';
+                box.style.display = 'block';
+                btn.style.display = 'none';
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 1000; 
+                        let width = img.width; let height = img.height;
+                        if (width > MAX_WIDTH) { height = Math.round(height *= MAX_WIDTH / width); width = MAX_WIDTH; }
+                        canvas.width = width; canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const optimizedUrl = canvas.toDataURL('image/jpeg', 0.85);
+                        
+                        database.ref('config/menuImage').set(optimizedUrl)
+                            .then(() => {
+                                showCustomAlert("<span style='font-size:13px;'>✅ 菜單照片上傳成功！</span>", "success");
+                                input.value = '';
+                            })
+                            .catch(err => {
+                                showCustomAlert("<span style='font-size:13px;'>❌ 照片上傳失敗：" + err.message + "</span>", "error");
+                                input.value = '';
+                            });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        database.ref('config/menuImage').on('value', (s) => {
+            const img = document.getElementById('menuImg');
+            const wrapper = document.getElementById('menuWrapper');
+            if (s.val()) { 
+                img.src = s.val(); 
+                wrapper.style.display = 'block'; 
+            } else {
+                wrapper.style.display = 'none';
+            }
+        });
 
         database.ref('config/isLocked').on('value', (snapshot) => {
             isOrderLocked = snapshot.val() || false;
             
             const submitBtn = document.getElementById('submitOrderBtn');
-            const lockBtn = document.getElementById('lockSystemBtn');
+            const lockIcon = document.getElementById('secretLockBtn');
             const inputs = [
                 document.getElementById('userName'),
                 document.getElementById('userItem'),
@@ -318,10 +378,7 @@
             ];
 
             if (isOrderLocked) {
-                if (lockBtn) {
-                    lockBtn.innerHTML = "開放";
-                    lockBtn.style.background = "var(--success)";
-                }
+                if (lockIcon) lockIcon.innerText = "🔒";
                 if (submitBtn) {
                     submitBtn.innerText = "已截單";
                     submitBtn.style.background = "#94a3b8";
@@ -329,10 +386,7 @@
                 }
                 inputs.forEach(el => { if(el) el.disabled = true; });
             } else {
-                if (lockBtn) {
-                    lockBtn.innerHTML = "鎖定";
-                    lockBtn.style.background = "var(--danger)";
-                }
+                if (lockIcon) lockIcon.innerText = "🔓";
                 if (submitBtn) {
                     submitBtn.innerText = "送出點餐";
                     submitBtn.style.background = "var(--primary)";
@@ -343,7 +397,10 @@
         });
 
         function toggleOrderLock() {
-            database.ref('config/isLocked').set(!isOrderLocked);
+            // 只有開啟管理員模式的人才可以操作這個隱藏鎖頭
+            if(document.getElementById('adminToggle').checked) {
+                database.ref('config/isLocked').set(!isOrderLocked);
+            }
         }
 
         database.ref('config/announcement').on('value', (s) => {
@@ -360,14 +417,15 @@
             if(time) updates.deadline = time + " 截止";
             if(text || time) {
                 database.ref('config/announcement').update(updates)
-                    .then(() => showCustomAlert("<span style='font-size:15px;'>公告同步成功！</span>", "success"));
+                    .then(() => showCustomAlert("<span style='font-size:13px;'>公告同步成功！</span>", "success"));
             }
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
 
         function submitOrder() {
             if (isOrderLocked) {
-                showCustomAlert("⚠️ <b>已經截單囉！</b><br><br><span style='font-size:14px; color:#e11d48;'>目前團主已關閉系統，需加點請聯絡團主。</span>", "error");
+                // 字體縮小
+                showCustomAlert("⚠️ <span style='font-size:13px;'>已經截單囉！</span><br><br><span style='font-size:13px; color:#e11d48;'>目前團主已關閉系統，需加點請聯絡團主。</span>", "error");
                 return;
             }
 
@@ -378,7 +436,7 @@
             const pay = payInput === '' ? price : (parseInt(payInput) || 0);
             
             if(!name || !item) {
-                showCustomAlert("⚠️ <span style='font-size:14px;'>請確實填寫姓名與品項內容！</span>", "error");
+                showCustomAlert("⚠️ <span style='font-size:13px;'>請確實填寫姓名與品項內容！</span>", "error");
                 return;
             }
             
@@ -569,11 +627,11 @@
 
         function copyStatsText() {
             if (!statsTextForCopy || statsTextForCopy === "【今日點餐清單】\n\n\n總計：0 份") {
-                showCustomAlert("⚠️ <span style='font-size:15px;'>目前還沒有任何訂單喔！</span>", "error");
+                showCustomAlert("⚠️ <span style='font-size:13px;'>目前還沒有任何訂單喔！</span>", "error");
                 return;
             }
             navigator.clipboard.writeText(statsTextForCopy).then(() => {
-                showCustomAlert("✅ <b>複製成功！</b><br><br><span style='font-size:14px;color:#64748b;'>可以直接到 LINE 貼上傳給店家了。</span>", "success");
+                showCustomAlert("✅ <span style='font-size:13px;'>複製成功！可以直接到 LINE 貼上傳給店家了。</span>", "success");
             }).catch(err => {
                 alert("瀏覽器不支援自動複製，請手動圈選文字複製！");
             });
