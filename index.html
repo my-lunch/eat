@@ -24,8 +24,8 @@
         .page-title-section h1 { margin: 0; font-size: 32px; font-weight: 900; color: var(--dark); letter-spacing: 2px; }
         .page-title-section h2 { margin: 6px 0 0 0; font-size: 16px; font-weight: bold; color: #64748b; letter-spacing: 5px; }
 
-        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: var(--dark); padding: 12px 20px; border-radius: 12px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; }
-        .admin-toolbar input[type="text"] { padding: 8px 12px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; height: 36px; box-sizing: border-box; }
+        .admin-toolbar { display: none; flex-direction: row; flex-wrap: nowrap; background: var(--dark); padding: 12px 20px; border-radius: 12px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; white-space: nowrap; overflow-x: auto; }
+        .admin-toolbar input { padding: 8px 12px; border: 1px solid #444; background: #2d3748; color: white; border-radius: 6px; font-size: 14px; height: 36px; box-sizing: border-box; }
         .admin-toolbar input::placeholder { color: #a0aec0; }
         
         .ann-input { width: 150px; }
@@ -35,10 +35,6 @@
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
-
-        .admin-menu-setup { display: none; background: var(--dark); padding: 15px 20px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
-        .admin-menu-setup textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #2d3748; color: white; font-size: 14px; box-sizing: border-box; resize: vertical; line-height: 1.5; }
-        .admin-menu-setup textarea::placeholder { color: #94a3b8; }
 
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
@@ -59,17 +55,6 @@
         .text-red { color: var(--danger); }
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        
-        .pos-panel { display: none; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
-        .pos-layout { display: flex; gap: 20px; }
-        .pos-categories { width: 20%; display: flex; flex-direction: column; gap: 10px; border-right: 2px solid #e2e8f0; padding-right: 15px; }
-        .pos-cat-btn { background: white; border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-align: left; transition: 0.2s; color: var(--dark); }
-        .pos-cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .pos-items-grid { width: 80%; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; max-height: 350px; overflow-y: auto; padding-right: 5px; }
-        .pos-item-card { background: white; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; gap: 8px; text-align: left; }
-        .pos-item-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255,159,67,0.15); }
-        .pos-item-name { font-weight: bold; font-size: 14px; color: var(--dark); word-break: break-all; white-space: normal; line-height: 1.4; }
-        .pos-item-price { color: var(--danger); font-weight: 900; font-size: 15px; text-align: right; }
 
         .form-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; text-align: left; transition: 0.3s; }
         .form-box:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; border-color: #e2e8f0; }
@@ -117,8 +102,6 @@
         .custom-alert-box { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center; min-width: 320px; max-width: 90%; }
         .custom-alert-text { font-size: 18px; font-weight: bold; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
         .custom-alert-btn { color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; transition: 0.2s; }
-        .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
@@ -134,9 +117,6 @@
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 6px 12px; }
             .dashboard { flex-direction: column; gap: 10px; }
-            .pos-layout { flex-direction: column; }
-            .pos-categories { width: 100%; flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; padding-right: 0; }
-            .pos-items-grid { width: 100%; }
             .desktop-labels { display: none !important; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
             .form-inputs { flex-direction: column; gap: 15px; }
@@ -156,7 +136,6 @@
 
     <div id="customAlertOverlay" class="custom-alert-overlay"></div>
     <div id="customAlertBox" class="custom-alert-box">
-        <div id="customAlertSpinner" class="spinner" style="display: none;"></div>
         <div id="customAlertText" class="custom-alert-text"></div>
         <button id="customAlertBtn" class="custom-alert-btn" onclick="closeCustomAlert()">確定</button>
     </div>
@@ -173,17 +152,9 @@
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
             <button class="btn-sync" onclick="updateAnnouncement()">同步</button>
-            <button class="btn-stats" onclick="showStats()">📊 統計</button>
-            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空</button>
-            <button id="lockSystemBtn" class="btn-sync" style="background:var(--danger);" onclick="toggleOrderLock()">🛑 鎖定點餐</button>
-        </div>
-
-        <div class="admin-menu-setup" id="adminMenuSetup">
-            <div style="color: #cbd5e1; font-weight: bold; margin-bottom: 8px; font-size: 14px;">
-                📋 貼上菜單文字，系統將自動產生 POS 按鈕
-            </div>
-            <textarea id="menuTextInput" rows="6" placeholder="請在這裡貼上文字。&#10;格式超級自由 (有空格就可以)：&#10;炒涼麵 小 70&#10;味噌湯 20&#10;1. 牛肉麵 120元"></textarea>
-            <button class="btn-sync" style="margin-top: 10px; width: 100%; height: 36px; background:#a55eea;" onclick="generatePOSMenu()">🪄 自動分類並產生 POS 按鈕</button>
+            <button class="btn-stats" onclick="showStats()">統計</button>
+            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空</button>
+            <button id="lockSystemBtn" class="btn-sync" style="background:var(--danger);" onclick="toggleOrderLock()">鎖定點餐</button>
         </div>
         
         <div class="status-banner">
@@ -202,13 +173,6 @@
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
             
-            <div class="pos-panel" id="posPanel">
-                <div class="pos-layout">
-                    <div class="pos-categories" id="posCategories"></div>
-                    <div class="pos-items-grid" id="posItemsGrid"></div>
-                </div>
-            </div>
-
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
@@ -220,11 +184,11 @@
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
-                    <input type="text" id="userName" placeholder="請輸入姓名" class="form-box">
+                    <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
-                    <input type="text" id="userItem" placeholder="點上方按鈕，或手動輸入..." class="form-box">
+                    <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
@@ -281,7 +245,7 @@
         <div class="stats-header">📞 叫餐統計</div>
         <div id="statsTotal" class="stats-total">總計：0 份</div>
         <div id="statsContent" class="stats-list"></div>
-        <button class="btn-sync" style="margin-top:5px; width:100%; padding: 12px; font-size: 16px; background: #2563eb;" onclick="copyStatsText()">📋 一鍵複製給店家</button>
+        <button class="btn-sync" style="margin-top:5px; width:100%; padding: 12px; font-size: 16px; background: #2563eb;" onclick="copyStatsText()">一鍵複製給店家</button>
         <button class="btn-sync" style="margin-top:10px; width:100%; padding: 12px; font-size: 16px; background: #94a3b8;" onclick="closeModal()">關閉</button>
     </div>
 
@@ -293,10 +257,7 @@
         let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
         localStorage.setItem('myDeviceId', myId);
         let editingId = null;
-        let activeCategory = null;
-        let posMenuData = null;
         
-        // 新增全域變數
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
@@ -305,20 +266,14 @@
             const box = document.getElementById('customAlertBox');
             const text = document.getElementById('customAlertText');
             const btn = document.getElementById('customAlertBtn');
-            const spinner = document.getElementById('customAlertSpinner');
             text.innerHTML = message;
             overlay.style.display = 'block';
             box.style.display = 'block';
-            if (type === 'processing') {
-                btn.style.display = 'none';
-                spinner.style.display = 'block';
-            } else {
-                btn.style.display = 'inline-block';
-                spinner.style.display = 'none';
-                if (type === 'success') { btn.style.background = 'var(--success)'; btn.innerText = '完成 (關閉)'; } 
-                else if (type === 'error') { btn.style.background = 'var(--danger)'; btn.innerText = '關閉'; } 
-                else { btn.style.background = 'var(--primary)'; btn.innerText = '確定'; }
-            }
+            
+            btn.style.display = 'inline-block';
+            if (type === 'success') { btn.style.background = 'var(--success)'; btn.innerText = '完成 (關閉)'; } 
+            else if (type === 'error') { btn.style.background = 'var(--danger)'; btn.innerText = '關閉'; } 
+            else { btn.style.background = 'var(--primary)'; btn.innerText = '確定'; }
         }
 
         function closeCustomAlert() {
@@ -330,9 +285,7 @@
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
             document.getElementById('adminToggle').checked = isAdm;
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
-            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
 
-            // ✨ 功能2：網頁載入時，自動填入上次輸入的姓名
             let savedName = localStorage.getItem('myLunchName');
             if(savedName) {
                 document.getElementById('userName').value = savedName;
@@ -343,11 +296,9 @@
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
-            document.getElementById('adminMenuSetup').style.display = isAdm ? 'block' : 'none';
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
 
-        // 👇 功能4：監聽與控制「鎖定點餐狀態」
         database.ref('config/isLocked').on('value', (snapshot) => {
             isOrderLocked = snapshot.val() || false;
             
@@ -360,21 +311,19 @@
             const inputs = [inputName, inputItem, inputPrice, inputPay];
 
             if (isOrderLocked) {
-                // 進入鎖定狀態
                 if (lockBtn) {
-                    lockBtn.innerHTML = "🟢 開放點餐";
+                    lockBtn.innerHTML = "開放點餐";
                     lockBtn.style.background = "var(--success)";
                 }
                 if (submitBtn) {
-                    submitBtn.innerText = "⛔ 已截單";
+                    submitBtn.innerText = "已截單";
                     submitBtn.style.background = "#94a3b8";
                     submitBtn.style.cursor = "not-allowed";
                 }
                 inputs.forEach(el => { if(el) el.disabled = true; });
             } else {
-                // 解除鎖定狀態
                 if (lockBtn) {
-                    lockBtn.innerHTML = "🛑 鎖定點餐";
+                    lockBtn.innerHTML = "鎖定點餐";
                     lockBtn.style.background = "var(--danger)";
                 }
                 if (submitBtn) {
@@ -386,123 +335,11 @@
             }
         });
 
-        // 團主點擊鎖定按鈕
         function toggleOrderLock() {
             database.ref('config/isLocked').set(!isOrderLocked).then(() => {
                 let statusMsg = !isOrderLocked ? "系統已截單鎖定，大家無法點餐囉！" : "系統已重新開放，大家可以繼續點餐！";
                 showCustomAlert(`✅ <b>狀態更新</b><br><br><span style='font-size:14px;'>${statusMsg}</span>`, "success");
             });
-        }
-
-        database.ref('config/posMenu').on('value', (snapshot) => {
-            let data = snapshot.val();
-            const panel = document.getElementById('posPanel');
-            const catContainer = document.getElementById('posCategories');
-            posMenuData = [];
-            if (Array.isArray(data)) { posMenuData = data.filter(item => item && item.category); } 
-            else if (data && typeof data === 'object') { posMenuData = Object.values(data).filter(item => item && item.category); }
-            if (!posMenuData || posMenuData.length === 0) { panel.style.display = 'none'; return; }
-            panel.style.display = 'block';
-            catContainer.innerHTML = '';
-            posMenuData.forEach((cat, index) => {
-                const btn = document.createElement('button');
-                btn.className = `pos-cat-btn ${index === 0 && !activeCategory ? 'active' : (activeCategory === cat.category ? 'active' : '')}`;
-                btn.innerText = cat.category;
-                btn.onclick = () => selectCategory(cat.category);
-                catContainer.appendChild(btn);
-            });
-            if (!activeCategory && posMenuData.length > 0) activeCategory = posMenuData[0].category;
-            renderPosItems();
-        });
-
-        function selectCategory(catName) {
-            activeCategory = catName;
-            const btns = document.querySelectorAll('.pos-cat-btn');
-            btns.forEach(btn => btn.classList.toggle('active', btn.innerText === catName));
-            renderPosItems();
-        }
-
-        function renderPosItems() {
-            const grid = document.getElementById('posItemsGrid');
-            grid.innerHTML = '';
-            if (!posMenuData || !activeCategory) return;
-            const targetCat = posMenuData.find(c => c.category === activeCategory);
-            if (!targetCat || !targetCat.items) return;
-            let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items || {});
-            itemsArray.forEach(item => {
-                if (!item || !item.name) return;
-                const card = document.createElement('div');
-                card.className = 'pos-item-card';
-                card.onclick = () => {
-                    // 如果系統鎖定，點選 POS 按鈕也沒有反應
-                    if(isOrderLocked) return;
-                    document.getElementById('userItem').value = item.name;
-                    document.getElementById('price').value = item.price;
-                    document.getElementById('pay').value = item.price;
-                };
-                card.innerHTML = `<div class="pos-item-name">${item.name}</div><div class="pos-item-price">$${item.price}</div>`;
-                grid.appendChild(card);
-            });
-        }
-
-        function getSubSortWeight(name) {
-            let subCat = "99";
-            if (name.includes('牛')) subCat = "01";
-            else if (name.includes('豬')) subCat = "02";
-            else if (name.includes('雞')) subCat = "03";
-            else if (name.includes('魚') || name.includes('鮭') || name.includes('鱈') || name.includes('蝦')) subCat = "04";
-            else if (name.includes('堡')) subCat = "05";
-            else if (name.includes('吐司') || name.includes('三明治')) subCat = "06";
-            else if (name.includes('蛋餅')) subCat = "07";
-            else if (name.includes('麵')) subCat = "08";
-            else if (name.includes('飯')) subCat = "09";
-            return subCat + "-" + name;
-        }
-
-        function generatePOSMenu() {
-            const text = document.getElementById('menuTextInput').value.trim();
-            if (!text) {
-                database.ref('config/posMenu').remove();
-                alert("已清空 POS 選單！");
-                return;
-            }
-            
-            const lines = text.split('\n');
-            const categories = { "主食": [], "單點": [], "飲品": [] };
-
-            lines.forEach(line => {
-                line = line.trim();
-                if (!line) return;
-                const match = line.match(/^[\d\.\-\*]*\s*(.*?)\s*[:：,，\$]?\s*(\d+)\s*[元塊]?$/);
-                if (match && match.length >= 3) {
-                    const name = match[1].trim();
-                    const priceStr = match[2];
-                    const price = parseInt(priceStr) || 0;
-                    if (name && price > 0) {
-                        let cat = "單點";
-                        if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "主食";
-                        else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|湯)/.test(name)) cat = "飲品";
-                        categories[cat].push({ name, price });
-                    }
-                }
-            });
-
-            if (categories["主食"].length === 0 && categories["單點"].length === 0 && categories["飲品"].length === 0) {
-                showCustomAlert("⚠️ <b>找不到有效的品項！</b><br><br><span style='font-size:14px;color:#64748b;'>請確定文字裡面有「品名」跟「價格 (數字)」。<br>範例：炒涼麵 小 70</span>", "error");
-                return;
-            }
-
-            Object.keys(categories).forEach(cat => {
-                categories[cat].sort((a, b) => getSubSortWeight(b.name).localeCompare(getSubSortWeight(a.name), 'zh-TW'));
-            });
-
-            const finalPosMenu = [];
-            if (categories["主食"].length > 0) finalPosMenu.push({ category: "主食", items: categories["主食"] });
-            if (categories["單點"].length > 0) finalPosMenu.push({ category: "單點", items: categories["單點"] });
-            if (categories["飲品"].length > 0) finalPosMenu.push({ category: "飲品", items: categories["飲品"] });
-
-            database.ref('config/posMenu').set(finalPosMenu)
-                .then(() => showCustomAlert("🎉 <b>POS 機按鈕建立成功！</b><br><br><span style='font-size:14px;color:#64748b;'>系統已自動忽略亂碼，並把品項與價格分類完畢！</span>", "success"));
         }
 
         database.ref('config/announcement').on('value', (s) => {
@@ -541,12 +378,10 @@
                 return;
             }
             
-            // ✨ 功能2：儲存姓名到本機端
             localStorage.setItem('myLunchName', name);
 
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
             
-            // 送出後保留姓名，清空其他
             document.getElementById('userItem').value = '';
             document.getElementById('price').value = ''; 
             document.getElementById('pay').value = '';
@@ -679,7 +514,6 @@
                 const orders = s.val(); 
                 const stats = {}; let total = 0; 
                 
-                // 重置全域複製文字
                 statsTextForCopy = "【今日點餐清單】\n\n";
 
                 if(orders) {
@@ -711,7 +545,6 @@
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
                 const sortedStats = Object.entries(stats).sort((a, b) => getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW'));
                 
-                // ✨ 功能3：產生要複製的純文字格式
                 sortedStats.forEach(([k, v]) => {
                     statsTextForCopy += `${k} x ${v.count}\n`;
                 });
@@ -729,7 +562,6 @@
             });
         }
 
-        // ✨ 功能3：一鍵複製按鈕功能
         function copyStatsText() {
             if (!statsTextForCopy || statsTextForCopy === "【今日點餐清單】\n\n\n總計：0 份") {
                 showCustomAlert("⚠️ <b>目前還沒有任何訂單喔！</b>", "error");
