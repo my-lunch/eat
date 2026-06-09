@@ -159,8 +159,8 @@
             <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenuImageOnly(this)">
             <button class="btn-stats" onclick="showStats()">統計</button>
-            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空訂單</button>
-            <button id="lockSystemBtn" class="btn-sync" style="background:var(--danger);" onclick="toggleOrderLock()">鎖定點餐</button>
+            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空</button>
+            <button id="lockSystemBtn" class="btn-sync" style="background:var(--danger);" onclick="toggleOrderLock()">鎖定</button>
         </div>
         
         <div class="status-banner">
@@ -202,7 +202,7 @@
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
-                    <input type="number" id="price" placeholder="金額" class="form-box">
+                    <input type="number" id="price" placeholder="130" class="form-box">
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
@@ -254,7 +254,7 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <div class="stats-header" style="margin-bottom: 0;">📞 叫餐統計</div>
-            <button class="btn-sync" style="background: #2563eb; padding: 6px 12px; font-size: 12px;" onclick="copyStatsText()">📋 一鍵複製</button>
+            <button class="btn-sync" style="background: #e2e8f0; color: #1e293b; padding: 6px 12px; font-size: 12px; border: 1px solid #cbd5e1;" onclick="copyStatsText()">一鍵複製</button>
         </div>
         <div id="statsTotal" class="stats-total">總計：0 份</div>
         <div id="statsContent" class="stats-list"></div>
@@ -293,7 +293,6 @@
             document.getElementById('customAlertBox').style.display = 'none';
         }
 
-        // 確保載入時自動填入名字
         document.addEventListener("DOMContentLoaded", () => {
             let savedName = localStorage.getItem('myLunchName');
             if(savedName) {
@@ -314,7 +313,6 @@
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
 
-        // 處理上傳菜單照片並存入 Firebase
         function uploadMenuImageOnly(input) {
             if (input.files && input.files[0]) {
                 const overlay = document.getElementById('customAlertOverlay');
@@ -355,7 +353,6 @@
             }
         }
 
-        // 監聽並顯示菜單照片
         database.ref('config/menuImage').on('value', (s) => {
             const img = document.getElementById('menuImg');
             const wrapper = document.getElementById('menuWrapper');
@@ -380,7 +377,7 @@
 
             if (isOrderLocked) {
                 if (lockBtn) {
-                    lockBtn.innerHTML = "開放點餐";
+                    lockBtn.innerHTML = "開放";
                     lockBtn.style.background = "var(--success)";
                 }
                 if (submitBtn) {
@@ -391,7 +388,7 @@
                 inputs.forEach(el => { if(el) el.disabled = true; });
             } else {
                 if (lockBtn) {
-                    lockBtn.innerHTML = "鎖定點餐";
+                    lockBtn.innerHTML = "鎖定";
                     lockBtn.style.background = "var(--danger)";
                 }
                 if (submitBtn) {
@@ -404,7 +401,6 @@
         });
 
         function toggleOrderLock() {
-            // 點擊後僅改變狀態，不再跳出提醒視窗
             database.ref('config/isLocked').set(!isOrderLocked);
         }
 
@@ -429,7 +425,7 @@
 
         function submitOrder() {
             if (isOrderLocked) {
-                showCustomAlert("⚠️ <b>已經截單囉！</b><br><br><span style='font-size:14px;color:#64748b;'>目前團主已關閉系統，需加點請聯絡團主。</span>", "error");
+                showCustomAlert("⚠️ <b>已經截單囉！</b><br><br><span style='font-size:18px; font-weight:bold; color:#e11d48;'>目前團主已關閉系統，需加點請聯絡團主。</span>", "error");
                 return;
             }
 
@@ -444,7 +440,6 @@
                 return;
             }
             
-            // 儲存姓名到本機記憶體
             localStorage.setItem('myLunchName', name);
 
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
