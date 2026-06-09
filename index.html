@@ -30,7 +30,6 @@
         
         .ann-input { width: 150px; }
         .time-input { width: 110px; }
-        .file-input { width: 180px; color: #cbd5e1; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
 
         .admin-toolbar button { padding: 0 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; height: 36px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
         .btn-sync { background: var(--primary); color: white; }
@@ -48,9 +47,6 @@
 
         .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
-
-        .menu-wrapper { width: 100%; display: none; text-align: center; }
-        .menu-display { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: block; margin-top: 10px; }
 
         .dashboard { display: flex; gap: 20px; }
         .card { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
@@ -75,11 +71,11 @@
         th:last-child, td:last-child { padding-right: 0; }
         
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; } 
+        th:nth-child(2), td:nth-child(2) { width: 40%; padding-right: 25px; white-space: normal; word-break: break-all; } 
         th:nth-child(3), td:nth-child(3) { width: 13%; } 
         th:nth-child(4), td:nth-child(4) { width: 13%; } 
         th:nth-child(5), td:nth-child(5) { width: 8%; } 
-        th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
+        th:nth-child(6), td:nth-child(6) { width: 14%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         .btn-confirm { background: var(--success); color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
@@ -104,7 +100,7 @@
 
         .custom-alert-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 9999; }
         .custom-alert-box { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center; min-width: 320px; max-width: 90%; }
-        .custom-alert-text { font-size: 18px; font-weight: bold; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
+        .custom-alert-text { font-size: 16px; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
         .custom-alert-btn { color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; transition: 0.2s; }
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
@@ -141,7 +137,7 @@
     <div id="customAlertOverlay" class="custom-alert-overlay"></div>
     <div id="customAlertBox" class="custom-alert-box">
         <div id="customAlertText" class="custom-alert-text"></div>
-        <button id="customAlertBtn" class="custom-alert-btn" onclick="closeCustomAlert()">確定</button>
+        <button type="button" id="customAlertBtn" class="custom-alert-btn" onclick="closeCustomAlert()">確定</button>
     </div>
 
     <div class="container">
@@ -155,12 +151,9 @@
             <span style="font-weight:bold; color:var(--primary); font-size: 15px;">👑 團主：</span>
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
-            <button class="btn-sync" onclick="updateAnnouncement()">同步</button>
-            <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
-            <input type="file" accept="image/*" class="file-input" onchange="uploadMenuImageOnly(this)">
-            <button class="btn-stats" onclick="showStats()">統計</button>
-            <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空</button>
-            <button id="lockSystemBtn" class="btn-sync" style="background:var(--danger);" onclick="toggleOrderLock()">鎖定</button>
+            <button type="button" class="btn-sync" onclick="updateAnnouncement()">同步</button>
+            <button type="button" class="btn-stats" onclick="showStats()">統計</button>
+            <button type="button" class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空</button>
         </div>
         
         <div class="status-banner">
@@ -176,19 +169,15 @@
             </div>
         </div>
 
-        <div id="menuWrapper" class="menu-wrapper">
-            <img id="menuImg" class="menu-display">
-        </div>
-
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
             
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
-                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
+                <div style="width: 40%; padding-right: 25px; box-sizing: border-box;">品項</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
-                <div style="width: 18%;"></div> 
+                <div style="width: 22%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
@@ -196,7 +185,7 @@
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
+                <div style="width: 40%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
                 </div>
@@ -206,10 +195,11 @@
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
-                    <input type="number" id="pay" placeholder="給多少" class="form-box">
+                    <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 18%; display: flex; justify-content: flex-end; box-sizing: border-box;">
-                    <button id="submitOrderBtn" class="btn-sync" style="height: 48px; width: 100%; max-width: 120px; border-radius: 8px; font-weight: 900; transition: 0.3s;" onclick="submitOrder()">送出點餐</button>
+                <div style="width: 22%; display: flex; justify-content: flex-end; gap: 8px; box-sizing: border-box;">
+                    <button type="button" id="lockSystemBtn" class="btn-sync" style="display: none; height: 48px; padding: 0 12px; border-radius: 8px; font-weight: bold; background: var(--danger); transition: 0.3s;" onclick="toggleOrderLock()">鎖定</button>
+                    <button type="button" id="submitOrderBtn" class="btn-sync" style="height: 48px; flex: 1; max-width: 120px; border-radius: 8px; font-weight: 900; transition: 0.3s;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
         </div>
@@ -254,11 +244,11 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <div class="stats-header" style="margin-bottom: 0;">📞 叫餐統計</div>
-            <button class="btn-sync" style="background: #e2e8f0; color: #1e293b; padding: 6px 12px; font-size: 12px; border: 1px solid #cbd5e1;" onclick="copyStatsText()">一鍵複製</button>
+            <button type="button" class="btn-sync" style="background: #e2e8f0; color: #1e293b; padding: 6px 12px; font-size: 12px; border: 1px solid #cbd5e1;" onclick="copyStatsText()">一鍵複製</button>
         </div>
         <div id="statsTotal" class="stats-total">總計：0 份</div>
         <div id="statsContent" class="stats-list"></div>
-        <button class="btn-sync" style="margin-top:10px; width:100%; padding: 12px; font-size: 16px; background: #94a3b8;" onclick="closeModal()">關閉</button>
+        <button type="button" class="btn-sync" style="margin-top:10px; width:100%; padding: 12px; font-size: 16px; background: #94a3b8;" onclick="closeModal()">關閉</button>
     </div>
 
     <script>
@@ -304,76 +294,28 @@
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
             document.getElementById('adminToggle').checked = isAdm;
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
+            document.getElementById('lockSystemBtn').style.display = isAdm ? 'inline-block' : 'none';
         });
 
         function toggleAdminMode() {
             let isAdm = document.getElementById('adminToggle').checked;
             localStorage.setItem('isAdminMode', isAdm);
             document.getElementById('adminToolbar').style.display = isAdm ? 'flex' : 'none';
+            document.getElementById('lockSystemBtn').style.display = isAdm ? 'inline-block' : 'none';
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
-
-        function uploadMenuImageOnly(input) {
-            if (input.files && input.files[0]) {
-                const overlay = document.getElementById('customAlertOverlay');
-                const box = document.getElementById('customAlertBox');
-                const text = document.getElementById('customAlertText');
-                const btn = document.getElementById('customAlertBtn');
-                text.innerHTML = "⏳ 照片上傳中...";
-                overlay.style.display = 'block';
-                box.style.display = 'block';
-                btn.style.display = 'none';
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 1000; 
-                        let width = img.width; let height = img.height;
-                        if (width > MAX_WIDTH) { height = Math.round(height *= MAX_WIDTH / width); width = MAX_WIDTH; }
-                        canvas.width = width; canvas.height = height;
-                        ctx.drawImage(img, 0, 0, width, height);
-                        const optimizedUrl = canvas.toDataURL('image/jpeg', 0.85);
-                        
-                        database.ref('config/menuImage').set(optimizedUrl)
-                            .then(() => {
-                                showCustomAlert("✅ 菜單照片上傳成功！", "success");
-                                input.value = '';
-                            })
-                            .catch(err => {
-                                showCustomAlert("❌ 照片上傳失敗：" + err.message, "error");
-                                input.value = '';
-                            });
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        database.ref('config/menuImage').on('value', (s) => {
-            const img = document.getElementById('menuImg');
-            const wrapper = document.getElementById('menuWrapper');
-            if (s.val()) { 
-                img.src = s.val(); 
-                wrapper.style.display = 'block'; 
-            } else {
-                wrapper.style.display = 'none';
-            }
-        });
 
         database.ref('config/isLocked').on('value', (snapshot) => {
             isOrderLocked = snapshot.val() || false;
             
             const submitBtn = document.getElementById('submitOrderBtn');
             const lockBtn = document.getElementById('lockSystemBtn');
-            const inputName = document.getElementById('userName');
-            const inputItem = document.getElementById('userItem');
-            const inputPrice = document.getElementById('price');
-            const inputPay = document.getElementById('pay');
-            const inputs = [inputName, inputItem, inputPrice, inputPay];
+            const inputs = [
+                document.getElementById('userName'),
+                document.getElementById('userItem'),
+                document.getElementById('price'),
+                document.getElementById('pay')
+            ];
 
             if (isOrderLocked) {
                 if (lockBtn) {
@@ -418,14 +360,14 @@
             if(time) updates.deadline = time + " 截止";
             if(text || time) {
                 database.ref('config/announcement').update(updates)
-                    .then(() => showCustomAlert("公告同步成功！", "success"));
+                    .then(() => showCustomAlert("<span style='font-size:15px;'>公告同步成功！</span>", "success"));
             }
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
 
         function submitOrder() {
             if (isOrderLocked) {
-                showCustomAlert("⚠️ <b>已經截單囉！</b><br><br><span style='font-size:18px; font-weight:bold; color:#e11d48;'>目前團主已關閉系統，需加點請聯絡團主。</span>", "error");
+                showCustomAlert("⚠️ <b>已經截單囉！</b><br><br><span style='font-size:14px; color:#e11d48;'>目前團主已關閉系統，需加點請聯絡團主。</span>", "error");
                 return;
             }
 
@@ -436,13 +378,14 @@
             const pay = payInput === '' ? price : (parseInt(payInput) || 0);
             
             if(!name || !item) {
-                showCustomAlert("⚠️ 請確實填寫姓名與品項內容！", "error");
+                showCustomAlert("⚠️ <span style='font-size:14px;'>請確實填寫姓名與品項內容！</span>", "error");
                 return;
             }
             
             localStorage.setItem('myLunchName', name);
 
-            database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
+            database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId })
+                .catch(err => alert("網路錯誤，點餐失敗！"));
             
             document.getElementById('userItem').value = '';
             document.getElementById('price').value = ''; 
@@ -478,67 +421,67 @@
             if (orders) {
                 Object.keys(orders).forEach(id => {
                     const o = orders[id];
-                    tNeed += o.price;
+                    tNeed += o.price || 0;
                     const isEditing = (editingId === id);
-                    const changeAmt = o.pay - o.price;
-                    const safeItem = o.item.replace(/"/g, '&quot;');
+                    const changeAmt = (o.pay || 0) - (o.price || 0);
+                    const safeItem = o.item ? o.item.toString().replace(/"/g, '&quot;') : '';
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
                     const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>` : `<span style="color:#747d8c; font-weight:bold;">0</span>`;
 
                     if (o.isPaid) {
-                        if (changeAmt <= 0 || o.changeSettled) tGet += o.price;
-                        else tGet += o.pay;
+                        if (changeAmt <= 0 || o.changeSettled) tGet += o.price || 0;
+                        else tGet += o.pay || 0;
 
                         if (isEditing) {
                             paidBody.innerHTML += `<tr>
-                                <td><strong>${o.name}</strong></td>
+                                <td><strong>${o.name || ""}</strong></td>
                                 <td><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
-                                <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:100%"></td>
-                                <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:100%"></td>
+                                <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price || 0}" style="width:100%"></td>
+                                <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay || 0}" style="width:100%"></td>
                                 <td>編輯中</td>
-                                <td><div class="action-btns"><button class="btn-save" onclick="saveEdit('${id}')">💾</button><button class="btn-del" onclick="cancelEdit()">❌</button></div></td>
+                                <td><div class="action-btns"><button type="button" class="btn-save" onclick="saveEdit('${id}')">💾</button><button type="button" class="btn-del" onclick="cancelEdit()">❌</button></div></td>
                             </tr>`;
                         } else {
-                            let btnHtml = canEdit ? `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
+                            let btnHtml = canEdit ? `<button type="button" class="btn-edit" onclick="startEdit('${id}')">修改</button> <button type="button" class="btn-del" onclick="deleteOrder('${id}')">❌</button>` : `<span class="status-icon-only">🔒</span>`;
                             let changeStatusHtml = '';
                             if (changeAmt <= 0) changeStatusHtml = `<span style="color:var(--success);" class="status-icon-only">✓</span>`;
                             else {
                                 const toggleStatus = !o.changeSettled;
                                 const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
                                 if (o.changeSettled) changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">✓</span>`;
-                                else changeStatusHtml = isAdminMode ? `<button class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
+                                else changeStatusHtml = isAdminMode ? `<button type="button" class="btn-change-done" onclick="${toggleFn}">找 ${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>`;
                             }
                             paidBody.innerHTML += `<tr>
-                                <td><strong>${o.name}</strong></td>
-                                <td style="color:#475569">${o.item}</td>
-                                <td>${o.price}</td>
-                                <td style="color:var(--success); font-weight:900;">${o.pay}</td>
+                                <td><strong>${o.name || ""}</strong></td>
+                                <td style="color:#475569">${safeItem}</td>
+                                <td>${o.price || 0}</td>
+                                <td style="color:var(--success); font-weight:900;">${o.pay || 0}</td>
                                 <td>${changeStatusHtml}</td>
                                 <td><div class="action-btns">${btnHtml}</div></td>
                             </tr>`;
                         }
                     } else {
-                        tUnpaid += o.price;
+                        tUnpaid += o.price || 0;
                         if (isEditing) {
                             unpaidBody.innerHTML += `<tr>
-                                <td><strong>${o.name}</strong></td>
+                                <td><strong>${o.name || ""}</strong></td>
                                 <td><input type="text" id="editItem_${id}" class="inline-input" value="${safeItem}"></td>
-                                <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price}" style="width:100%"></td>
-                                <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay}" style="width:100%"></td>
+                                <td><input type="number" id="editPrice_${id}" class="inline-input" value="${o.price || 0}" style="width:100%"></td>
+                                <td><input type="number" id="editPay_${id}" class="inline-input" value="${o.pay || 0}" style="width:100%"></td>
                                 <td>編輯中</td>
-                                <td><div class="action-btns"><button class="btn-save" onclick="saveEdit('${id}')">💾</button><button class="btn-del" onclick="cancelEdit()">❌</button></div></td>
+                                <td><div class="action-btns"><button type="button" class="btn-save" onclick="saveEdit('${id}')">💾</button><button type="button" class="btn-del" onclick="cancelEdit()">❌</button></div></td>
                             </tr>`;
                         } else {
                             let btnHtml = '';
-                            if (isAdminMode) btnHtml += `<button class="btn-confirm" onclick="markPaid('${id}')">收款</button> `;
-                            if (canEdit) btnHtml += `<button class="btn-edit" onclick="startEdit('${id}')">修改</button> <button class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
+                            if (isAdminMode) btnHtml += `<button type="button" class="btn-confirm" onclick="markPaid('${id}')">收款</button> `;
+                            if (canEdit) btnHtml += `<button type="button" class="btn-edit" onclick="startEdit('${id}')">修改</button> <button type="button" class="btn-del" onclick="deleteOrder('${id}')">❌</button>`;
                             else btnHtml += `<span class="status-icon-only">🔒</span>`;
                             unpaidBody.innerHTML += `<tr>
-                                <td><strong>${o.name}</strong></td>
-                                <td style="color:#475569">${o.item}</td>
-                                <td>${o.price}</td>
-                                <td style="color:#94a3b8">${o.pay}</td>
+                                <td><strong>${o.name || ""}</strong></td>
+                                <td style="color:#475569">${safeItem}</td>
+                                <td>${o.price || 0}</td>
+                                <td style="color:#94a3b8">${o.pay || 0}</td>
                                 <td>${changeText}</td>
                                 <td><div class="action-btns">${btnHtml}</div></td>
                             </tr>`;
@@ -582,12 +525,12 @@
                     let orderList = Object.values(orders);
                     let processedItems = [];
                     for(let i = 0; i < orderList.length; i++) {
-                        let currentItem = orderList[i].item.trim();
-                        let currentName = orderList[i].name;
+                        let currentItem = (orderList[i].item || "").trim();
+                        let currentName = orderList[i].name || "";
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
-                            currentItem = currentItem + "、" + orderList[i+1].item.trim();
+                            currentItem = currentItem + "、" + (orderList[i+1].item || "").trim();
                             i++; 
                         }
                         processedItems.push({ name: currentName, item: currentItem });
@@ -626,7 +569,7 @@
 
         function copyStatsText() {
             if (!statsTextForCopy || statsTextForCopy === "【今日點餐清單】\n\n\n總計：0 份") {
-                showCustomAlert("⚠️ <b>目前還沒有任何訂單喔！</b>", "error");
+                showCustomAlert("⚠️ <span style='font-size:15px;'>目前還沒有任何訂單喔！</span>", "error");
                 return;
             }
             navigator.clipboard.writeText(statsTextForCopy).then(() => {
