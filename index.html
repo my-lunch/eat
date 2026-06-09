@@ -253,9 +253,9 @@
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px;">
-            <div style="display: flex; align-items: baseline; gap: 15px;">
+            <div style="display: flex; align-items: baseline; gap: 50px;">
                 <div class="stats-header" style="margin-bottom: 0;">📞 叫餐統計</div>
-                <div id="statsTotal" style="font-size: 16px; font-weight: bold; color: #4b5563;">總計：0 份</div>
+                <div id="statsTotal" style="font-size: 16px; font-weight: bold; color: #4b5563;">總計：<span style="font-size: 26px; color: #e11d48;">0</span> 份</div>
             </div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 8px; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
@@ -601,7 +601,7 @@
                     }); 
                 }
                 
-                document.getElementById('statsTotal').innerText = `總計：${total} 份`;
+                document.getElementById('statsTotal').innerHTML = `總計：<span style="font-size: 26px; color: #e11d48;">${total}</span> 份`;
                 
                 const sortedStats = Object.entries(stats).sort((a, b) => {
                     return getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW');
