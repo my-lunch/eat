@@ -159,6 +159,7 @@
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button type="button" class="btn-stats" onclick="showStats()">統計</button>
             <button type="button" class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空訂單</button>
+            <span id="lockToggleBtn" style="cursor: pointer; font-size: 20px; margin-left: 5px;" onclick="toggleOrderLock()" title="鎖定/解鎖系統">🔓</span>
         </div>
         
         <div class="status-banner">
@@ -166,10 +167,9 @@
                 <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
-                        <span id="lockToggleBtn" style="cursor: pointer; opacity: 0.15; font-size: 14px; margin-right: 6px;" onclick="toggleOrderLock()" title="鎖定/解鎖系統">🔓</span>
                         <span class="time-label" style="font-size: 14px;">截止時間</span>
                         <span id="timeText" class="time-value">未設定</span>
-                        <span class="time-label" style="font-size: 22px; margin-left: 5px;">截止</span>
+                        <span class="time-label" style="font-size: 18px; margin-left: 5px;">截止</span>
                     </div>
                     <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
                 </div>
@@ -536,26 +536,27 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        function getSortKey(name) {
-            let cat = "2"; 
-            if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉|丼)/.test(name)) cat = "1";
-            if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "3";
+        function getSortWeight(name) {
+            let cat = 2; 
+            
+            if (/(堡|麵|面|麺|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|意麵|雞腿|排骨|爌肉|丼)/.test(name)) cat = 1;
+            if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|湯)/.test(name)) cat = 3;
 
-            let subCat = "99";
-            if (name.includes('牛')) subCat = "01";
-            else if (name.includes('豬')) subCat = "02";
-            else if (name.includes('雞')) subCat = "03";
-            else if (name.includes('魚') || name.includes('鮭') || name.includes('鱈') || name.includes('蝦') || name.includes('海鮮')) subCat = "04";
-            else if (name.includes('堡')) subCat = "05";
-            else if (name.includes('吐司') || name.includes('三明治')) subCat = "06";
-            else if (name.includes('蛋餅')) subCat = "07";
-            else if (name.includes('麵')) subCat = "08";
-            else if (name.includes('飯')) subCat = "09";
-            else if (name.includes('套餐')) subCat = "10";
-            else if (name.includes('薯')) subCat = "11";
-            else if (name.includes('蛋')) subCat = "12";
+            let subCat = 99;
+            if (name.includes('牛')) subCat = 1;
+            else if (name.includes('豬')) subCat = 2;
+            else if (name.includes('雞')) subCat = 3;
+            else if (/(魚|鮭|鱈|蝦|海鮮|蛤蠣|魷魚|花枝)/.test(name)) subCat = 4;
+            else if (name.includes('堡')) subCat = 5;
+            else if (/(吐司|三明治)/.test(name)) subCat = 6;
+            else if (name.includes('蛋餅')) subCat = 7;
+            else if (/(麵|面|麺|烏龍)/.test(name)) subCat = 8;
+            else if (name.includes('飯')) subCat = 9;
+            else if (name.includes('套餐')) subCat = 10;
+            else if (name.includes('薯')) subCat = 11;
+            else if (name.includes('蛋')) subCat = 12;
 
-            return cat + "-" + subCat + "-" + name;
+            return cat * 100 + subCat;
         }
 
         function showStats() {
@@ -603,15 +604,12 @@
                 
                 document.getElementById('statsTotal').innerHTML = `總計：<span style="font-size: 26px; color: #e11d48;">${total}</span> 份`;
                 
-                // 更精準的排序邏輯：先比較主食/配餐分類(前4碼)，同類別再照筆畫/字母排序
                 const sortedStats = Object.entries(stats).sort((a, b) => {
-                    const keyA = getSortKey(a[0]);
-                    const keyB = getSortKey(b[0]);
-                    const prefixA = keyA.substring(0, 4);
-                    const prefixB = keyB.substring(0, 4);
+                    const weightA = getSortWeight(a[0]);
+                    const weightB = getSortWeight(b[0]);
                     
-                    if (prefixA !== prefixB) {
-                        return prefixA < prefixB ? -1 : 1;
+                    if (weightA !== weightB) {
+                        return weightA - weightB;
                     }
                     return a[0].localeCompare(b[0], 'zh-TW');
                 });
