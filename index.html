@@ -60,6 +60,18 @@
 
         .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
+        /* POS 按鈕面板樣式 */
+        .pos-panel { display: none; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
+        .pos-layout { display: flex; gap: 20px; }
+        .pos-categories { width: 20%; display: flex; flex-direction: column; gap: 10px; border-right: 2px solid #e2e8f0; padding-right: 15px; }
+        .pos-cat-btn { background: white; border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-align: left; transition: 0.2s; color: var(--dark); }
+        .pos-cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .pos-items-grid { width: 80%; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; align-content: start; max-height: 350px; overflow-y: auto; padding-right: 5px; }
+        .pos-item-card { background: white; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; gap: 8px; text-align: left; }
+        .pos-item-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255,159,67,0.15); }
+        .pos-item-name { font-weight: bold; font-size: 14px; color: var(--dark); word-break: break-all; white-space: normal; line-height: 1.4; }
+        .pos-item-price { color: var(--danger); font-weight: 900; font-size: 15px; text-align: right; }
+
         .form-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; height: 48px; text-align: left; }
         .mobile-only-label { display: none; }
 
@@ -93,9 +105,7 @@
         .btn-del:hover { background: #fee2e2; }
         
         .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
-        
         .status-icon-only { font-size: 16px; font-weight: 900; }
-        
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: left; }
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; }
@@ -103,15 +113,22 @@
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
         .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
-        
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
         .stats-user-names { font-size: 13px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
+        /* 進度視窗 */
+        .custom-alert-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 9999; }
+        .custom-alert-box { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center; min-width: 320px; max-width: 90%; }
+        .custom-alert-text { font-size: 18px; font-weight: bold; margin-bottom: 25px; color: var(--dark); line-height: 1.5; }
+        .custom-alert-btn { color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; transition: 0.2s; }
+        .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 📱 手機版 RWD 防護排版 */
+        /* 手機版排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
@@ -125,6 +142,10 @@
             .time-info { padding: 6px 12px; }
             .dashboard { flex-direction: column; gap: 10px; }
             
+            .pos-layout { flex-direction: column; }
+            .pos-categories { width: 100%; flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; padding-right: 0; }
+            .pos-items-grid { width: 100%; }
+
             .desktop-labels { display: none !important; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
             .form-inputs { flex-direction: column; gap: 15px; }
@@ -143,6 +164,13 @@
 </head>
 <body>
 
+    <div id="customAlertOverlay" class="custom-alert-overlay"></div>
+    <div id="customAlertBox" class="custom-alert-box">
+        <div id="customAlertSpinner" class="spinner" style="display: none;"></div>
+        <div id="customAlertText" class="custom-alert-text"></div>
+        <button id="customAlertBtn" class="custom-alert-btn" onclick="closeCustomAlert()">確定</button>
+    </div>
+
     <div class="container">
         
         <div class="page-title-section">
@@ -156,7 +184,7 @@
             <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
             <button class="btn-sync" onclick="updateAnnouncement()">同步</button>
             <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
-            <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
+            <input type="file" accept="image/*" class="file-input" onchange="uploadAndScanMenu(this)">
             <button class="btn-stats" onclick="showStats()">📊 統計</button>
             <button class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空訂單</button>
         </div>
@@ -181,6 +209,13 @@
         <div class="form-section">
             <h3 style="margin-top:0; border-bottom: 2px solid var(--bg); padding-bottom:10px;">📝 點餐</h3>
             
+            <div class="pos-panel" id="posPanel">
+                <div class="pos-layout">
+                    <div class="pos-categories" id="posCategories"></div>
+                    <div class="pos-items-grid" id="posItemsGrid"></div>
+                </div>
+            </div>
+
             <div class="desktop-labels">
                 <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
@@ -196,7 +231,7 @@
                 </div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
-                    <input type="text" id="userItem" placeholder="蒜香清炒-雞胸蛤蠣義大利麵" class="form-box">
+                    <input type="text" id="userItem" placeholder="上方點選按鈕，或手動輸入..." class="form-box">
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
@@ -257,6 +292,11 @@
     </div>
 
     <script>
+        // =========================================================================
+        // 👇 貼上你剛剛在 Google AI Studio 申請到的 AIza 開頭的金鑰
+        // =========================================================================
+        const GEMINI_API_KEY = "請在這裡貼上你的AIza金鑰";
+
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -264,6 +304,34 @@
         let myId = localStorage.getItem('myDeviceId') || Math.random().toString(36).substr(2, 9);
         localStorage.setItem('myDeviceId', myId);
         let editingId = null;
+        let activeCategory = null;
+        let posMenuData = null;
+
+        function showCustomAlert(message, type = 'info') {
+            const overlay = document.getElementById('customAlertOverlay');
+            const box = document.getElementById('customAlertBox');
+            const text = document.getElementById('customAlertText');
+            const btn = document.getElementById('customAlertBtn');
+            const spinner = document.getElementById('customAlertSpinner');
+            text.innerHTML = message;
+            overlay.style.display = 'block';
+            box.style.display = 'block';
+            if (type === 'processing') {
+                btn.style.display = 'none';
+                spinner.style.display = 'block';
+            } else {
+                btn.style.display = 'inline-block';
+                spinner.style.display = 'none';
+                if (type === 'success') { btn.style.background = 'var(--success)'; btn.innerText = '完成 (關閉)'; } 
+                else if (type === 'error') { btn.style.background = 'var(--danger)'; btn.innerText = '關閉'; } 
+                else { btn.style.background = 'var(--primary)'; btn.innerText = '確定'; }
+            }
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertOverlay').style.display = 'none';
+            document.getElementById('customAlertBox').style.display = 'none';
+        }
 
         window.addEventListener('load', () => {
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
@@ -278,32 +346,171 @@
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
 
-        function uploadMenu(input) {
+        // ==========================================
+        // ✨ 全新的 AI 照片自動生成 POS 按鈕引擎
+        // ==========================================
+        function uploadAndScanMenu(input) {
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "請在這裡貼上你的AIza金鑰") {
+                showCustomAlert("⚠️ <b>尚未填寫 API 金鑰</b><br><br><span style='font-size:14px;color:#64748b;'>請在程式碼第 229 行填入您剛申請的 AIza 金鑰，才能啟用 AI 自動辨識功能。</span>", "error");
+                input.value = '';
+                return;
+            }
+
             if (input.files && input.files[0]) {
-                alert("照片處理中，請稍候..."); 
+                showCustomAlert("⏳ <b>照片上傳與辨識中...</b><br><br><span style='font-size:14px;color:#64748b;'>這需要大約 5~10 秒，請稍候！</span>", "processing");
+                
                 const reader = new FileReader();
                 reader.onload = (e) => {
+                    const base64DataUrl = e.target.result;
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        
                         const MAX_WIDTH = 1000; 
-                        let width = img.width;
-                        let height = img.height;
+                        let width = img.width; let height = img.height;
                         if (width > MAX_WIDTH) { height = Math.round(height *= MAX_WIDTH / width); width = MAX_WIDTH; }
                         canvas.width = width; canvas.height = height;
                         ctx.drawImage(img, 0, 0, width, height);
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                        const optimizedUrl = canvas.toDataURL('image/jpeg', 0.85);
                         
-                        database.ref('config/menuImage').set(dataUrl)
-                            .then(() => alert("菜單照片上傳成功！"))
-                            .catch(err => alert("上傳失敗：" + err.message));
+                        database.ref('config/menuImage').set(optimizedUrl)
+                            .then(() => {
+                                runAiOcr(optimizedUrl);
+                            })
+                            .catch(err => {
+                                showCustomAlert("❌ 照片上傳失敗：" + err.message, "error");
+                                input.value = '';
+                            });
                     };
-                    img.src = e.target.result;
+                    img.src = base64DataUrl;
                 };
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        async function runAiOcr(base64DataUrl) {
+            const base64Content = base64DataUrl.split(',')[1];
+            const mimeType = base64DataUrl.split(',')[0].split(':')[1].split(';')[0];
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+            
+            const promptText = `這是一張餐廳菜單。請將所有餐點整理出來。
+            1. 將品項分為大類（如：主食、單點、飲料）。
+            2. 遇到有不同口味、大小，必須拆開成獨立的品項，例如「陽春麵(大)」、「陽春麵(小)」。
+            請絕對只回傳一個合法的 JSON 陣列，格式範例如下：
+            [
+              {
+                "category": "主食",
+                "items": [
+                  {"name": "陽春麵(小)", "price": 40},
+                  {"name": "陽春麵(大)", "price": 50}
+                ]
+              }
+            ]
+            請不要加上 \`\`\`json 標籤，只要純文字陣列。`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: promptText },
+                                { inlineData: { mimeType: mimeType, data: base64Content } }
+                            ]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 錯誤碼: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                let textResult = data.candidates[0].content.parts[0].text;
+                
+                let match = textResult.match(/\[[\s\S]*\]/);
+                if (match) {
+                    textResult = match[0];
+                }
+                
+                const parsedMenu = JSON.parse(textResult);
+                await database.ref('config/posMenu').set(parsedMenu);
+                
+                showCustomAlert("🎉 <b>AI 辨識成功！</b><br><br><span style='font-size:14px;color:#64748b;'>菜單已經自動轉換成下面的 POS 點餐按鈕囉！</span>", "success");
+                document.querySelector('.file-input').value = '';
+                
+            } catch (error) {
+                console.error("AI 錯誤:", error);
+                showCustomAlert("❌ <b>AI 辨識失敗</b><br><br><span style='font-size:14px;color:#e11d48;'>可能原因：照片模糊或 API 錯誤。<br>系統回報：" + error.message + "</span>", "error");
+                document.querySelector('.file-input').value = '';
+            }
+        }
+
+        // POS 面板動態讀取
+        database.ref('config/posMenu').on('value', (snapshot) => {
+            let data = snapshot.val();
+            const panel = document.getElementById('posPanel');
+            const catContainer = document.getElementById('posCategories');
+            
+            posMenuData = [];
+            if (Array.isArray(data)) {
+                posMenuData = data.filter(item => item && item.category);
+            } else if (data && typeof data === 'object') {
+                posMenuData = Object.values(data).filter(item => item && item.category);
+            }
+            
+            if (!posMenuData || posMenuData.length === 0) {
+                panel.style.display = 'none';
+                return;
+            }
+            
+            panel.style.display = 'block';
+            catContainer.innerHTML = '';
+            
+            posMenuData.forEach((cat, index) => {
+                const btn = document.createElement('button');
+                btn.className = `pos-cat-btn ${index === 0 && !activeCategory ? 'active' : (activeCategory === cat.category ? 'active' : '')}`;
+                btn.innerText = cat.category;
+                btn.onclick = () => selectCategory(cat.category);
+                catContainer.appendChild(btn);
+            });
+            
+            if (!activeCategory && posMenuData.length > 0) {
+                activeCategory = posMenuData[0].category;
+            }
+            renderPosItems();
+        });
+
+        function selectCategory(catName) {
+            activeCategory = catName;
+            const btns = document.querySelectorAll('.pos-cat-btn');
+            btns.forEach(btn => btn.classList.toggle('active', btn.innerText === catName));
+            renderPosItems();
+        }
+
+        function renderPosItems() {
+            const grid = document.getElementById('posItemsGrid');
+            grid.innerHTML = '';
+            if (!posMenuData || !activeCategory) return;
+            
+            const targetCat = posMenuData.find(c => c.category === activeCategory);
+            if (!targetCat || !targetCat.items) return;
+            
+            let itemsArray = Array.isArray(targetCat.items) ? targetCat.items : Object.values(targetCat.items || {});
+            
+            itemsArray.forEach(item => {
+                if (!item || !item.name) return;
+                const card = document.createElement('div');
+                card.className = 'pos-item-card';
+                card.onclick = () => {
+                    document.getElementById('userItem').value = item.name;
+                    document.getElementById('price').value = item.price;
+                    document.getElementById('pay').value = item.price;
+                };
+                card.innerHTML = `<div class="pos-item-name">${item.name}</div><div class="pos-item-price">$${item.price}</div>`;
+                grid.appendChild(card);
+            });
         }
 
         database.ref('config/menuImage').on('value', (s) => {
@@ -331,7 +538,7 @@
             if(time) updates.deadline = time + " 截止";
             if(text || time) {
                 database.ref('config/announcement').update(updates)
-                    .then(() => alert("公告同步成功！"));
+                    .then(() => showCustomAlert("公告同步成功！", "success"));
             }
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
@@ -344,7 +551,10 @@
             
             const pay = payInput === '' ? price : (parseInt(payInput) || 0);
             
-            if(!name || !item) return alert("請填寫姓名與品項內容！");
+            if(!name || !item) {
+                showCustomAlert("⚠️ 請確實填寫姓名與品項內容！", "error");
+                return;
+            }
             
             database.ref('orders').push({ name, item, price, pay, isPaid: false, changeSettled: false, owner: myId });
             
@@ -355,9 +565,7 @@
         }
         
         function markPaid(id) { database.ref('orders').child(id).update({ isPaid: true }); }
-        
         function settleChange(id) { database.ref('orders').child(id).update({ changeSettled: true }); }
-        
         function startEdit(id) { editingId = id; database.ref('orders').once('value', (s) => renderTable(s.val())); }
         function cancelEdit() { editingId = null; database.ref('orders').once('value', (s) => renderTable(s.val())); }
 
@@ -489,15 +697,11 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        // 👇 智能點餐分類排序引擎
         function getSortKey(name) {
-            let cat = "2"; // 預設：中間 (單點配餐)
-            // 判斷是否為主食 (最上面)
+            let cat = "2"; 
             if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "1";
-            // 判斷是否為飲料 (最下面)
             if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "3";
 
-            // 👇 核心食材群聚 (強制把相關肉類綁在一起)
             let subCat = "99";
             if (name.includes('牛')) subCat = "01";
             else if (name.includes('豬')) subCat = "02";
@@ -558,7 +762,6 @@
                 
                 document.getElementById('statsTotal').innerText = `總計：${total} 份`;
                 
-                // 👇 使用智能引擎進行排序：先比大分類，再比食材，最後回歸純粹的文字拼音排序
                 const sortedStats = Object.entries(stats).sort((a, b) => {
                     return getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW');
                 });
@@ -576,8 +779,13 @@
         }
 
         function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
-        function deleteOrder(id) { if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); }
-        function clearOrders() { if(confirm("確定清空所有數據？")) database.ref('orders').remove(); }
+        
+        function deleteOrder(id) { 
+            if(confirm("確定刪除？")) database.ref('orders').child(id).remove(); 
+        }
+        function clearOrders() { 
+            if(confirm("確定清空所有數據？")) database.ref('orders').remove(); 
+        }
     </script>
 </body>
 </html>
