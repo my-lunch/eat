@@ -36,6 +36,8 @@
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #a55eea; color: white; }
         .btn-clear { background: #747d8c; color: white; }
+        /* 鎖單按鈕專用樣式 */
+        .btn-lock { background: #ff7675; color: white; }
 
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .announcement-row { display: flex; justify-content: space-between; align-items: center; }
@@ -159,7 +161,7 @@
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button type="button" class="btn-stats" onclick="showStats()">統計</button>
             <button type="button" class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空訂單</button>
-            <span id="lockToggleBtn" style="cursor: pointer; font-size: 14px; margin-left: 5px;" onclick="toggleOrderLock()" title="鎖定/解鎖系統">🔓</span>
+            <button type="button" id="lockToggleBtn" class="btn-lock" onclick="toggleOrderLock()">鎖單</button>
         </div>
         
         <div class="status-banner">
@@ -289,7 +291,10 @@
             const submitBtn = document.getElementById('submitOrderBtn');
             
             if (isSystemLocked) {
-                if(lockBtn) lockBtn.innerText = '🔒';
+                if(lockBtn) {
+                    lockBtn.innerText = '開放點餐';
+                    lockBtn.className = 'btn-sync'; // 換成綠色或原始同步色
+                }
                 if(submitBtn) {
                     submitBtn.disabled = true;
                     submitBtn.innerText = '系統已關閉';
@@ -297,7 +302,10 @@
                     submitBtn.style.cursor = 'not-allowed';
                 }
             } else {
-                if(lockBtn) lockBtn.innerText = '🔓';
+                if(lockBtn) {
+                    lockBtn.innerText = '鎖定點餐';
+                    lockBtn.className = 'btn-lock'; // 變回橘紅色
+                }
                 if(submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.innerText = '送出點餐';
@@ -380,7 +388,6 @@
 
         function submitOrder() {
             if (isSystemLocked) {
-                // 使用明確的圖示與換行結構
                 return alert("🔒 點餐系統已關閉收單\n\n需點餐請聯絡團主 謝謝");
             }
 
