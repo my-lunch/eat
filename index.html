@@ -379,8 +379,9 @@
         }
 
         function submitOrder() {
+            // 【更新】系統鎖定時，跳出指定的圖示和文字訊息
             if (isSystemLocked) {
-                return alert("目前團主已關閉系統，需加點請聯絡團主。");
+                return alert("🔒 點餐系統已關閉收單\n需加點餐點請聯絡團主");
             }
 
             const name = document.getElementById('userName').value.trim();
