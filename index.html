@@ -70,9 +70,7 @@
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         th { text-align: left; background: #f8fafc; padding: 15px 10px 15px 0; color: #64748b; font-weight: bold; font-size: 15px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
-        
         td { padding: 15px 10px 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; }
-        
         th:first-child, td:first-child { padding-left: 0; }
         th:last-child, td:last-child { padding-right: 0; }
         
@@ -84,27 +82,21 @@
         th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
 
         .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
-        
         .btn-confirm { background: var(--success); color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
         .btn-change-done { background: #45aaf2; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; }
         .btn-edit { background: #4b5563; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
         .btn-save { background: #2563eb; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
-        
         .btn-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 10px; padding: 2px 4px; font-weight: 900; border-radius: 4px; white-space: nowrap; }
         .btn-del:hover { background: #fee2e2; }
         
-        .readonly-text { color: #94a3b8; font-size: 18px; font-weight: bold; padding: 8px; white-space: nowrap; }
-        
         .status-icon-only { font-size: 16px; font-weight: 900; }
-        
         .inline-input { padding: 8px; border: 2px solid var(--primary); border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; font-weight: bold; text-align: left; }
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); }
         .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; }
-        .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
-        
+        .stats-list { max-height: 500px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
         .stats-item-left { font-weight: bold; font-size: 16px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 16px; color: var(--dark); white-space: nowrap; }
@@ -112,7 +104,6 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 📱 手機版 RWD 防護排版 */
         @media (max-width: 768px) {
             body { padding: 10px 0; }
             .container { padding: 0 10px; }
@@ -125,12 +116,10 @@
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 6px 12px; }
             .dashboard { flex-direction: column; gap: 10px; }
-            
             .desktop-labels { display: none !important; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 15px; color: #64748b; text-align: left; }
             .form-inputs { flex-direction: column; gap: 15px; }
             .form-inputs > div { width: 100% !important; padding-right: 0 !important; }
-            
             .table-container { overflow-x: auto; padding: 20px 15px; }
             table { table-layout: fixed; width: 650px; } 
             th, td { padding: 10px 4px; font-size: 13px; }
@@ -154,8 +143,8 @@
         <div class="admin-toolbar" id="adminToolbar">
             <span style="font-weight:bold; color:var(--primary); font-size: 15px;">👑 團主：</span>
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
-            <input type="text" id="timeInput" class="time-input" placeholder="時間(例11:00)">
-            <button type="button" class="btn-sync" style="background:#3b82f6; color: white;" onclick="updateAnnouncement()">同步</button>
+            <input type="text" id="timeInput" class="time-input" placeholder="時間(11:00)">
+            <button type="button" class="btn-sync" style="background:#74b9ff; color: white;" onclick="updateAnnouncement()">同步</button>
             <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button type="button" class="btn-stats" onclick="showStats()">統計</button>
@@ -254,10 +243,10 @@
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #cbd5e1; padding-bottom: 10px;">
-            <div class="stats-header" style="margin-bottom: 0;">📞 叫餐統計</div>
-            <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 8px; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onclick="copyStatsText()">📋 一鍵複製</button>
+            <div class="stats-header" style="margin-bottom: 0; white-space: nowrap;">📞 叫餐統計</div>
+            <div id="statsTotal" class="stats-total" style="margin-bottom: 0; flex-grow: 1; text-align: center; margin: 0 20px; white-space: nowrap;">總計：<span style="color:var(--danger); font-size:24px;">0</span> 份</div>
+            <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 8px; font-size: 12px; border-radius: 6px; white-space: nowrap;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
-        <div id="statsTotal" class="stats-total">總計：<span style="color:var(--danger); font-size:24px;">0</span> 份</div>
         <div id="statsContent" class="stats-list"></div>
         <button type="button" class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px; background: #ff9f43; color: white; border: 2px solid #1e293b; font-weight: 900; border-radius: 8px;" onclick="closeModal()">關閉</button>
     </div>
@@ -409,7 +398,6 @@
 
         function submitOrder() {
             if (isOrderLocked) {
-                // 👇 警告訊息已更新
                 alert("目前團主已關閉系統，需點餐請聯絡團主。");
                 return;
             }
@@ -639,7 +627,9 @@
                         });
                     }); 
                 }
+                
                 document.getElementById('statsTotal').innerHTML = `總計：<span style="color:var(--danger); font-size:24px;">${total}</span> 份`;
+                
                 const sortedStats = Object.entries(stats).sort((a, b) => getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW'));
                 
                 sortedStats.forEach(([k, v]) => {
@@ -654,6 +644,7 @@
                         <span class="stats-user-names">${v.users.join('、')}</span>
                     </div>
                 `).join('');
+                
                 document.getElementById('statsModal').style.display = 'block'; 
                 document.getElementById('modalOverlay').style.display = 'block';
             });
@@ -661,7 +652,8 @@
 
         function copyStatsText() {
             if (!statsTextForCopy || statsTextForCopy.includes("總計：0 份")) {
-                return alert("目前還沒人點餐喔！");
+                alert("目前還沒人點餐喔！");
+                return;
             }
             const el = document.createElement('textarea');
             el.value = statsTextForCopy;
