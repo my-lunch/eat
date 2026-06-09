@@ -34,7 +34,7 @@
 
         .admin-toolbar button { padding: 0 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; height: 36px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
         .btn-sync { background: var(--primary); color: white; }
-        .btn-stats { background: #a55eea; color: white; }
+        .btn-stats { background: #934bd8; color: white; }
         .btn-clear { background: #747d8c; color: white; }
 
         .status-banner { background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
@@ -143,8 +143,8 @@
         <div class="admin-toolbar" id="adminToolbar">
             <span style="font-weight:bold; color:var(--primary); font-size: 15px;">👑 團主：</span>
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
-            <input type="text" id="timeInput" class="time-input" placeholder="時間(11:00)">
-            <button type="button" class="btn-sync" style="background:#74b9ff; color: white;" onclick="updateAnnouncement()">同步</button>
+            <input type="text" id="timeInput" class="time-input" placeholder="時間(10:30)">
+            <button type="button" class="btn-sync" style="background:#3681cd; color: white;" onclick="updateAnnouncement()">同步</button>
             <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button type="button" class="btn-stats" onclick="showStats()">統計</button>
@@ -398,7 +398,7 @@
 
         function submitOrder() {
             if (isOrderLocked) {
-                alert("目前團主已關閉系統，需點餐請聯絡團主。");
+                alert("目前已關閉系統，點餐請聯絡團主。");
                 return;
             }
 
