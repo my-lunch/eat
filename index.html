@@ -44,7 +44,7 @@
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; color: var(--danger); background: #fff1f2; padding: 8px 20px; border-radius: 8px; white-space: nowrap; } 
         .time-label { font-weight: bold; }
-        .time-value { font-size: 26px; font-weight: 900; margin: 0 5px; line-height: 1; } /* 改為 26px */
+        .time-value { font-size: 26px; font-weight: 900; margin: 0 5px; line-height: 1; }
 
         .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
@@ -101,7 +101,7 @@
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 100px rgba(0,0,0,0.4); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 99; }
         .stats-header { font-size: 20px; font-weight: 900; color: var(--dark); margin-bottom: 15px; }
-        .stats-total { font-size: 18px; font-weight: bold; color: #4b5563; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed #cbd5e1; }
+        
         .stats-list { max-height: 650px; overflow-y: auto; padding-right: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
@@ -169,7 +169,7 @@
                         <span id="lockToggleBtn" style="cursor: pointer; opacity: 0.15; font-size: 14px; margin-right: 6px;" onclick="toggleOrderLock()" title="鎖定/解鎖系統">🔓</span>
                         <span class="time-label" style="font-size: 14px;">截止時間</span>
                         <span id="timeText" class="time-value">未設定</span>
-                        <span class="time-label" style="font-size: 24px; margin-left: 5px;">截止</span>
+                        <span class="time-label" style="font-size: 18px; margin-left: 5px;">截止</span>
                     </div>
                     <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
                 </div>
@@ -252,13 +252,15 @@
 
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
     <div id="statsModal">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #cbd5e1; padding-bottom: 10px;">
-            <div class="stats-header" style="margin-bottom: 0;">📞 叫餐統計</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px;">
+            <div style="display: flex; align-items: baseline; gap: 15px;">
+                <div class="stats-header" style="margin-bottom: 0;">📞 叫餐統計</div>
+                <div id="statsTotal" style="font-size: 16px; font-weight: bold; color: #4b5563;">總計：0 份</div>
+            </div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 8px; font-size: 12px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
-        <div id="statsTotal" class="stats-total">總計：0 份</div>
         <div id="statsContent" class="stats-list"></div>
-        <button type="button" class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px; background: #ff9f43; color: white; border: 2px solid #1e293b; font-weight: 900; box-shadow: 0 4px 0px #1e293b; border-radius: 8px;" onclick="closeModal()">關閉</button>
+        <button type="button" class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px; background: #ff9f43; color: white; border: 2px solid #1e293b; font-weight: 900; border-radius: 8px;" onclick="closeModal()">關閉</button>
     </div>
 
     <script>
@@ -270,7 +272,7 @@
         localStorage.setItem('myDeviceId', myId);
         let editingId = null;
         let statsTextForCopy = ""; 
-        let isSystemLocked = false; // 用來記錄系統是否鎖定
+        let isSystemLocked = false; 
 
         window.addEventListener('load', () => {
             let isAdm = localStorage.getItem('isAdminMode') === 'true';
@@ -281,7 +283,6 @@
             if(savedName) document.getElementById('userName').value = savedName;
         });
 
-        // 監聽鎖定狀態
         database.ref('config/isLocked').on('value', (s) => {
             isSystemLocked = s.val() || false;
             const lockBtn = document.getElementById('lockToggleBtn');
@@ -313,7 +314,6 @@
             database.ref('orders').once('value', s => renderTable(s.val()));
         }
 
-        // 切換鎖定狀態
         function toggleOrderLock() {
             database.ref('config/isLocked').once('value', s => {
                 database.ref('config/isLocked').set(!(s.val() || false));
@@ -379,7 +379,6 @@
         }
 
         function submitOrder() {
-            // 加入防護：若系統已鎖定，阻止送出並提示
             if (isSystemLocked) {
                 return alert("目前團主已關閉系統，需加點請聯絡團主。");
             }
