@@ -157,8 +157,8 @@
             <button type="button" class="btn-sync" onclick="updateAnnouncement()">同步</button>
             <span style="font-weight:bold; font-size:14px; color: #cbd5e1; margin-left: 5px;">上傳菜單：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
-            <button type="button" class="btn-stats" onclick="showStats()">📊 統計</button>
-            <button type="button" class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">🧹 淨空訂單</button>
+            <button type="button" class="btn-stats" onclick="showStats()">統計</button>
+            <button type="button" class="btn-sync" style="background:#747d8c;" onclick="clearOrders()">淨空訂單</button>
         </div>
         
         <div class="status-banner">
@@ -169,7 +169,7 @@
                         <span id="lockToggleBtn" style="cursor: pointer; opacity: 0.15; font-size: 14px; margin-right: 6px;" onclick="toggleOrderLock()" title="鎖定/解鎖系統">🔓</span>
                         <span class="time-label" style="font-size: 14px;">截止時間</span>
                         <span id="timeText" class="time-value">未設定</span>
-                        <span class="time-label" style="font-size: 18px; margin-left: 5px;">截止</span>
+                        <span class="time-label" style="font-size: 22px; margin-left: 5px;">截止</span>
                     </div>
                     <input type="checkbox" id="adminToggle" class="admin-checkbox-secret" onclick="toggleAdminMode()" title="隱藏開關">
                 </div>
@@ -538,14 +538,14 @@
 
         function getSortKey(name) {
             let cat = "2"; 
-            if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "1";
+            if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉|丼)/.test(name)) cat = "1";
             if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "3";
 
             let subCat = "99";
             if (name.includes('牛')) subCat = "01";
             else if (name.includes('豬')) subCat = "02";
             else if (name.includes('雞')) subCat = "03";
-            else if (name.includes('魚') || name.includes('鮭') || name.includes('鱈') || name.includes('蝦')) subCat = "04";
+            else if (name.includes('魚') || name.includes('鮭') || name.includes('鱈') || name.includes('蝦') || name.includes('海鮮')) subCat = "04";
             else if (name.includes('堡')) subCat = "05";
             else if (name.includes('吐司') || name.includes('三明治')) subCat = "06";
             else if (name.includes('蛋餅')) subCat = "07";
@@ -603,8 +603,17 @@
                 
                 document.getElementById('statsTotal').innerHTML = `總計：<span style="font-size: 26px; color: #e11d48;">${total}</span> 份`;
                 
+                // 更精準的排序邏輯：先比較主食/配餐分類(前4碼)，同類別再照筆畫/字母排序
                 const sortedStats = Object.entries(stats).sort((a, b) => {
-                    return getSortKey(a[0]).localeCompare(getSortKey(b[0]), 'zh-TW');
+                    const keyA = getSortKey(a[0]);
+                    const keyB = getSortKey(b[0]);
+                    const prefixA = keyA.substring(0, 4);
+                    const prefixB = keyB.substring(0, 4);
+                    
+                    if (prefixA !== prefixB) {
+                        return prefixA < prefixB ? -1 : 1;
+                    }
+                    return a[0].localeCompare(b[0], 'zh-TW');
                 });
                 
                 sortedStats.forEach(([k, v]) => {
