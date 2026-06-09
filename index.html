@@ -379,9 +379,9 @@
         }
 
         function submitOrder() {
-            // 【更新】系統鎖定時，跳出指定的圖示和文字訊息
             if (isSystemLocked) {
-                return alert("🔒 點餐系統已關閉收單\n需加點餐點請聯絡團主");
+                // 使用明確的圖示與換行結構
+                return alert("🔒 點餐系統已關閉收單\n\n需點餐請聯絡團主 謝謝");
             }
 
             const name = document.getElementById('userName').value.trim();
@@ -534,8 +534,6 @@
             document.getElementById('totalGet').innerText = tGet;
             document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
-
-        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
         function getSortWeight(name) {
             let cat = 2; 
