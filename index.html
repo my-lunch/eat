@@ -46,7 +46,8 @@
         .time-label { font-size: 14px; font-weight: bold; color: var(--danger); }
         .time-value { font-size: 32px; font-weight: 900; margin: 0 5px; line-height: 1; }
 
-        .admin-checkbox-secret { width: 15px; height: 15px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
+        /* 👇 修改這裡：把 15px 縮小到 10px */
+        .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
 
         .menu-wrapper { width: 100%; display: none; text-align: center; }
@@ -248,7 +249,7 @@
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 8px; font-size: 12px; border-radius: 6px; white-space: nowrap;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
         <div id="statsContent" class="stats-list"></div>
-        <button type="button" class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px; background: #ff9f43; color: white; border: 2px solid #1e293b; font-weight: 900; border-radius: 8px;" onclick="closeModal()">關閉</button>
+        <button type="button" class="btn-sync" style="margin-top:20px; width:100%; padding: 12px; font-size: 16px; background: #ff9f43; color: white; border: 2px solid #1e293b; font-weight: 900; border-radius: 8px; box-shadow: none;" onclick="closeModal()">關閉</button>
     </div>
 
     <script>
@@ -352,6 +353,7 @@
                     lockBtn.style.background = "var(--danger)"; 
                 }
                 if (submitBtn) {
+                    // 👇 改為已結單
                     submitBtn.innerText = "已結單";
                     submitBtn.style.background = "#94a3b8";
                     submitBtn.style.cursor = "not-allowed";
@@ -398,7 +400,8 @@
 
         function submitOrder() {
             if (isOrderLocked) {
-                alert("目前已關閉系統，點餐請聯絡團主。");
+                // 👇 警告文字已修改
+                alert("目前團主已關閉系統，需點餐請聯絡團主。");
                 return;
             }
 
@@ -644,7 +647,6 @@
                         <span class="stats-user-names">${v.users.join('、')}</span>
                     </div>
                 `).join('');
-                
                 document.getElementById('statsModal').style.display = 'block'; 
                 document.getElementById('modalOverlay').style.display = 'block';
             });
@@ -652,7 +654,7 @@
 
         function copyStatsText() {
             if (!statsTextForCopy || statsTextForCopy.includes("總計：0 份")) {
-                alert("目前還沒人點餐喔！");
+                alert("目前還沒有任何訂單喔！");
                 return;
             }
             const el = document.createElement('textarea');
