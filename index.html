@@ -46,8 +46,7 @@
         .time-label { font-size: 14px; font-weight: bold; color: var(--danger); }
         .time-value { font-size: 32px; font-weight: 900; margin: 0 5px; line-height: 1; }
 
-        /* 👇 修改這裡：把 15px 縮小到 8px */
-        .admin-checkbox-secret { width: 8px; height: 8px; cursor: pointer; opacity: 0.15; margin-left: 8px; }
+        .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
 
         .menu-wrapper { width: 100%; display: none; text-align: center; }
@@ -245,7 +244,7 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #cbd5e1; padding-bottom: 10px;">
             <div class="stats-header" style="margin-bottom: 0; white-space: nowrap;">📞 叫餐統計</div>
-            <div id="statsTotal" class="stats-total" style="margin-bottom: 0; flex-grow: 1; text-align: center; margin: 0 20px; white-space: nowrap;">總計：<span style="color:var(--danger); font-size:24px;">0</span> 份</div>
+            <div id="statsTotal" class="stats-total" style="margin-bottom: 0; flex-grow: 1; text-align: center; margin: 0 16px; white-space: nowrap;">總計：<span style="color:var(--danger); font-size:24px;">0</span> 份</div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 8px; font-size: 12px; border-radius: 6px; white-space: nowrap;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
         <div id="statsContent" class="stats-list"></div>
@@ -353,7 +352,6 @@
                     lockBtn.style.background = "var(--danger)"; 
                 }
                 if (submitBtn) {
-                    // 👇 改為已結單
                     submitBtn.innerText = "已結單";
                     submitBtn.style.background = "#94a3b8";
                     submitBtn.style.cursor = "not-allowed";
@@ -400,7 +398,6 @@
 
         function submitOrder() {
             if (isOrderLocked) {
-                // 👇 警告文字已修改
                 alert("目前團主已關閉系統，需點餐請聯絡團主。");
                 return;
             }
@@ -642,7 +639,7 @@
 
                 document.getElementById('statsContent').innerHTML = sortedStats.map(([k,v]) => `
                     <div class="stats-item">
-                        <div class="stats-item-left">🍱 ${k}</div>
+                        <div class="stats-item-left"><span style="font-size: 12px;">🍱</span> ${k}</div>
                         <span class="stats-count">× ${v.count}</span>
                         <span class="stats-user-names">${v.users.join('、')}</span>
                     </div>
