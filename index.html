@@ -181,14 +181,13 @@
             .action-btns button { padding: 6px 8px; font-size: 11px; }
             .status-icon-only { font-size: 11px !important; }
             
-            /* 👇 發便當模式：手機版專屬統計表優化 */
-            #statsModal { padding: 20px 15px; width: 95%; }
-            .stats-list { max-height: 65vh; padding-right: 5px; } 
-            .stats-item { flex-wrap: wrap; align-items: flex-start; justify-content: space-between; width: 100%; padding: 14px 0; border-bottom: 1px solid #e2e8f0; }
-            .stats-item-left { flex: 1; white-space: normal; line-height: 1.4; margin-right: 10px; font-size: 15px; }
-            .stats-count { font-size: 16px; margin-top: 2px; }
-            /* 名字折疊在下方淺灰框內，不會擠在一起 */
-            .stats-user-names { width: 100%; margin-left: 0; margin-top: 10px; white-space: normal; font-size: 14px; line-height: 1.6; background: #f8fafc; padding: 10px 12px; border-radius: 8px; box-sizing: border-box; color: #475569; }
+            /* 👇 手機版統計表：單行顯示、允許左右滑動不折疊 */
+            #statsModal { padding: 20px 15px; width: 95%; max-width: 95%; overflow: hidden; }
+            .stats-list { max-height: 65vh; padding-right: 5px; padding-bottom: 10px; overflow-x: auto; overflow-y: auto; } 
+            .stats-item { flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: max-content; min-width: 100%; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+            .stats-item-left { flex: none; white-space: nowrap; margin-right: 12px; font-size: 15px; }
+            .stats-count { font-size: 16px; margin-top: 0; flex: none; white-space: nowrap; }
+            .stats-user-names { width: auto; margin-left: 15px; margin-top: 0; white-space: nowrap; font-size: 13px; background: transparent; padding: 0; color: #64748b; flex: none; }
         }
     </style>
 </head>
