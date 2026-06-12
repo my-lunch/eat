@@ -15,14 +15,14 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        /* 👇 1. 莫蘭迪明亮高質感配色 */
         :root { 
-            --primary: #d47a61; /* 莫蘭迪橘 */
-            --danger: #ce6c72;  /* 莫蘭迪紅 */
-            --success: #6e9e80; /* 莫蘭迪綠 */
-            --bg: #f4f6f8;      /* 乾淨的微涼灰白底 */
-            --dark: #2c3e50;    /* 深邃海軍藍黑 */
-            --card-bg: #ffffff; /* 純白卡片 */
+            --primary: #d47a61;
+            --primary-rgb: 212, 122, 97;
+            --danger: #ce6c72;  
+            --success: #6e9e80; 
+            --bg: #f4f6f8;      
+            --dark: #2c3e50;    
+            --card-bg: #ffffff; 
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
@@ -32,7 +32,7 @@
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: var(--dark); padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.15); gap: 12px; box-sizing: border-box; width: 100%; }
+        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: var(--dark); padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; }
         .admin-toolbar input { padding: 10px 14px; border: 2px solid transparent; background: rgba(255,255,255,0.1); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
         .admin-toolbar input:focus { background: rgba(255,255,255,0.2); outline: none; border-color: rgba(255,255,255,0.3); }
         .admin-toolbar input::placeholder { color: #cbd5e1; }
@@ -48,11 +48,10 @@
         .btn-stats { background: #8e7eb8; color: white; } 
         .btn-clear { background: #718096; color: white; }
 
-        /* 👇 升級版的圓角與深層柔和陰影 */
         .status-banner, .form-section, .table-container, .card, .menu-display { 
             background: var(--card-bg); 
             border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(149, 157, 165, 0.08); 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 12px 24px rgba(149, 157, 165, 0.08); 
             border: 1px solid rgba(255,255,255,0.8);
         }
         
@@ -73,15 +72,14 @@
 
         .dashboard { display: flex; gap: 24px; }
         .card { flex: 1; padding: 25px 20px; text-align: center; transition: 0.3s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(149, 157, 165, 0.12); }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 16px 32px rgba(149, 157, 165, 0.12); }
         .card h3 { margin: 0 0 12px; color: #64748b; font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
         .card p { margin: 0; font-size: 40px; font-weight: 900; letter-spacing: -1px; } 
         .text-red { color: var(--danger); }
 
         .form-section { padding: 35px 30px; }
-        .form-section h3 { margin-top: 0; border-bottom: 3px solid #f1f5f9; padding-bottom: 12px; font-size: 20px; font-weight: 900; }
+        .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
-        /* 👇 App 級的無邊框浮凸輸入法 */
         .form-box, .inline-input { 
             width: 100%; 
             padding: 14px 16px; 
@@ -106,16 +104,18 @@
         .mobile-only-label { display: none; }
 
         .table-container { padding: 35px 30px; }
-        .table-container h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 3px solid #f1f5f9; font-size: 20px; font-weight: 900; }
+        #unpaidTable h3, .table-container:first-of-type h3 { border-bottom: 2px solid rgba(206, 108, 114, 0.1); }
+        #paidTable h3, .table-container:nth-of-type(2) h3 { border-bottom: 2px solid rgba(110, 158, 128, 0.1); }
+        
+        .table-container h3 { margin-top: 0; padding-bottom: 15px; font-size: 20px; font-weight: 900; }
         
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 凍結表頭 & 表格精緻化 */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 0; color: #64748b; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 10px 18px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
-        th:first-child, td:first-child { padding-left: 10px; } /* 表格微調內縮，更有質感 */
+        th:first-child, td:first-child { padding-left: 10px; } 
         th:last-child, td:last-child { padding-right: 10px; }
         
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
@@ -127,7 +127,6 @@
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         
-        /* 按鈕全體 Q彈質感升級 */
         .btn-confirm, .btn-change-done, .btn-edit, .btn-save { padding: 6px 12px; border: none; border-radius: 8px; font-weight: 900; font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .btn-confirm { background: var(--success); color: white; }
         .btn-change-done { background: #6b8ea8; color: white; }
@@ -141,14 +140,13 @@
         .btn-del:hover { background: #ffe4e6; transform: scale(0.95); }
         
         .status-icon-only { font-size: 16px; font-weight: 900; }
-        .inline-input { height: 40px; padding: 8px 12px; font-size: 14px; } /* 表格內的編輯框微調 */
+        .inline-input { height: 40px; padding: 8px 12px; font-size: 14px; } 
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.5); }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); z-index: 99; }
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; }
         .stats-total { font-size: 18px; font-weight: 800; color: #4b5563; }
         .stats-list { max-height: 500px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
-        /* 滾動條美化 */
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
@@ -163,9 +161,9 @@
             .container { padding: 0; gap: 16px; }
             .page-footer { order: 100; }
             .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
-            .admin-toolbar input { width: 100% !important; box-sizing: border-box; }
-            .admin-toolbar button { width: 100%; padding: 12px; font-size: 16px; margin-bottom: 5px; }
-            .status-banner { padding: 20px; }
+            .admin-toolbar input { width: 100% !important; box-sizing: border-box; height: 32px !important; padding: 6px 12px !important; font-size: 13px; }
+            .admin-toolbar button { width: 100%; padding: 8px; font-size: 14px; margin-bottom: 5px; height: 36px; }
+            
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
             .cash-info { font-size: 20px; }
             .time-info-wrapper { justify-content: center; width: 100%; }
@@ -181,10 +179,16 @@
             th { padding: 12px 6px; font-size: 12px; }
             td { padding: 15px 6px; font-size: 14px; }
             .action-btns button { padding: 6px 8px; font-size: 11px; }
-            .status-icon-only { font-size: 14px !important; }
-            #statsModal { padding: 25px 20px; width: 95%; }
-            .stats-item { flex-direction: row; align-items: center; justify-content: flex-start; overflow-x: auto; width: 100%; white-space: nowrap; padding: 8px 0; }
-            .stats-user-names { margin-left: 20px; margin-top: 0; white-space: nowrap; font-size: 13px; }
+            .status-icon-only { font-size: 11px !important; }
+            
+            /* 👇 發便當模式：手機版專屬統計表優化 */
+            #statsModal { padding: 20px 15px; width: 95%; }
+            .stats-list { max-height: 65vh; padding-right: 5px; } 
+            .stats-item { flex-wrap: wrap; align-items: flex-start; justify-content: space-between; width: 100%; padding: 14px 0; border-bottom: 1px solid #e2e8f0; }
+            .stats-item-left { flex: 1; white-space: normal; line-height: 1.4; margin-right: 10px; font-size: 15px; }
+            .stats-count { font-size: 16px; margin-top: 2px; }
+            /* 名字折疊在下方淺灰框內，不會擠在一起 */
+            .stats-user-names { width: 100%; margin-left: 0; margin-top: 10px; white-space: normal; font-size: 14px; line-height: 1.6; background: #f8fafc; padding: 10px 12px; border-radius: 8px; box-sizing: border-box; color: #475569; }
         }
     </style>
 </head>
@@ -262,7 +266,7 @@
         </div>
 
         <div class="table-container">
-            <h3 style="color:var(--danger)">📝 所有未付款區</h3>
+            <h3>📝 所有未付款區</h3>
             <table id="unpaidTable">
                 <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零</th><th></th></tr></thead>
                 <tbody id="unpaidBody"></tbody>
@@ -270,7 +274,7 @@
         </div>
 
         <div class="table-container">
-            <h3 style="color:var(--success)">✅ 所有已付款區</h3>
+            <h3>✅ 所有已付款區</h3>
             <table id="paidTable">
                 <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零</th><th></th></tr></thead>
                 <tbody id="paidBody"></tbody>
@@ -484,21 +488,17 @@
             }
 
             const name = nameEl.value.trim();
-            let rawItem = itemEl.value.trim(); 
+            const rawItem = itemEl.value; 
             const price = parseInt(priceEl.value) || 0;
             const payVal = payEl.value.trim();
             
             const pay = payVal === '' ? price : (parseInt(payVal) || 0);
-            
-            if(!name || !rawItem) {
+            const cleanItem = formatItemName(rawItem);
+
+            if(!name || !cleanItem) {
                 alert("請確實填寫姓名與品項內容！");
                 return;
             }
-
-            let cleanItem = rawItem.replace(/（/g, '(').replace(/）/g, ')'); 
-            cleanItem = cleanItem.replace(/[\-\/\\]/g, '_'); 
-            cleanItem = cleanItem.replace(/\s+/g, ''); 
-            cleanItem = cleanItem.replace(/_+/g, '_'); 
             
             try { 
                 if (window.localStorage) {
@@ -550,10 +550,7 @@
             if (!elItem) return;
             editingId = null;
 
-            let cleanItem = elItem.value.trim().replace(/（/g, '(').replace(/）/g, ')');
-            cleanItem = cleanItem.replace(/[\-\/\\]/g, '_');
-            cleanItem = cleanItem.replace(/\s+/g, '');
-            cleanItem = cleanItem.replace(/_+/g, '_');
+            let cleanItem = formatItemName(elItem.value);
 
             database.ref('orders').child(id).update({
                 item: cleanItem,
@@ -702,10 +699,7 @@
                         o.item.split(/[+＋]/).forEach(singleItem => {
                             let originalName = singleItem.trim();
                             if(originalName) { 
-                                let formatName = originalName.replace(/（/g, '(').replace(/）/g, ')');
-                                formatName = formatName.replace(/[\-\/\\]/g, '_');
-                                formatName = formatName.replace(/\s+/g, '');
-                                formatName = formatName.replace(/_+/g, '_');
+                                let formatName = formatItemName(originalName);
 
                                 const normKey = formatName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
                                 
