@@ -147,9 +147,7 @@
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; }
         .stats-total { font-size: 18px; font-weight: 800; color: #4b5563; }
         
-        /* 👇 3. 電腦版叫餐統計畫面加長 (改為 600px) */
         .stats-list { max-height: 600px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
-        
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
@@ -157,7 +155,6 @@
         .stats-count { font-weight: 900; font-size: 17px; color: var(--primary); white-space: nowrap; }
         .stats-user-names { font-size: 14px; color: #64748b; margin-left: 40px; font-weight: bold; word-break: break-all; white-space: normal; } 
 
-        /* 👇 4. 頁尾字體再縮小一碼 (11px) */
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
         .stats-icon { font-size: 11px; opacity: 0.85; display: inline-block; transform: scale(0.9); margin-right: 2px; }
@@ -171,7 +168,6 @@
             .admin-toolbar span { text-align: center; width: 100%; display: block; margin: 0 auto !important; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; height: 32px !important; padding: 6px 12px !important; font-size: 13px; }
             
-            /* 👇 1. 手機版解決檔案上傳重疊 Bug */
             .file-input { display: block; margin: 8px auto 12px auto !important; width: 220px !important; text-align: left; }
             
             .admin-toolbar button { width: 100%; padding: 8px; font-size: 14px; margin-bottom: 5px; height: 36px; }
@@ -197,8 +193,8 @@
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
-            /* 手機版靠左對齊，防擠 */
-            .stats-total { margin: 0 0 0 10px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
+            /* 👇 1. 手機版總分數往右開一些 (margin-left: 20px) */
+            .stats-total { margin: 0 0 0 20px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
             .stats-total span { font-size: 20px !important; } 
             #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
             
@@ -206,7 +202,9 @@
             .stats-item { flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: max-content; min-width: 100%; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
             .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 14px; }
             .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
-            .stats-user-names { width: auto; margin-left: 10px; margin-top: 0; white-space: nowrap; font-size: 12px; background: transparent; padding: 0; color: #64748b; flex: none; }
+            
+            /* 👇 2 & 3. 手機版人名：顏色變淡、字體變小至 11px、間距空出兩個空白格 (margin-left: 28px) */
+            .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; }
         }
     </style>
 </head>
@@ -323,7 +321,7 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
             <div class="stats-header" style="margin-bottom: 0; white-space: nowrap;"><span style="font-size: 16px;">📞</span> 叫餐統計</div>
-            <div id="statsTotal" class="stats-total" style="margin-bottom: 0; flex-grow: 1; text-align: left; margin: 0 0 0 15px; white-space: nowrap;"></div>
+            <div id="statsTotal" class="stats-total" style="margin-bottom: 0; flex-grow: 1; text-align: left; margin: 0 0 0 30px; white-space: nowrap;"></div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 6px 12px; font-size: 13px; border-radius: 8px; white-space: nowrap; box-shadow: none;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
         <div id="statsContent" class="stats-list"></div>
