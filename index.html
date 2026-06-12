@@ -154,14 +154,22 @@
         .stats-count { font-weight: 900; font-size: 17px; color: var(--primary); white-space: nowrap; }
         .stats-user-names { font-size: 14px; color: #64748b; margin-left: 40px; font-weight: bold; word-break: break-all; white-space: normal; } 
 
-        .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; }
+        /* 👇 3. 頁尾還原大小寫（拿掉 text-transform） */
+        .page-footer { text-align: center; color: #94a3b8; font-size: 13px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
+
+        /* 👇 1. 圖示精緻縮小樣式 */
+        .stats-icon { font-size: 11px; opacity: 0.85; display: inline-block; transform: scale(0.9); margin-right: 2px; }
 
         @media (max-width: 768px) {
             body { padding: 12px 10px; background: #eef2f6; }
             .container { padding: 0; gap: 16px; }
             .page-footer { order: 100; }
-            .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; }
+            .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; text-align: center; }
+            
+            /* 👇 2. 手機版控制台：文字與選擇檔案按鈕完美置中 */
+            .admin-toolbar span { text-align: center; width: 100%; display: block; margin: 0 auto !important; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; height: 32px !important; padding: 6px 12px !important; font-size: 13px; }
+            .file-input { text-align-last: center; text-align: center; display: block; margin: 0 auto !important; width: 100% !important; }
             .admin-toolbar button { width: 100%; padding: 8px; font-size: 14px; margin-bottom: 5px; height: 36px; }
             
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
@@ -181,13 +189,19 @@
             .action-btns button { padding: 6px 8px; font-size: 11px; }
             .status-icon-only { font-size: 11px !important; }
             
-            /* 👇 手機版統計表：解除寬度限制、單行到底、平滑左右滑動 */
-            #statsModal { padding: 20px 15px; width: 92%; min-width: auto; max-width: 95vw; overflow: hidden; border-radius: 16px; }
+            /* 👇 1. 手機版統計表：解除寬度，防止複製按鈕與標題爆框 */
+            #statsModal { padding: 20px 12px; width: 92%; min-width: auto; max-width: 95vw; overflow: hidden; border-radius: 16px; }
+            #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
+            .stats-header { font-size: 14px !important; flex-shrink: 0; }
+            .stats-total { margin: 0 4px !important; font-size: 14px !important; text-align: center; flex-grow: 1; }
+            .stats-total span { font-size: 20px !important; } /* 數字略縮小防擠 */
+            #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
+            
             .stats-list { max-height: 55vh; padding-right: 5px; padding-bottom: 10px; overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; } 
             .stats-item { flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: max-content; min-width: 100%; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
-            .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 15px; }
-            .stats-count { font-size: 15px; margin-top: 0; flex: none; white-space: nowrap; }
-            .stats-user-names { width: auto; margin-left: 10px; margin-top: 0; white-space: nowrap; font-size: 13px; background: transparent; padding: 0; color: #64748b; flex: none; }
+            .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 14px; }
+            .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
+            .stats-user-names { width: auto; margin-left: 10px; margin-top: 0; white-space: nowrap; font-size: 12px; background: transparent; padding: 0; color: #64748b; flex: none; }
         }
     </style>
 </head>
@@ -304,7 +318,7 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
             <div class="stats-header" style="margin-bottom: 0; white-space: nowrap;"><span style="font-size: 16px;">📞</span> 叫餐統計</div>
-            <div id="statsTotal" class="stats-total" style="margin-bottom: 0; flex-grow: 1; text-align: center; margin: 0 20px; white-space: nowrap;">總計：<span style="color:var(--danger); font-size:26px;">0</span> 份</div>
+            <div id="statsTotal" class="stats-total" style="margin-bottom: 0; flex-grow: 1; text-align: center; margin: 0 20px; white-space: nowrap;"><span style="color:var(--danger); font-size:26px;">0</span> 份</div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 6px 12px; font-size: 13px; border-radius: 8px; white-space: nowrap; box-shadow: none;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
         <div id="statsContent" class="stats-list"></div>
@@ -721,7 +735,8 @@
                     }); 
                 }
                 
-                document.getElementById('statsTotal').innerHTML = `總計：<span style="color:var(--danger); font-size:26px;">${total}</span> 份`;
+                // 👇 1. 手機版優化：拿掉「總計：」文字
+                document.getElementById('statsTotal').innerHTML = `<span style="color:var(--danger); font-size:26px;">${total}</span> 份`;
                 
                 const sortedStats = Object.values(stats).sort((a, b) => {
                     return getSortKey(a.displayName).localeCompare(getSortKey(b.displayName), 'zh-TW');
@@ -732,9 +747,10 @@
                 });
                 statsTextForCopy += `\n總計：${total} 份`;
 
+                // 👇 1. 圖示加上 .stats-icon 類別進行精緻縮小
                 document.getElementById('statsContent').innerHTML = sortedStats.map((v) => `
                     <div class="stats-item">
-                        <div class="stats-item-left"><span style="font-size: 13px;">🍱</span> ${v.displayName}</div>
+                        <div class="stats-item-left"><span class="stats-icon">🍱</span> ${v.displayName}</div>
                         <span class="stats-count">× ${v.count}</span>
                         <span class="stats-user-names">${v.users.join('、')}</span>
                     </div>
@@ -745,9 +761,12 @@
         }
 
         function copyStatsText() {
-            if (!statsTextForCopy || statsTextForCopy.includes("總計：0 份")) {
-                alert("目前還沒有任何訂單喔！");
-                return;
+            if (!statsTextForCopy || statsTextForCopy.includes("份")) {
+                let checkZero = document.getElementById('statsTotal').innerText;
+                if(checkZero.includes("0")) {
+                    alert("目前還沒有任何訂單喔！");
+                    return;
+                }
             }
             const el = document.createElement('textarea');
             el.value = statsTextForCopy;
@@ -755,7 +774,7 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            alert("已複製，可直接貼到 LINE 給店家！");
+            alert("已複製到剪貼簿，可直接貼到 LINE 給店家！");
         }
 
         function closeModal() { document.getElementById('statsModal').style.display = 'none'; document.getElementById('modalOverlay').style.display = 'none'; }
