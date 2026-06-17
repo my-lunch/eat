@@ -114,13 +114,12 @@
         th:first-child, td:first-child { padding-left: 10px; } 
         th:last-child, td:last-child { padding-right: 10px; }
         
-        /* 👇 找零欄位完美垂直置中對齊 */
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; font-weight: bold; } 
+        th:nth-child(2), td:nth-child(2) { width: 38%; padding-right: 25px; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 12%; } 
         th:nth-child(4), td:nth-child(4) { width: 12%; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; } /* 置中確保數字與打勾對齊 */
-        th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
+        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; padding-right: 15px; } 
+        th:nth-child(6), td:nth-child(6) { width: 16%; text-align: right; } 
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         
@@ -147,7 +146,11 @@
         .stats-list { max-height: 750px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+        
+        /* 👇 叫餐統計列表項目：加入 Hover 淺淺底色與平滑過渡效果 */
+        .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; transition: background-color 0.2s; border-radius: 8px; box-sizing: border-box; }
+        .stats-item:hover { background-color: #f1f5f9; cursor: default; }
+        
         .stats-item-left { font-weight: 800; font-size: 18px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 18px; color: var(--primary); white-space: nowrap; margin-right: 15px; }
         .stats-user-names { font-size: 14px; color: #94a3b8; font-weight: normal; word-break: break-all; white-space: normal; } 
@@ -190,17 +193,18 @@
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
-            /* 👇 1. 手機版總分數間距拉近為 10px */
             .stats-total { margin: 0 0 0 10px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
             .stats-total span { font-size: 20px !important; } 
             #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
             
             .stats-list { max-height: 55vh; padding-right: 5px; padding-bottom: 10px; overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; } 
-            .stats-item { flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: max-content; min-width: 100%; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+            
+            /* 👇 手機版也要確保 padding 讓底色能完美覆蓋 */
+            .stats-item { flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: max-content; min-width: 100%; padding: 12px 8px; border-bottom: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
             .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 14px; }
             .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
             
-            .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; }
+            .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; word-break: break-all; }
         }
     </style>
 </head>
@@ -598,7 +602,6 @@
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
                     
-                    /* 👇 1. 拿掉找字，讓純數字能完美置中對齊 */
                     const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900; font-size:16px;">${changeAmt}</span>` : `<span style="color:#94a3b8; font-weight:bold; font-size:16px;">0</span>`;
 
                     if (o.isPaid) {
@@ -622,7 +625,6 @@
                                 const toggleStatus = !o.changeSettled;
                                 const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
                                 if (o.changeSettled) changeStatusHtml = `<span style="color:var(--success); font-weight:900; cursor:pointer; font-size:16px;" onclick="${toggleFn}">✓</span>`;
-                                /* 👇 2. 已付款區按鈕拔除底線與邊框，字體16px，無找字，完美垂直對齊打勾 */
                                 else changeStatusHtml = isAdminMode ? `<button type="button" onclick="${toggleFn}" style="background:none; border:none; padding:0; margin:0; color:var(--danger); font-weight:900; font-size:16px; cursor:pointer; font-family:inherit;">${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900; font-size:16px;">${changeAmt}</span>`;
                             }
                             paidBody.innerHTML += `<tr>
@@ -669,7 +671,6 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* 👇 3. 完美客製化分類排序：飯 -> 麵 -> 涼麵 -> 湯 -> 菜 -> 小菜 -> 飲料 */
         function getGroupKey(name) {
             let cat = "99";
             if (name.includes('飯')) cat = "01";
@@ -732,7 +733,6 @@
                 
                 document.getElementById('statsTotal').innerHTML = `<span style="color:var(--danger); font-size:26px;">${total}</span> 份`;
                 
-                /* 使用自定義分類排序 */
                 const sortedStats = Object.values(stats).sort((a, b) => {
                     return getGroupKey(a.displayName).localeCompare(getGroupKey(b.displayName), 'zh-TW');
                 });
