@@ -17,14 +17,17 @@
     <style>
         :root { 
             --primary: #d47a61; --primary-rgb: 212, 122, 97;
-            --danger: #ce6c72; --success: #6e9e80; 
+            --danger: #ce6c72;  --success: #6e9e80; 
             --bg: #f4f6f8; --dark: #2c3e50; --card-bg: #ffffff; 
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
+        
         .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+        
         .page-title-section { text-align: center; margin-top: 10px; margin-bottom: 5px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
+
         .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: var(--dark); padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; }
         .admin-toolbar input { padding: 10px 14px; border: 2px solid transparent; background: rgba(255,255,255,0.1); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
         .admin-toolbar input:focus { background: rgba(255,255,255,0.2); outline: none; border-color: rgba(255,255,255,0.3); }
@@ -105,7 +108,6 @@
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 找零欄位 (nth-child(5)) 確保置中對齊 */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 0; color: #64748b; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 10px 18px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
@@ -114,9 +116,9 @@
         
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
         th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; font-weight: bold; } 
-        th:nth-child(3), td:nth-child(3) { width: 12%; } 
-        th:nth-child(4), td:nth-child(4) { width: 12%; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; vertical-align: middle; } /* 置中 */
+        th:nth-child(3), td:nth-child(3) { width: 13%; } 
+        th:nth-child(4), td:nth-child(4) { width: 13%; } 
+        th:nth-child(5), td:nth-child(5) { width: 8%; } 
         th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
@@ -141,7 +143,7 @@
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; }
         .stats-total { font-size: 18px; font-weight: 800; color: #4b5563; }
         
-        /* 👇 電腦版統計樣式高度與人名淺色 */
+        /* 👇 電腦版統計樣式 */
         .stats-list { max-height: 750px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -188,7 +190,8 @@
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
-            .stats-total { margin: 0 0 0 20px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
+            /* 👇 1. 手機版總分數往右收回一半距離 (margin-left: 10px) */
+            .stats-total { margin: 0 0 0 10px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
             .stats-total span { font-size: 20px !important; } 
             #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
             
@@ -197,8 +200,8 @@
             .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 14px; }
             .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
             
-            /* 👇 手機版人名縮小、變淡，保留至少兩個空白間距 */
-            .stats-user-names { width: auto; margin-top: 0; white-space: normal; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: 1; font-weight: normal; word-break: break-all; }
+            /* 👇 手機版人名：縮小、變淺、加入安全間距避免沾黏 */
+            .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; }
         }
     </style>
 </head>
@@ -315,7 +318,7 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
             <div class="stats-header" style="margin-bottom: 0; white-space: nowrap;"><span style="font-size: 16px;">📞</span> 叫餐統計</div>
-            <div id="statsTotal" class="stats-total" style="margin: 0 0 0 50px; white-space: nowrap;"></div>
+            <div id="statsTotal" class="stats-total" style="margin: 0 0 0 25px; white-space: nowrap;"></div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 6px 12px; font-size: 13px; border-radius: 8px; white-space: nowrap; box-shadow: none;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
         <div id="statsContent" class="stats-list"></div>
@@ -597,7 +600,7 @@
                     const canEdit = isOwner || isAdminMode;
                     
                     /* 👇 1. 未付款區保留找字 */
-                    const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900;">找 ${changeAmt}</span>` : `<span style="color:#94a3b8; font-weight:bold;">0</span>`;
+                    const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900; font-size:14px; display:inline-block; text-align:center; width:100%;">找 ${changeAmt}</span>` : `<span style="color:#94a3b8; font-weight:bold; font-size:14px; display:inline-block; text-align:center; width:100%;">0</span>`;
 
                     if (o.isPaid) {
                         if (changeAmt <= 0 || o.changeSettled) tGet += price;
@@ -620,7 +623,7 @@
                                 const toggleStatus = !o.changeSettled;
                                 const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
                                 if (o.changeSettled) changeStatusHtml = `<span style="color:var(--success); font-weight:900; cursor:pointer; font-size:16px; display:inline-block; text-align:center; width:100%;" onclick="${toggleFn}">✓</span>`;
-                                /* 👇 2. 已付款區按鈕拔除底線與邊框，字體14px，文字置中與打勾對齊 */
+                                /* 👇 1. 已付款區按鈕拔除底線邊框，文字14px與打勾置中對齊，並保留找字 */
                                 else changeStatusHtml = isAdminMode ? `<button type="button" onclick="${toggleFn}" style="background:none; border:none; padding:0; margin:0 auto; display:block; color:var(--danger); font-weight:900; font-size:14px; cursor:pointer; font-family:inherit; text-align:center;">找 ${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900; font-size:14px; display:inline-block; text-align:center; width:100%;">找 ${changeAmt}</span>`;
                             }
                             paidBody.innerHTML += `<tr>
@@ -667,14 +670,16 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* 👇 3. 智能群組分類，讓涼麵自動排在一起，飯排在一起 */
+        /* 👇 2. 統計表完美客製化分類排序：飯 -> 麵 -> 涼麵 -> 湯 -> 菜 -> 小菜 -> 飲料 */
         function getGroupKey(name) {
             let cat = "99";
-            if (name.includes('涼麵')) cat = "01";
-            else if (name.includes('飯')) cat = "02";
-            else if (name.includes('麵') || name.includes('粉')) cat = "03";
+            if (name.includes('飯')) cat = "01";
+            else if (name.includes('涼麵')) cat = "03";
+            else if (/(麵|粉|粄條|米粉|烏龍|餃|抄手)/.test(name)) cat = "02";
             else if (name.includes('湯')) cat = "04";
-            else if (name.includes('菜') || name.includes('筍') || name.includes('蛋')) cat = "05";
+            else if (/(菜|大陸妹|地瓜葉)/.test(name) && !name.includes('沙拉')) cat = "05";
+            else if (/(沙拉|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷)/.test(name)) cat = "06";
+            else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "07";
             return cat + "-" + name;
         }
 
@@ -728,7 +733,7 @@
                 
                 document.getElementById('statsTotal').innerHTML = `<span style="color:var(--danger); font-size:26px;">${total}</span> 份`;
                 
-                /* 使用自定義分類排序 */
+                /* 呼叫自定義分類排序 */
                 const sortedStats = Object.values(stats).sort((a, b) => {
                     return getGroupKey(a.displayName).localeCompare(getGroupKey(b.displayName), 'zh-TW');
                 });
@@ -738,7 +743,6 @@
                 });
                 statsTextForCopy += `\n總計：${total} 份`;
 
-                /* 👇 人名前方強制加入安全空白間隔 (&nbsp;&nbsp;&nbsp;) 確保絕不沾黏 */
                 document.getElementById('statsContent').innerHTML = sortedStats.map((v) => `
                     <div class="stats-item">
                         <div class="stats-item-left"><span class="stats-icon">🍱</span> ${v.displayName}</div>
