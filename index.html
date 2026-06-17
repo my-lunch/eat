@@ -16,21 +16,31 @@
 
     <style>
         :root { 
-            --primary: #d47a61; --primary-rgb: 212, 122, 97;
-            --danger: #ce6c72; --success: #6e9e80; 
-            --bg: #f4f6f8; --dark: #2c3e50; --card-bg: #ffffff; 
+            --primary: #d47a61;
+            --primary-rgb: 212, 122, 97;
+            --danger: #ce6c72;  
+            --success: #6e9e80; 
+            --bg: #f4f6f8;      
+            --dark: #2c3e50;    
+            --card-bg: #ffffff; 
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
+        
         .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+        
         .page-title-section { text-align: center; margin-top: 10px; margin-bottom: 5px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
+
         .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: var(--dark); padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 10px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; }
         .admin-toolbar input { padding: 10px 14px; border: 2px solid transparent; background: rgba(255,255,255,0.1); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
         .admin-toolbar input:focus { background: rgba(255,255,255,0.2); outline: none; border-color: rgba(255,255,255,0.3); }
         .admin-toolbar input::placeholder { color: #cbd5e1; }
         
-        .ann-input { width: 150px; } .time-input { width: 110px; } .file-input { width: 180px; color: #e2e8f0; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
+        .ann-input { width: 150px; }
+        .time-input { width: 110px; }
+        .file-input { width: 180px; color: #e2e8f0; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
+
         .admin-toolbar button { padding: 0 16px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-size: 14px; height: 40px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
         .admin-toolbar button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         
@@ -96,6 +106,7 @@
         .table-container { padding: 35px 30px; }
         #unpaidTable h3, .table-container:first-of-type h3 { border-bottom: 2px solid rgba(206, 108, 114, 0.1); }
         #paidTable h3, .table-container:nth-of-type(2) h3 { border-bottom: 2px solid rgba(110, 158, 128, 0.1); }
+        
         .table-container h3 { margin-top: 0; padding-bottom: 15px; font-size: 20px; font-weight: 900; }
         
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
@@ -142,7 +153,7 @@
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
         .stats-item-left { font-weight: 800; font-size: 18px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 18px; color: var(--primary); white-space: nowrap; }
-        .stats-user-names { font-size: 14px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
+        .stats-user-names { font-size: 14px; color: #94a3b8; font-weight: normal; word-break: break-all; white-space: normal; } 
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
@@ -153,9 +164,12 @@
             .container { padding: 0; gap: 16px; }
             .page-footer { order: 100; }
             .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; text-align: center; }
+            
             .admin-toolbar span { text-align: center; width: 100%; display: block; margin: 0 auto !important; }
             .admin-toolbar input { width: 100% !important; box-sizing: border-box; height: 32px !important; padding: 6px 12px !important; font-size: 13px; }
+            
             .file-input { display: block; margin: 8px auto 12px auto !important; width: 220px !important; text-align: left; }
+            
             .admin-toolbar button { width: 100%; padding: 8px; font-size: 14px; margin-bottom: 5px; height: 36px; }
             
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
@@ -179,6 +193,7 @@
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
+            /* 👇 1. 手機版總分數往右開一些 */
             .stats-total { margin: 0 0 0 20px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
             .stats-total span { font-size: 20px !important; } 
             #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
@@ -188,6 +203,7 @@
             .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 14px; }
             .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
             
+            /* 👇 2 & 3. 手機版人名：顏色變淡、字體變小至 11px、間距空出兩個空白格 (margin-left: 28px) */
             .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; }
         }
     </style>
@@ -249,7 +265,7 @@
                 </div>
                 <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
-                    <input type="text" id="userItem" placeholder="例如：鴨片飯_小" class="form-box">
+                    <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
                 <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
@@ -333,13 +349,11 @@
         function formatItemName(str) {
             if (!str) return "";
             let res = str.trim();
-            // 將全半形括號、空白、頓號替換為底線
-            res = res.replace(/[（\(\)）\s、]/g, '_'); 
-            // 將連續多個底線合併為單一底線
+            res = res.replace(/（/g, '(').replace(/）/g, ')'); 
+            res = res.replace(/[\-\/\\、]/g, '_'); 
+            res = res.replace(/\s/g, ''); 
             res = res.replace(/_+/g, '_'); 
-            // 移除頭尾可能產生的多餘底線
-            res = res.replace(/^_|_$/g, ''); 
-            // 處理加號
+            res = res.replace(/_+$/g, '').replace(/^_+/g, ''); 
             res = res.replace(/_\+/g, '+').replace(/\+_/g, '+'); 
             return res;
         }
@@ -610,7 +624,7 @@
                                 const toggleStatus = !o.changeSettled;
                                 const toggleFn = `database.ref('orders').child('${id}').update({changeSettled: ${toggleStatus}})` ;
                                 if (o.changeSettled) changeStatusHtml = `<span style="color:var(--success); cursor:pointer;" onclick="${toggleFn}" class="status-icon-only">✓</span>`;
-                                else changeStatusHtml = isAdminMode ? `<button type="button" class="btn-change-done" onclick="${toggleFn}">${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900;">${changeAmt}</span>`;
+                                else changeStatusHtml = isAdminMode ? `<button type="button" onclick="${toggleFn}" style="background:none; border:none; padding:0; margin:0; color:var(--danger); font-weight:900; font-size:16px; cursor:pointer; font-family:inherit;">${changeAmt}</button>` : `<span style="color:var(--danger); font-weight:900; font-size:16px;">${changeAmt}</span>`;
                             }
                             paidBody.innerHTML += `<tr>
                                 <td><strong>${o.name || ""}</strong></td>
