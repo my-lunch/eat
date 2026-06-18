@@ -16,9 +16,13 @@
 
     <style>
         :root { 
-            --primary: #d47a61; --primary-rgb: 212, 122, 97;
-            --danger: #ce6c72;  --success: #6e9e80; 
-            --bg: #f4f6f8; --dark: #2c3e50; --card-bg: #ffffff; 
+            --primary: #d47a61;
+            --primary-rgb: 212, 122, 97;
+            --danger: #ce6c72;  
+            --success: #6e9e80; 
+            --bg: #f4f6f8;      
+            --dark: #2c3e50;    
+            --card-bg: #ffffff; 
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
@@ -115,11 +119,11 @@
         th:last-child, td:last-child { padding-right: 10px; }
         
         th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 38%; padding-right: 25px; white-space: normal; word-break: break-all; font-weight: bold; } 
-        th:nth-child(3), td:nth-child(3) { width: 12%; } 
-        th:nth-child(4), td:nth-child(4) { width: 12%; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; padding-right: 15px; } 
-        th:nth-child(6), td:nth-child(6) { width: 16%; text-align: right; } 
+        th:nth-child(2), td:nth-child(2) { width: 44%; padding-right: 25px; white-space: normal; word-break: break-all; font-weight: bold; } 
+        th:nth-child(3), td:nth-child(3) { width: 13%; } 
+        th:nth-child(4), td:nth-child(4) { width: 13%; } 
+        th:nth-child(5), td:nth-child(5) { width: 8%; } 
+        th:nth-child(6), td:nth-child(6) { width: 10%; text-align: right; } 
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         
@@ -143,17 +147,17 @@
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; }
         .stats-total { font-size: 18px; font-weight: 800; color: #4b5563; }
         
-        .stats-list { max-height: 750px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
+        .stats-list { max-height: 600px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
-        /* 👇 叫餐統計列表項目：加入 Hover 淺淺底色與平滑過渡效果 */
+        /* 這裡也為統計項目加上滑鼠移過去的淺底色反白效果 */
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; transition: background-color 0.2s; border-radius: 8px; box-sizing: border-box; }
         .stats-item:hover { background-color: #f1f5f9; cursor: default; }
-        
+
         .stats-item-left { font-weight: 800; font-size: 18px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
-        .stats-count { font-weight: 900; font-size: 18px; color: var(--primary); white-space: nowrap; margin-right: 15px; }
-        .stats-user-names { font-size: 14px; color: #94a3b8; font-weight: normal; word-break: break-all; white-space: normal; } 
+        .stats-count { font-weight: 900; font-size: 18px; color: var(--primary); white-space: nowrap; }
+        .stats-user-names { font-size: 14px; color: #94a3b8; margin-left: 40px; font-weight: normal; word-break: break-all; white-space: normal; } 
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
@@ -193,18 +197,16 @@
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
-            .stats-total { margin: 0 0 0 10px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
+            .stats-total { margin: 0 0 0 20px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
             .stats-total span { font-size: 20px !important; } 
             #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
             
             .stats-list { max-height: 55vh; padding-right: 5px; padding-bottom: 10px; overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; } 
-            
-            /* 👇 手機版也要確保 padding 讓底色能完美覆蓋 */
             .stats-item { flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: max-content; min-width: 100%; padding: 12px 8px; border-bottom: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
             .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 14px; }
             .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
             
-            .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; word-break: break-all; }
+            .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; }
         }
     </style>
 </head>
@@ -321,7 +323,7 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
             <div class="stats-header" style="margin-bottom: 0; white-space: nowrap;"><span style="font-size: 16px;">📞</span> 叫餐統計</div>
-            <div id="statsTotal" class="stats-total" style="margin: 0 0 0 15px; white-space: nowrap;"></div>
+            <div id="statsTotal" class="stats-total" style="margin: 0 0 0 30px; white-space: nowrap;"></div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 6px 12px; font-size: 13px; border-radius: 8px; white-space: nowrap; box-shadow: none;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
         <div id="statsContent" class="stats-list"></div>
@@ -352,6 +354,8 @@
             res = res.replace(/（/g, '(').replace(/）/g, ')'); 
             res = res.replace(/[\-\/\\、]/g, '_'); 
             res = res.replace(/\s/g, ''); 
+            /* 👇 加上數字自動過濾器，確保品項沒有數字 */
+            res = res.replace(/[0-9０-９]/g, '');
             res = res.replace(/_+/g, '_'); 
             res = res.replace(/_+$/g, '').replace(/^_+/g, ''); 
             res = res.replace(/_\+/g, '+').replace(/\+_/g, '+'); 
@@ -671,16 +675,24 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        function getGroupKey(name) {
-            let cat = "99";
-            if (name.includes('飯')) cat = "01";
-            else if (name.includes('涼麵')) cat = "03";
-            else if (/(麵|粉|粄條|米粉|烏龍|餃|抄手)/.test(name)) cat = "02";
-            else if (name.includes('湯')) cat = "04";
-            else if (/(菜|大陸妹|地瓜葉)/.test(name) && !name.includes('沙拉')) cat = "05";
-            else if (/(沙拉|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷)/.test(name)) cat = "06";
-            else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "07";
-            return cat + "-" + name;
+        function getSortKey(name) {
+            let cat = "2"; 
+            if (/(堡|麵|飯|冬粉|粄條|米粉|水餃|鍋貼|吐司|三明治|套餐|披薩|餐|粥|餃|烏龍|雞腿|排骨|爌肉)/.test(name)) cat = "1";
+            if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "3";
+            let subCat = "99";
+            if (name.includes('牛')) subCat = "01";
+            else if (name.includes('豬')) subCat = "02";
+            else if (name.includes('雞')) subCat = "03";
+            else if (name.includes('魚') || name.includes('鮭') || name.includes('鱈') || name.includes('蝦')) subCat = "04";
+            else if (name.includes('堡')) subCat = "05";
+            else if (name.includes('吐司') || name.includes('三明治')) subCat = "06";
+            else if (name.includes('蛋餅')) subCat = "07";
+            else if (name.includes('麵')) subCat = "08";
+            else if (name.includes('飯')) subCat = "09";
+            else if (name.includes('套餐')) subCat = "10";
+            else if (name.includes('薯')) subCat = "11";
+            else if (name.includes('蛋')) subCat = "12";
+            return cat + "-" + subCat + "-" + name;
         }
 
         function showStats() {
@@ -734,7 +746,7 @@
                 document.getElementById('statsTotal').innerHTML = `<span style="color:var(--danger); font-size:26px;">${total}</span> 份`;
                 
                 const sortedStats = Object.values(stats).sort((a, b) => {
-                    return getGroupKey(a.displayName).localeCompare(getGroupKey(b.displayName), 'zh-TW');
+                    return getSortKey(a.displayName).localeCompare(getSortKey(b.displayName), 'zh-TW');
                 });
                 
                 sortedStats.forEach((v) => {
@@ -746,7 +758,7 @@
                     <div class="stats-item">
                         <div class="stats-item-left"><span class="stats-icon">🍱</span> ${v.displayName}</div>
                         <span class="stats-count">× ${v.count}</span>
-                        <span class="stats-user-names">&nbsp;&nbsp;&nbsp;${v.users.join('、')}</span>
+                        <span class="stats-user-names">${v.users.join('、')}</span>
                     </div>
                 `).join('');
                 document.getElementById('statsModal').style.display = 'block'; 
