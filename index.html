@@ -108,7 +108,6 @@
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 重新配置寬度：姓名加大(16%)、品項(38%)、應付縮(11%)、實收縮(11%)、找零置中(10%)、動作區(14%) */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 0; color: #64748b; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 10px 18px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
@@ -119,7 +118,7 @@
         th:nth-child(2), td:nth-child(2) { width: 38%; padding-right: 10px; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 11%; padding-right: 10px; } 
         th:nth-child(4), td:nth-child(4) { width: 11%; padding-right: 10px; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; } /* 完全置中 */
+        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; } 
         th:nth-child(6), td:nth-child(6) { width: 14%; text-align: right; } 
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
@@ -143,8 +142,8 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); z-index: 99; }
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
         
-        /* 👇 電腦版統計樣式 */
-        .stats-total { display: flex; align-items: baseline; margin: 0 0 0 50px; flex-grow: 1; white-space: nowrap; }
+        /* 👇 電腦版統計樣式：拉開左側距離為 60px */
+        .stats-total { display: flex; align-items: baseline; margin: 0 0 0 60px; flex-grow: 1; white-space: nowrap; }
         .stats-list { max-height: 750px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -194,10 +193,10 @@
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
-            /* 👇 手機版總金額排版與間距 */
-            .stats-total { margin: 0 0 0 20px !important; flex-grow: 1; align-items: baseline; }
+            /* 👇 手機版總金額排版與間距：拉開左側距離為 30px */
+            .stats-total { margin: 0 0 0 30px !important; flex-grow: 1; align-items: baseline; }
             .stats-total .total-num { font-size: 20px !important; } 
-            .stats-total .total-text { font-size: 13px !important; margin-right: 25px !important; }
+            .stats-total .total-text { font-size: 13px !important; margin-right: 12px !important; }
             .stats-total .amt-label { font-size: 11px !important; margin-right: 4px !important; }
             .stats-total .amt-num { font-size: 14px !important; }
 
@@ -235,7 +234,7 @@
         
         <div class="status-banner">
             <div class="announcement-row">
-                <div id="announceText" class="cash-info"><span style="font-size: 0.8em; opacity: 0.9;">📢</span> 收現金 / 收 LINE Pay</div>
+                <div id="announceText" class="cash-info"><span style="font-size: 0.85em; opacity: 0.9;">📢</span> 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
                         <span class="time-label">截止時間</span>
@@ -356,7 +355,6 @@
             res = res.replace(/（/g, '(').replace(/）/g, ')'); 
             res = res.replace(/[\-\/\\、]/g, '_'); 
             res = res.replace(/\s/g, ''); 
-            /* 👇 加上數字自動過濾器，確保品項沒有數字 */
             res = res.replace(/[0-9０-９]/g, '');
             res = res.replace(/_+/g, '_'); 
             res = res.replace(/_+$/g, '').replace(/^_+/g, ''); 
@@ -608,7 +606,6 @@
                     const isOwner = (o.owner === myId);
                     const canEdit = isOwner || isAdminMode;
                     
-                    /* 👇 1. 完全清除「找」字，確保數字呈現 16px */
                     const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900; font-size:16px;">${changeAmt}</span>` : `<span style="color:#94a3b8; font-weight:bold; font-size:16px;">0</span>`;
 
                     if (o.isPaid) {
@@ -627,7 +624,6 @@
                         } else {
                             let btnHtml = canEdit ? `<button type="button" class="btn-edit" onclick="startEdit('${id}')">修改</button> <button type="button" class="btn-del" onclick="deleteOrder('${id}')">✕</button>` : `<span class="status-icon-only">🔒</span>`;
                             let changeStatusHtml = '';
-                            /* 👇 2. 已付款區按鈕拔除底線與邊框，字體16px，無找字，與打勾完全置中對齊 */
                             if (changeAmt <= 0) changeStatusHtml = `<span style="color:var(--success); font-weight:900; font-size:16px;">✓</span>`;
                             else {
                                 const toggleStatus = !o.changeSettled;
@@ -679,7 +675,6 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* 👇 3. 完美客製化分類排序：飯 -> 麵 -> 涼麵 -> 湯 -> 菜 -> 小菜 -> 飲料 */
         function getGroupKey(name) {
             let cat = "99";
             if (name.includes('飯')) cat = "01";
@@ -706,7 +701,6 @@
                         let currentItem = (orderList[i].item || "").trim();
                         let currentName = orderList[i].name || "";
                         
-                        /* 計算總金額 */
                         totalAmt += parseInt(orderList[i].price) || 0;
 
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
@@ -744,15 +738,14 @@
                     }); 
                 }
                 
-                /* 👇 顯示總份數與總金額 */
+                /* 👇 顯示總份數與總金額，並套用修改後的 60px 間距與深鐵灰色金額 */
                 document.getElementById('statsTotal').innerHTML = `
                     <span class="total-num" style="color:var(--danger); font-size:26px; font-weight:900; margin-right:4px;">${total}</span>
-                    <span class="total-text" style="font-size:16px; margin-right:50px; color:var(--dark);">份</span>
+                    <span class="total-text" style="font-size:16px; margin-right:60px; color:var(--dark);">份</span>
                     <span class="amt-label" style="color:#64748b; font-size:13px; margin-right:8px;">總金額</span>
-                    <span class="amt-num" style="color:var(--danger); font-size:18px; font-weight:900;">${totalAmt.toLocaleString('en-US')}</span>
+                    <span class="amt-num" style="color:#475569; font-size:18px; font-weight:900;">${totalAmt.toLocaleString('en-US')}</span>
                 `;
                 
-                /* 使用自定義分類排序 */
                 const sortedStats = Object.values(stats).sort((a, b) => {
                     return getGroupKey(a.displayName).localeCompare(getGroupKey(b.displayName), 'zh-TW');
                 });
