@@ -76,6 +76,19 @@
         .form-section { padding: 35px 30px; }
         .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
+        /* 👇 點餐注意事項樣式 */
+        .order-notes {
+            font-size: 13px;
+            color: #64748b;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            line-height: 1.6;
+            border-left: 4px solid var(--primary);
+            font-weight: bold;
+        }
+
         .form-box, .inline-input { 
             width: 100%; 
             padding: 14px 16px; 
@@ -142,7 +155,7 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); z-index: 99; }
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
         
-        /* 👇 電腦版統計樣式：拉開左側距離為 60px */
+        /* 👇 電腦版統計樣式 */
         .stats-total { display: flex; align-items: baseline; margin: 0 0 0 60px; flex-grow: 1; white-space: nowrap; }
         .stats-list { max-height: 750px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-list::-webkit-scrollbar { width: 6px; }
@@ -193,11 +206,11 @@
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
-            /* 👇 手機版總金額排版與間距：拉開左側距離為 30px */
+            /* 👇 手機版總金額排版與間距 */
             .stats-total { margin: 0 0 0 30px !important; flex-grow: 1; align-items: baseline; }
             .stats-total .total-num { font-size: 20px !important; } 
-            .stats-total .total-text { font-size: 13px !important; margin-right: 16px !important; }
-            .stats-total .amt-label { font-size: 11px !important; margin-right: 4px !important; }
+            .stats-total .total-text { font-size: 13px !important; margin-right: 12px !important; }
+            .stats-total .amt-label { font-size: 14px !important; margin-right: 4px !important; }
             .stats-total .amt-num { font-size: 14px !important; }
 
             #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
@@ -252,6 +265,12 @@
 
         <div class="form-section">
             <h3>🥢 點餐</h3>
+            
+            <!-- 👇 新增的注意事項框 -->
+            <div class="order-notes">
+                * 為了精準統計，請務必填寫「完整的品項名稱」。<br>
+                * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
+            </div>
             
             <div class="desktop-labels">
                 <div style="width: 16%; padding-right: 10px; box-sizing: border-box;">姓名</div>
@@ -355,6 +374,7 @@
             res = res.replace(/（/g, '(').replace(/）/g, ')'); 
             res = res.replace(/[\-\/\\、]/g, '_'); 
             res = res.replace(/\s/g, ''); 
+            /* 👇 加上數字自動過濾器，確保品項沒有數字 */
             res = res.replace(/[0-9０-９]/g, '');
             res = res.replace(/_+/g, '_'); 
             res = res.replace(/_+$/g, '').replace(/^_+/g, ''); 
@@ -738,11 +758,11 @@
                     }); 
                 }
                 
-                /* 👇 顯示總份數與總金額，並套用修改後的 60px 間距與深鐵灰色金額 */
+                /* 👇 顯示總份數與總金額 */
                 document.getElementById('statsTotal').innerHTML = `
                     <span class="total-num" style="color:var(--danger); font-size:26px; font-weight:900; margin-right:4px;">${total}</span>
                     <span class="total-text" style="font-size:16px; margin-right:60px; color:var(--dark);">份</span>
-                    <span class="amt-label" style="color:#64748b; font-size:12px; font-weight:900; margin-right:4px;">總金額</span>
+                    <span class="amt-label" style="color:#64748b; font-size:16px; font-weight:900; margin-right:4px;">$</span>
                     <span class="amt-num" style="color:#475569; font-size:18px; font-weight:900;">${totalAmt.toLocaleString('en-US')}</span>
                 `;
                 
@@ -753,7 +773,7 @@
                 sortedStats.forEach((v) => {
                     statsTextForCopy += `${v.displayName} x ${v.count}\n`;
                 });
-                statsTextForCopy += `\n總計：${total} 份 / 金額：${totalAmt.toLocaleString('en-US')} 元`;
+                statsTextForCopy += `\n總計：${total} 份 / 金額：$${totalAmt.toLocaleString('en-US')} 元`;
 
                 document.getElementById('statsContent').innerHTML = sortedStats.map((v) => `
                     <div class="stats-item">
