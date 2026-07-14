@@ -44,17 +44,17 @@
         .btn-stats { background: #8e7eb8; color: white; } 
         .btn-clear { background: #718096; color: white; }
 
-        /* 👇 公告區塊：邊框與背景設計 */
+        /* 👇 莫蘭迪暖橘公告區 */
         .status-banner { 
-            background: #ffffff; 
+            background: #fffdf7; 
             padding: 24px 35px; 
             border-radius: 20px; 
-            border: 2px solid var(--primary); 
+            border: 2px solid #fbdcc4; 
             box-shadow: 0 4px 12px rgba(212, 122, 97, 0.1);
         }
         
-        .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .cash-info { font-size: 20px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 10px; } 
+        .announcement-row { display: flex; justify-content: space-between; align-items: center; }
+        .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); display: flex; align-items: center; gap: 8px; } 
         
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; color: var(--danger); background: #fff5f5; padding: 10px 20px; border-radius: 12px; white-space: nowrap; border: 1px solid #ffe4e6; } 
@@ -127,12 +127,12 @@
         th:first-child, td:first-child { padding-left: 10px; } 
         th:last-child, td:last-child { padding-right: 10px; }
         
-        th:nth-child(1), td:nth-child(1) { width: 16%; padding-right: 10px; } 
-        th:nth-child(2), td:nth-child(2) { width: 38%; padding-right: 10px; white-space: normal; word-break: break-all; font-weight: bold; } 
-        th:nth-child(3), td:nth-child(3) { width: 11%; padding-right: 10px; } 
-        th:nth-child(4), td:nth-child(4) { width: 11%; padding-right: 10px; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; } 
-        th:nth-child(6), td:nth-child(6) { width: 14%; text-align: right; } 
+        th:nth-child(1), td:nth-child(1) { width: 12%; padding-right: 15px; } 
+        th:nth-child(2), td:nth-child(2) { width: 38%; padding-right: 25px; white-space: normal; word-break: break-all; font-weight: bold; } 
+        th:nth-child(3), td:nth-child(3) { width: 12%; } 
+        th:nth-child(4), td:nth-child(4) { width: 12%; } 
+        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; padding-right: 15px; } 
+        th:nth-child(6), td:nth-child(6) { width: 16%; text-align: right; } 
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         
@@ -153,16 +153,16 @@
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.5); }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); z-index: 99; }
-        .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
+        .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; }
+        .stats-total { font-size: 18px; font-weight: 800; color: #4b5563; }
         
-        .stats-total { display: flex; align-items: baseline; margin: 0 0 0 60px; flex-grow: 1; white-space: nowrap; }
         .stats-list { max-height: 750px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; transition: background-color 0.2s; border-radius: 8px; box-sizing: border-box; }
         .stats-item:hover { background-color: #e2e8f0; cursor: default; }
-
+        
         .stats-item-left { font-weight: 800; font-size: 18px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 18px; color: var(--primary); white-space: nowrap; margin-right: 15px; }
         .stats-user-names { font-size: 14px; color: #94a3b8; font-weight: normal; word-break: break-all; white-space: normal; } 
@@ -185,7 +185,7 @@
             .admin-toolbar button { width: 100%; padding: 8px; font-size: 14px; margin-bottom: 5px; height: 36px; }
             
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
-            .cash-info { font-size: 18px; }
+            .cash-info { font-size: 20px; }
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 8px 16px; }
             .dashboard { flex-direction: column; gap: 12px; }
@@ -201,19 +201,16 @@
             .action-btns button { padding: 6px 8px; font-size: 11px; }
             .status-icon-only { font-size: 11px !important; }
             
-            #statsModal { padding: 20px 12px; width: 95%; min-width: auto; max-width: 95vw; overflow: hidden; border-radius: 16px; }
+            #statsModal { padding: 20px 12px; width: 92%; min-width: auto; max-width: 95vw; overflow: hidden; border-radius: 16px; }
             #statsModal > div:first-child { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: 4px; padding-bottom: 10px !important; margin-bottom: 10px !important; }
             .stats-header { font-size: 14px !important; flex-shrink: 0; }
             
-            .stats-total { margin: 0 0 0 30px !important; flex-grow: 1; align-items: baseline; }
-            .stats-total .total-num { font-size: 20px !important; } 
-            .stats-total .total-text { font-size: 13px !important; margin-right: 30px !important; }
-            .stats-total .amt-label { font-size: 14px !important; margin-right: 4px !important; }
-            .stats-total .amt-num { font-size: 14px !important; }
-
+            .stats-total { margin: 0 0 0 10px !important; font-size: 14px !important; text-align: left !important; flex-grow: 1; }
+            .stats-total span { font-size: 20px !important; } 
             #statsModal button.btn-sync[onclick="copyStatsText()"] { padding: 4px 8px !important; font-size: 11px !important; flex-shrink: 0; box-sizing: border-box; }
             
             .stats-list { max-height: 55vh; padding-right: 5px; padding-bottom: 10px; overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; } 
+            
             .stats-item { flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: max-content; min-width: 100%; padding: 12px 8px; border-bottom: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
             .stats-item-left { flex: none; white-space: nowrap; margin-right: 8px; font-size: 14px; }
             .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
@@ -245,7 +242,7 @@
         
         <div class="status-banner">
             <div class="announcement-row">
-                <div id="announceText" class="cash-info"><span style="font-size: 0.85em; opacity: 0.9;">📢</span> 收現金 / 收 LINE Pay</div>
+                <div id="announceText" class="cash-info">📢 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
                         <span class="time-label">截止時間</span>
@@ -263,38 +260,37 @@
 
         <div class="form-section">
             <h3>🥢 點餐</h3>
-            
             <div class="order-notes">
                 * 為了精準統計，請務必填寫「完整並正確的品項名稱」。<br>
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
             <div class="desktop-labels">
-                <div style="width: 16%; padding-right: 10px; box-sizing: border-box;">姓名</div>
-                <div style="width: 38%; padding-right: 10px; box-sizing: border-box;">品項</div>
-                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">應付</div>
-                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">實付</div>
-                <div style="width: 24%;"></div> 
+                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">姓名</div>
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">品項</div>
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">應付</div>
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">實付</div>
+                <div style="width: 18%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
-                <div style="width: 16%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 38%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 44%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
-                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 13%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 24%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                <div style="width: 18%; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button type="button" id="submitOrderBtn" class="btn-sync" style="height: 52px; width: 100%; max-width: 130px; font-size: 16px; border-radius: 12px; font-weight: 900; transition: 0.3s;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -340,7 +336,7 @@
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
             <div class="stats-header" style="margin-bottom: 0; white-space: nowrap;"><span style="font-size: 16px;">📞</span> 叫餐統計</div>
-            <div id="statsTotal" class="stats-total"></div>
+            <div id="statsTotal" class="stats-total" style="margin: 0 0 0 15px; white-space: nowrap;"></div>
             <button type="button" class="btn-sync" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 6px 12px; font-size: 13px; border-radius: 8px; white-space: nowrap; box-shadow: none;" onclick="copyStatsText()">📋 一鍵複製</button>
         </div>
         <div id="statsContent" class="stats-list"></div>
@@ -490,7 +486,7 @@
 
         database.ref('config/announcement').on('value', (s) => {
             const val = s.val() || { text: "收現金 / 收 LINE Pay", deadline: "未設定" };
-            document.getElementById('announceText').innerHTML = `<span style="font-size: 0.85em; opacity: 0.9;">📢</span> ` + val.text;
+            document.getElementById('announceText').innerText = "📢 " + val.text;
             document.getElementById('timeText').innerText = val.deadline;
         });
         
@@ -691,9 +687,8 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* 👇 智能分類：強制將加購與飲品墊底 */
         function getGroupKey(name) {
-            // 加購、飲品強制排在最後
+            // 先過濾出「加購」與「飲品」，強制排到最後
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
             
             // 主食與小菜
@@ -702,13 +697,13 @@
             if (name.includes('湯')) return "30-" + name;
             if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
             
-            return "50-" + name; 
+            return "50-" + name; // 其他未分類
         }
 
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
-                const stats = {}; let total = 0; let totalAmt = 0;
+                const stats = {}; let total = 0; 
                 
                 statsTextForCopy = "【今日點餐清單】\n\n";
 
@@ -718,9 +713,6 @@
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = (orderList[i].item || "").trim();
                         let currentName = orderList[i].name || "";
-                        
-                        totalAmt += parseInt(orderList[i].price) || 0;
-
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
@@ -756,23 +748,7 @@
                     }); 
                 }
                 
-                document.getElementById('statsTotal').innerHTML = `
-                    <span class="total-num" style="color:var(--danger); font-size:26px; font-weight:900; margin-right:4px;">${total}</span>
-                    <span class="total-text" style="font-size:16px; margin-right:60px; color:var(--dark);">份</span>
-                    <span class="amt-label" style="color:#64748b; font-size:16px; font-weight:900; margin-right:4px;">$</span>
-                    <span class="amt-num" style="color:#475569; font-size:18px; font-weight:900;">${totalAmt.toLocaleString('en-US')}</span>
-                `;
-                
-                const sortedStats = Object.values(stats).sort((a, b) => {
-                    return getGroupKey(a.displayName).localeCompare(getGroupKey(b.displayName), 'zh-TW');
-                });
-                
-                sortedStats.forEach((v) => {
-                    statsTextForCopy += `${v.displayName} x ${v.count}\n`;
-                });
-                statsTextForCopy += `\n總計：${total} 份 / 金額：$${totalAmt.toLocaleString('en-US')} 元`;
-
-                document.getElementById('statsContent').innerHTML = sortedStats.map((v) => `
+                document.getElementById('statsContent').innerHTML = Object.values(stats).sort((a,b) => getGroupKey(a.displayName).localeCompare(getGroupKey(b.displayName), 'zh-TW')).map((v) => `
                     <div class="stats-item">
                         <div class="stats-item-left"><span class="stats-icon">🍱</span> ${v.displayName}</div>
                         <span class="stats-count">× ${v.count}</span>
@@ -785,13 +761,6 @@
         }
 
         function copyStatsText() {
-            if (!statsTextForCopy || statsTextForCopy.includes("總計：0 份")) {
-                let checkZero = document.getElementById('statsTotal').innerText;
-                if(checkZero.includes("0 份")) {
-                    alert("目前還沒有任何訂單喔！");
-                    return;
-                }
-            }
             const el = document.createElement('textarea');
             el.value = statsTextForCopy;
             document.body.appendChild(el);
