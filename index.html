@@ -44,22 +44,22 @@
         .btn-stats { background: #8e7eb8; color: white; } 
         .btn-clear { background: #718096; color: white; }
 
-        /* 👇 修改公告區塊：醒目、質感、莫蘭迪暖橘 */
+        /* 👇 公告區塊：邊框與背景設計 */
         .status-banner { 
-            background: #fffdf7; 
-            padding: 22px 28px; 
+            background: #ffffff; 
+            padding: 24px 35px; 
             border-radius: 20px; 
-            border: 2px solid #fbdcc4; 
-            box-shadow: 0 6px 15px rgba(212, 122, 97, 0.15);
+            border: 2px solid var(--primary); 
+            box-shadow: 0 4px 12px rgba(212, 122, 97, 0.1);
         }
         
         .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .cash-info { font-size: 20px; font-weight: 900; color: #2c3e50; display: flex; align-items: center; gap: 10px; } 
+        .cash-info { font-size: 20px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 10px; } 
         
         .time-info-wrapper { display: flex; align-items: center; }
-        .time-info { display: flex; align-items: baseline; color: #b91c1c; background: #ffffff; padding: 8px 18px; border-radius: 12px; white-space: nowrap; border: 1px solid #fecaca; box-shadow: 0 2px 4px rgba(0,0,0,0.02); } 
-        .time-label { font-size: 13px; font-weight: 800; opacity: 0.9; }
-        .time-value { font-size: 30px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; }
+        .time-info { display: flex; align-items: baseline; color: var(--danger); background: #fff5f5; padding: 10px 20px; border-radius: 12px; white-space: nowrap; border: 1px solid #ffe4e6; } 
+        .time-label { font-size: 14px; font-weight: 800; color: var(--danger); opacity: 0.9; }
+        .time-value { font-size: 34px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; }
 
         .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
@@ -689,16 +689,17 @@
             document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
 
-        /* 👇 智能分類排序邏輯 */
+        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
+
+        /* 👇 智能分類：強制將加購與飲品墊底 */
         function getGroupKey(name) {
-            // 加購、飲品墊底
+            // 加購、飲品強制排在最後
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
             
-            // 主食類
+            // 主食與小菜
             if (name.includes('飯')) return "10-" + name;
             if (/(麵|粉|粄條|米粉|餃|抄手|線)/.test(name)) return "20-" + name;
             if (name.includes('湯')) return "30-" + name;
-            // 小菜/其他
             if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
             
             return "50-" + name; 
