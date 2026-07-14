@@ -161,8 +161,9 @@
         .stats-list::-webkit-scrollbar { width: 6px; }
         .stats-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
+        /* 👇 叫餐統計列表項目：Hover 淺色加深為 #e2e8f0 */
         .stats-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; transition: background-color 0.2s; border-radius: 8px; box-sizing: border-box; }
-        .stats-item:hover { background-color: #f1f5f9; cursor: default; }
+        .stats-item:hover { background-color: #e2e8f0; cursor: default; }
 
         .stats-item-left { font-weight: 800; font-size: 18px; color: var(--dark); margin-right: 12px; white-space: nowrap; }
         .stats-count { font-weight: 900; font-size: 18px; color: var(--primary); white-space: nowrap; margin-right: 15px; }
@@ -266,7 +267,7 @@
         <div class="form-section">
             <h3>🥢 點餐</h3>
             
-            <!-- 👇 新增的注意事項框 -->
+            <!-- 👇 新增的注意事項框確保出現 -->
             <div class="order-notes">
                 * 為了精準統計，請務必填寫「完整的品項名稱」。<br>
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
@@ -374,7 +375,6 @@
             res = res.replace(/（/g, '(').replace(/）/g, ')'); 
             res = res.replace(/[\-\/\\、]/g, '_'); 
             res = res.replace(/\s/g, ''); 
-            /* 👇 加上數字自動過濾器，確保品項沒有數字 */
             res = res.replace(/[0-9０-９]/g, '');
             res = res.replace(/_+/g, '_'); 
             res = res.replace(/_+$/g, '').replace(/^_+/g, ''); 
@@ -695,16 +695,19 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
+        /* 👇 3. 智能分類大重整：加購與飲品保證墊底 */
         function getGroupKey(name) {
-            let cat = "99";
-            if (name.includes('飯')) cat = "01";
-            else if (name.includes('涼麵')) cat = "03";
-            else if (/(麵|粉|粄條|米粉|烏龍|餃|抄手)/.test(name)) cat = "02";
-            else if (name.includes('湯')) cat = "04";
-            else if (/(菜|大陸妹|地瓜葉)/.test(name) && !name.includes('沙拉')) cat = "05";
-            else if (/(沙拉|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷)/.test(name)) cat = "06";
-            else if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水)/.test(name)) cat = "07";
-            return cat + "-" + name;
+            // 先過濾出「加購」與「飲品」，強制排到最後
+            if (name.includes('加購')) return "80-" + name;
+            if (/(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
+            
+            // 其他主食與小菜
+            if (name.includes('飯')) return "10-" + name;
+            if (/(麵|粉|粄條|米粉|餃|抄手|線)/.test(name)) return "20-" + name;
+            if (name.includes('湯')) return "30-" + name;
+            if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
+            
+            return "50-" + name; // 其他未分類
         }
 
         function showStats() {
