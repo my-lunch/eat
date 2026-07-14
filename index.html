@@ -44,22 +44,22 @@
         .btn-stats { background: #8e7eb8; color: white; } 
         .btn-clear { background: #718096; color: white; }
 
-        /* 👇 醒目的公告區塊樣式 */
+        /* 👇 修改公告區塊：醒目、質感、莫蘭迪暖橘 */
         .status-banner { 
             background: #fffdf7; 
-            padding: 24px 35px; 
+            padding: 22px 28px; 
             border-radius: 20px; 
-            border: 2px solid #fde68a; 
-            box-shadow: 0 4px 12px rgba(212, 122, 97, 0.1);
+            border: 2px solid #fbdcc4; 
+            box-shadow: 0 6px 15px rgba(212, 122, 97, 0.15);
         }
         
         .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .cash-info { font-size: 20px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 10px; } 
+        .cash-info { font-size: 20px; font-weight: 900; color: #2c3e50; display: flex; align-items: center; gap: 10px; } 
         
         .time-info-wrapper { display: flex; align-items: center; }
-        .time-info { display: flex; align-items: baseline; color: var(--danger); background: #ffffff; padding: 10px 20px; border-radius: 12px; white-space: nowrap; border: 1px solid #fecaca; } 
-        .time-label { font-size: 14px; font-weight: 800; color: #b91c1c; opacity: 0.9; }
-        .time-value { font-size: 34px; font-weight: 900; margin: 0 8px; line-height: 1; letter-spacing: -0.5px; }
+        .time-info { display: flex; align-items: baseline; color: #b91c1c; background: #ffffff; padding: 8px 18px; border-radius: 12px; white-space: nowrap; border: 1px solid #fecaca; box-shadow: 0 2px 4px rgba(0,0,0,0.02); } 
+        .time-label { font-size: 13px; font-weight: 800; opacity: 0.9; }
+        .time-value { font-size: 30px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; }
 
         .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
@@ -77,7 +77,6 @@
         .form-section { padding: 35px 30px; }
         .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
-        /* 👇 點餐注意事項樣式 */
         .order-notes {
             font-size: 13px;
             color: #64748b;
@@ -264,9 +263,10 @@
 
         <div class="form-section">
             <h3>🥢 點餐</h3>
+            
             <div class="order-notes">
-                * 點餐請務必填寫「完整並正確的品項名稱」的品項名稱。<br>
-                * 若點購多項餐點，請使用「+」號隔開（例如：肉燥飯+蛋花湯）。
+                * 為了精準統計，請務必填寫「完整並正確的品項名稱」。<br>
+                * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
             <div class="desktop-labels">
@@ -689,17 +689,16 @@
             document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
 
-        database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
-
-        /* 👇 智能分類：強制將加購與飲品墊底 */
+        /* 👇 智能分類排序邏輯 */
         function getGroupKey(name) {
-            // 加購與飲品強制排在最後
+            // 加購、飲品墊底
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
             
-            // 主食與小菜
+            // 主食類
             if (name.includes('飯')) return "10-" + name;
             if (/(麵|粉|粄條|米粉|餃|抄手|線)/.test(name)) return "20-" + name;
             if (name.includes('湯')) return "30-" + name;
+            // 小菜/其他
             if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
             
             return "50-" + name; 
