@@ -25,8 +25,8 @@
         /* 👇 全局間距再次縮小至 12px */
         .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
         
-        /* 👇 徹底清除標題與上方元素的隱形外距，確保真正縮小 */
-        .page-title-section { text-align: center; margin-top: 5px; margin-bottom: 0; }
+        /* 👇 1. 調整點餐系統文字和公佈欄的間距，加上 margin-bottom: 20px */
+        .page-title-section { text-align: center; margin-top: 5px; margin-bottom: 20px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
@@ -131,15 +131,13 @@
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 0; color: #64748b; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; box-sizing: border-box; }
-        td { padding: 18px 10px 18px 0; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
-        tbody tr:hover td { background-color: #fafcfd; }
-        th:first-child, td:first-child { padding-left: 10px; } 
-        th:last-child, td:last-child { padding-right: 10px; }
+        /* 👇 2. 所有標題列統一為 font-size: 14px */
+        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 14px; text-transform: uppercase; }
+        td { padding: 18px 10px; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
         
-        /* 👇 重新分配寬度：姓名加大為 20%，藉此將品項、應付、實付向右推，找零位置不變 */
-        th:nth-child(1), td:nth-child(1) { width: 20%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 36%; padding-right: 15px; white-space: normal; word-break: break-all; font-weight: bold; } 
+        /* 👇 3. 姓名欄位加大為 22%，品項降為 34%，藉此將品項、應付、實付一起往右邊推移 */
+        th:nth-child(1), td:nth-child(1) { width: 22%; padding-right: 25px; } 
+        th:nth-child(2), td:nth-child(2) { width: 34%; padding-right: 15px; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 10%; padding-right: 10px; } 
         th:nth-child(4), td:nth-child(4) { width: 10%; padding-right: 10px; } 
         th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; } 
@@ -207,7 +205,7 @@
             .form-inputs > div { width: 100% !important; padding-right: 0 !important; }
             .table-container { overflow-x: auto; padding: 25px 15px; border-radius: 20px; }
             table { table-layout: fixed; width: 680px; } 
-            th { padding: 12px 6px; font-size: 12px; }
+            th { padding: 12px 6px; font-size: 13px; }
             td { padding: 15px 6px; font-size: 14px; }
             .action-btns button { padding: 6px 8px; font-size: 11px; }
             .status-icon-only { font-size: 11px !important; }
@@ -281,28 +279,28 @@
             </div>
             
             <div class="desktop-labels">
-                <!-- 👇 對應下方加大的 20%，將中間三個欄位右移 -->
-                <div style="width: 20%; padding-right: 15px; box-sizing: border-box;">姓名</div>
-                <div style="width: 36%; padding-right: 15px; box-sizing: border-box;">品項</div>
-                <div style="width: 10%; padding-right: 10px; box-sizing: border-box;">應付</div>
-                <div style="width: 10%; padding-right: 10px; box-sizing: border-box;">實付</div>
+                <!-- 👇 3. 將寬高設定與 padding-left 對齊，確保列對齊且向右平移 -->
+                <div style="width: 22%; padding-left: 10px; padding-right: 25px; box-sizing: border-box;">姓名</div>
+                <div style="width: 34%; padding-left: 10px; padding-right: 15px; box-sizing: border-box;">品項</div>
+                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">應付</div>
+                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">實付</div>
                 <div style="width: 24%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
-                <div style="width: 20%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 22%; padding-left: 10px; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 36%; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 34%; padding-left: 10px; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
-                <div style="width: 10%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 10%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
@@ -315,7 +313,7 @@
         <div class="table-container">
             <h3>📝 未付款區</h3>
             <table id="unpaidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零</th><th></th></tr></thead>
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實付</th><th>找零</th><th></th></tr></thead>
                 <tbody id="unpaidBody"></tbody>
             </table>
         </div>
@@ -323,7 +321,7 @@
         <div class="table-container">
             <h3>✅ 已付款區</h3>
             <table id="paidTable">
-                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實收</th><th>找零</th><th></th></tr></thead>
+                <thead><tr><th>姓名</th><th>品項</th><th>應付</th><th>實付</th><th>找零</th><th></th></tr></thead>
                 <tbody id="paidBody"></tbody>
             </table>
         </div>
