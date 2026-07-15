@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -69,7 +67,8 @@
             50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
-        .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; font-size: 1.1em; margin-right: 2px; }
+        /* 👇 圖示單獨縮小為 15px，不影響旁邊的文字 */
+        .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; font-size: 15px; margin-right: 2px; }
 
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; background: #ffffff; padding: 6px 16px; border-radius: 12px; white-space: nowrap; border: 1px solid #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.03); } 
@@ -104,23 +103,7 @@
             font-weight: bold;
         }
 
-        .form-grid-wrapper {
-            display: grid;
-            grid-template-columns: 2fr 3.5fr 1fr 1fr 110px; 
-            gap: 12px; 
-            align-items: center;
-            width: 100%;
-        }
-
-        .grid-label {
-            font-size: 12px; 
-            font-weight: 800;
-            color: #64748b;
-            text-align: left;
-            padding-left: 14px; 
-            margin-bottom: 6px;
-        }
-
+        /* 👇 輸入框內部左側留白 12px + 邊框厚度 2px = 14px，保證與下方表格的 14px 對齊 */
         .form-box, .inline-input { 
             width: 100%; 
             padding: 14px 12px; 
@@ -158,10 +141,12 @@
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
+        /* 👇 所有表格起算點統一鎖死在 padding-left: 14px */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 14px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 10px 18px 14px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
         
+        /* 👇 全域統一的各欄位精準寬度配置 (加總100%) */
         th:nth-child(1), td:nth-child(1) { width: 18%; } 
         th:nth-child(2), td:nth-child(2) { width: 36%; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 11%; } 
@@ -204,7 +189,6 @@
         .stats-user-names { font-size: 14px; color: #94a3b8; font-weight: normal; word-break: break-all; white-space: normal; } 
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
-        .stats-icon { font-size: 11px; opacity: 0.85; display: inline-block; transform: scale(0.9); margin-right: 2px; }
 
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -246,21 +230,19 @@
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
             .cash-info { font-size: 20px; justify-content: center; width: 100%; }
 
-            /* 👇 解決手機版時間框因為隱形開關導致沒置中的問題：設定相對定位 */
             .time-info-wrapper { justify-content: center; width: 100%; position: relative; }
             .time-info { padding: 8px 16px; }
-            
-            /* 👇 讓隱形開關脫離排版流，漂浮在右側，保證白色時間框「絕對置中」 */
             .admin-checkbox-secret { position: absolute; right: 10px; margin: 0; }
             
             .dashboard { flex-direction: column; gap: 12px; }
             
-            .form-grid-wrapper.desktop-labels-grid { display: none; }
-            .form-grid-wrapper.inputs-grid { display: flex; flex-direction: column; gap: 16px; }
+            .desktop-labels-container { display: none !important; }
+            .form-inputs-container { flex-direction: column; gap: 16px; display: flex; width: 100%; }
+            .form-inputs-container > div { width: 100% !important; padding-right: 0 !important; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 4px; }
             
-            /* 👇 修改此處：將手機點餐格子的左右留白縮減為 3px，讓格子寬度放到最大！ */
-            .form-section { padding: 25px 20px; }
+            /* 👇 手機版點餐格子左右留白設定為 4px，讓寬度最大化！ */
+            .form-section { padding: 25px 4px; }
             
             .table-container { overflow-x: auto; padding: 25px 15px; border-radius: 20px; }
             table { table-layout: fixed; width: 680px; } 
@@ -294,10 +276,11 @@
 </head>
 <body>
 
+    <!-- 密碼解鎖畫面 -->
     <div id="authOverlay">
         <div class="auth-box">
             <h1>午餐吃什麼</h1>
-            <p>請輸入團主的通關密碼</p>
+            <p>請輸入辦公室通關密碼</p>
             <input type="password" id="passcodeInput" class="auth-input" placeholder="Enter Code" onkeypress="if(event.key === 'Enter') checkPasscode()">
             <button class="auth-btn" onclick="checkPasscode()">進入點餐系統</button>
         </div>
@@ -348,32 +331,34 @@
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
-            <div class="form-grid-wrapper desktop-labels-grid">
-                <div class="grid-label" style="padding-right: 10px;">姓名</div>
-                <div class="grid-label" style="padding-right: 10px;">品項</div>
-                <div class="grid-label" style="padding-right: 10px;">應付</div>
-                <div class="grid-label" style="padding-right: 10px;">實付</div>
-                <div></div> 
+            <!-- 👇 標題的絕對對齊網格 -->
+            <div class="desktop-labels-container" style="display: flex; width: 100%; margin-bottom: 6px;">
+                <div style="width: 18%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
+                <div style="width: 36%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
+                <div style="width: 11%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">應付</div>
+                <div style="width: 11%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">實付</div>
+                <div style="width: 24%; box-sizing: border-box;"></div> 
             </div>
             
-            <div class="form-grid-wrapper inputs-grid">
-                <div>
+            <!-- 👇 輸入框的絕對對齊網格 (使用與表格相同的 100% 寬度比例) -->
+            <div class="form-inputs-container" style="display: flex; width: 100%; align-items: center;">
+                <div style="width: 18%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div>
+                <div style="width: 36%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
-                <div>
+                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="130" class="form-box">
                 </div>
-                <div>
+                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
-                <div>
+                <div style="width: 24%; padding-left: 4px; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button type="button" id="submitOrderBtn" class="btn-submit-grid" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -427,6 +412,7 @@
     </div>
 
     <script>
+        // 👇 密碼設定為 8888
         const SECRET_OFFICE_CODE = "8888"; 
 
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
