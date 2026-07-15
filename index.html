@@ -22,24 +22,30 @@
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
-        .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+        /* 👇 預設隱藏，等待雲端密碼驗證後才顯示，避免畫面閃爍 */
+        .container { max-width: 1000px; margin: 0 auto; display: none; flex-direction: column; gap: 12px; }
+        .container.active { display: flex; }
         
         .page-title-section { text-align: center; margin-top: 5px; margin-bottom: 20px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: #718096; padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; border: 1px solid #475569; color: white; box-shadow: 0 10px 30px rgba(113, 128, 150, 0.2); gap: 12px; box-sizing: border-box; width: 100%; }
-        .admin-toolbar span { color: #f8fafc !important; }
-        .admin-toolbar input { padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
-        .admin-toolbar input:focus { background: rgba(255,255,255,0.25); outline: none; border-color: rgba(255,255,255,0.5); }
-        .admin-toolbar input::placeholder { color: #cbd5e1; }
+        /* 👇 後台控制台：升級為兩排版面，加入密碼設定區 */
+        .admin-toolbar { display: none; flex-direction: column; background: #718096; padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; border: 1px solid #475569; color: white; box-shadow: 0 10px 30px rgba(113, 128, 150, 0.2); gap: 12px; box-sizing: border-box; width: 100%; }
+        .admin-toolbar-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; width: 100%; }
+        .admin-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 2px 0; }
+        
+        .admin-toolbar-row span { color: #f8fafc !important; }
+        .admin-toolbar-row input { padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
+        .admin-toolbar-row input:focus { background: rgba(255,255,255,0.25); outline: none; border-color: rgba(255,255,255,0.5); }
+        .admin-toolbar-row input::placeholder { color: #cbd5e1; }
         
         .ann-input { width: 150px; }
         .time-input { width: 110px; }
         .file-input { width: 180px; color: #cbd5e1; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
 
-        .admin-toolbar button { padding: 0 16px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-size: 14px; height: 40px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
-        .admin-toolbar button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .admin-toolbar-row button { padding: 0 16px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-size: 14px; height: 40px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
+        .admin-toolbar-row button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #8e7eb8; color: white; } 
@@ -203,12 +209,15 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
+        /* 👇 預設隱藏，等待雲端密碼驗證後才顯示，避免畫面閃爍 */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(244, 246, 248, 0.85);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center;
         }
+        #authOverlay.active { display: flex; }
+        
         .auth-box {
             background: rgba(255, 255, 255, 0.95); padding: 45px 50px; border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.5);
@@ -232,13 +241,14 @@
             body { padding: 12px 10px; background: #eef2f6; }
             .container { padding: 0; gap: 12px; }
             .page-footer { order: 100; }
-            .admin-toolbar { flex-direction: column; flex-wrap: wrap; padding: 20px 15px; margin: 0; white-space: normal; text-align: center; }
             
-            .admin-toolbar span { text-align: center; width: 100%; display: block; margin: 0 auto !important; }
-            .admin-toolbar input { width: 100% !important; box-sizing: border-box; height: 32px !important; padding: 6px 12px !important; font-size: 13px; }
+            .admin-toolbar { padding: 20px 15px; }
+            .admin-toolbar-row { flex-direction: column; gap: 12px; width: 100%; }
+            .admin-toolbar-row span, .admin-toolbar-row label { text-align: center; justify-content: center; width: 100%; display: flex; margin: 0; }
+            .admin-toolbar-row input { width: 100% !important; box-sizing: border-box; height: 36px !important; padding: 6px 12px !important; font-size: 13px; }
+            .admin-toolbar-row button { width: 100%; padding: 8px; font-size: 14px; height: 36px; }
             
-            .file-input { display: block; margin: 8px auto 12px auto !important; width: 220px !important; text-align: left; }
-            .admin-toolbar button { width: 100%; padding: 8px; font-size: 14px; margin-bottom: 5px; height: 36px; }
+            .file-input { display: block; margin: 0 auto !important; width: 100% !important; text-align: center; }
             
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
             .cash-info { font-size: 20px; justify-content: center; width: 100%; }
@@ -292,13 +302,14 @@
     <div id="authOverlay">
         <div class="auth-box">
             <h1>午餐吃什麼</h1>
-            <p>請輸入團主的通關密碼</p>
+            <p>請輸入辦公室通關密碼</p>
             <input type="password" id="passcodeInput" class="auth-input" placeholder="Enter Code" onkeypress="if(event.key === 'Enter') checkPasscode()">
             <button class="auth-btn" onclick="checkPasscode()">進入點餐系統</button>
         </div>
     </div>
 
-    <div class="container" id="mainContainer" style="display: none;">
+    <!-- 主系統畫面 -->
+    <div class="container" id="mainContainer">
         
         <div class="page-title-section">
             <h1>午餐吃什麼</h1>
@@ -306,15 +317,30 @@
         </div>
 
         <div class="admin-toolbar" id="adminToolbar">
-            <span style="font-weight:bold; color:white; font-size: 15px;">👑 團主：</span>
-            <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
-            <input type="text" id="timeInput" class="time-input" placeholder="時間(10:30)">
-            <button type="button" class="btn-sync" style="background:#5c8eb5; color: white;" onclick="updateAnnouncement()">同步</button>
-            <span style="font-weight:bold; font-size:14px; color: #f8fafc; margin-left: 5px;">上傳菜單：</span>
-            <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
-            <button type="button" class="btn-stats" onclick="showStats()">統計</button>
-            <button type="button" class="btn-clear" onclick="clearOrders()">淨空</button>
-            <button type="button" id="lockSystemBtn" class="btn-sync" onclick="toggleOrderLock()">開放</button>
+            <!-- 團主第一排功能 -->
+            <div class="admin-toolbar-row">
+                <span style="font-weight:bold; font-size: 15px;">👑 團主：</span>
+                <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
+                <input type="text" id="timeInput" class="time-input" placeholder="時間(10:30)">
+                <button type="button" class="btn-sync" style="background:#5c8eb5;" onclick="updateAnnouncement()">同步</button>
+                <span style="font-weight:bold; font-size:14px; margin-left: 5px;">上傳菜單：</span>
+                <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
+                <button type="button" class="btn-stats" onclick="showStats()">統計</button>
+                <button type="button" class="btn-clear" onclick="clearOrders()">淨空</button>
+                <button type="button" id="lockSystemBtn" class="btn-sync" onclick="toggleOrderLock()">開放</button>
+            </div>
+            
+            <div class="admin-divider"></div>
+            
+            <!-- 👇 團主第二排功能：動態設定密碼保護 -->
+            <div class="admin-toolbar-row">
+                <span style="font-weight:bold; font-size: 14px;">🔒 密碼保護：</span>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; margin-right: 8px; color: white;">
+                    <input type="checkbox" id="authEnableCheck" style="width: 16px; height: 16px; margin: 0; cursor: pointer;"> 啟用
+                </label>
+                <input type="text" id="authPasswordInput" class="ann-input" placeholder="設定密碼 (例:8888)">
+                <button type="button" class="btn-sync" style="background:#5c8eb5;" onclick="updateAuthSettings()">儲存密碼設定</button>
+            </div>
         </div>
         
         <div class="status-banner">
@@ -343,7 +369,6 @@
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
-            <!-- 👇 標題的絕對對齊網格 -->
             <div class="desktop-labels-container" style="display: flex; width: 100%; margin-bottom: 6px;">
                 <div style="width: 18%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
                 <div style="width: 36%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
@@ -352,7 +377,6 @@
                 <div style="width: 24%; box-sizing: border-box;"></div> 
             </div>
             
-            <!-- 👇 輸入框的絕對對齊網格 (使用與表格相同的 100% 寬度比例) -->
             <div class="form-inputs-container" style="display: flex; width: 100%; align-items: center;">
                 <div style="width: 18%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
@@ -424,9 +448,6 @@
     </div>
 
     <script>
-        // 👇 將密碼改為 localStorage (長期記憶)，輸入一次後免再輸入
-        const SECRET_OFFICE_CODE = "8888"; 
-
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -443,17 +464,85 @@
         let editingId = null;
         let isOrderLocked = false;
         let statsTextForCopy = "";
+        
+        // 👇 動態密碼驗證變數
+        let currentPassword = "";
+        let isAuthEnabled = false;
 
-        // 👇 驗證邏輯改為使用 localStorage
+        // 👇 獨立的雲端密碼偵測機制
+        database.ref('config/authSettings').on('value', (s) => {
+            const val = s.val() || { enabled: false, password: "" };
+            isAuthEnabled = val.enabled === true; 
+            currentPassword = val.password || "";
+            
+            // 更新團主控制台的顯示狀態
+            const checkEl = document.getElementById('authEnableCheck');
+            const passEl = document.getElementById('authPasswordInput');
+            if (checkEl) checkEl.checked = isAuthEnabled;
+            if (passEl) passEl.value = currentPassword;
+
+            // 每當雲端密碼改變，立刻重新驗證畫面
+            verifyAccess();
+        });
+
+        // 👇 判斷是否放行 (無縫接軌不閃爍)
+        function verifyAccess() {
+            if (!isAuthEnabled) {
+                // 若未啟用密碼，直接進入系統
+                document.getElementById('authOverlay').classList.remove('active');
+                document.getElementById('mainContainer').classList.add('active');
+            } else {
+                // 若啟用密碼，比對短期記憶
+                let savedPasscode = null;
+                try { if(window.sessionStorage) savedPasscode = sessionStorage.getItem('officePasscode'); } catch(e){}
+                
+                if (savedPasscode === currentPassword && currentPassword !== "") {
+                    // 密碼正確，放行
+                    document.getElementById('authOverlay').classList.remove('active');
+                    document.getElementById('mainContainer').classList.add('active');
+                } else {
+                    // 密碼錯誤或更改，踢回登入畫面
+                    document.getElementById('mainContainer').classList.remove('active');
+                    document.getElementById('authOverlay').classList.add('active');
+                }
+            }
+        }
+
+        // 👇 登入畫面的按鈕檢查
+        function checkPasscode() {
+            const input = document.getElementById('passcodeInput').value;
+            if(input === currentPassword && currentPassword !== "") {
+                try { if(window.sessionStorage) sessionStorage.setItem('officePasscode', input); } catch(e){}
+                verifyAccess();
+            } else {
+                alert("通關密碼錯誤喔！請確認後再試一次。");
+                document.getElementById('passcodeInput').value = '';
+            }
+        }
+
+        // 👇 團主儲存新密碼設定
+        function updateAuthSettings() {
+            const enabled = document.getElementById('authEnableCheck').checked;
+            const password = document.getElementById('authPasswordInput').value.trim();
+            
+            if (enabled && password === "") {
+                alert("啟用密碼保護時，請務必設定密碼喔！");
+                return;
+            }
+
+            database.ref('config/authSettings').update({
+                enabled: enabled,
+                password: password
+            }).then(() => {
+                alert("密碼安全設定已更新完畢！");
+            }).catch(err => {
+                alert("更新失敗：" + err.message);
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             try {
                 if (window.localStorage) {
-                    let savedPasscode = localStorage.getItem('officePasscode');
-                    if(savedPasscode === SECRET_OFFICE_CODE) {
-                        document.getElementById('authOverlay').style.display = 'none';
-                        document.getElementById('mainContainer').style.display = 'flex';
-                    }
-                    
                     let savedName = localStorage.getItem('myLunchName');
                     if(savedName) {
                         document.getElementById('userName').value = savedName;
@@ -461,19 +550,6 @@
                 }
             } catch(e) {}
         });
-
-        function checkPasscode() {
-            const input = document.getElementById('passcodeInput').value;
-            if(input === SECRET_OFFICE_CODE) {
-                // 👇 存入 localStorage，永久記住該裝置
-                try { if(window.localStorage) localStorage.setItem('officePasscode', input); } catch(e){}
-                document.getElementById('authOverlay').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'flex';
-            } else {
-                alert("通關密碼錯誤喔！請確認後再試一次。");
-                document.getElementById('passcodeInput').value = '';
-            }
-        }
 
         function formatItemName(str) {
             if (!str) return "";
