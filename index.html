@@ -22,7 +22,8 @@
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
-        .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+        /* 👇 調整大區塊之間的間距 (從24px微調縮小至16px) */
+        .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
         
         .page-title-section { text-align: center; margin-top: 10px; margin-bottom: 5px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -51,14 +52,22 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        .status-banner { padding: 24px 35px; }
-        .announcement-row { display: flex; justify-content: space-between; align-items: center; }
-        .cash-info { font-size: 24px; font-weight: 800; color: var(--dark); display: flex; align-items: center; gap: 8px; } 
+        /* 👇 公告區塊專屬：陰影暈開無生硬邊框、莫蘭迪暖橘底色 */
+        .status-banner { 
+            background: #fffdf7 !important; 
+            padding: 24px 35px; 
+            border: none !important; 
+            box-shadow: 0 8px 25px rgba(212, 122, 97, 0.15) !important;
+        }
+        
+        .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .cash-info { font-size: 20px; font-weight: 900; color: #2c3e50; display: flex; align-items: center; gap: 10px; } 
         
         .time-info-wrapper { display: flex; align-items: center; }
-        .time-info { display: flex; align-items: baseline; color: var(--danger); background: #fff5f5; padding: 10px 20px; border-radius: 12px; white-space: nowrap; border: 1px solid #ffe4e6; } 
-        .time-label { font-size: 14px; font-weight: 800; color: var(--danger); opacity: 0.9; }
-        .time-value { font-size: 34px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; }
+        /* 時間區塊的框也調柔和 */
+        .time-info { display: flex; align-items: baseline; color: #b91c1c; background: #ffffff; padding: 8px 18px; border-radius: 12px; white-space: nowrap; border: 1px solid rgba(254, 202, 202, 0.4); box-shadow: 0 2px 8px rgba(0,0,0,0.02); } 
+        .time-label { font-size: 13px; font-weight: 800; opacity: 0.9; }
+        .time-value { font-size: 30px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; }
 
         .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
         .admin-checkbox-secret:hover { opacity: 0.8; }
@@ -127,7 +136,8 @@
         th:first-child, td:first-child { padding-left: 10px; } 
         th:last-child, td:last-child { padding-right: 10px; }
         
-        th:nth-child(1), td:nth-child(1) { width: 16%; padding-right: 10px; } 
+        /* 👇 拉寬姓名跟品項之間的間距 (padding-right 加大到 25px) */
+        th:nth-child(1), td:nth-child(1) { width: 16%; padding-right: 25px; } 
         th:nth-child(2), td:nth-child(2) { width: 38%; padding-right: 10px; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 11%; padding-right: 10px; } 
         th:nth-child(4), td:nth-child(4) { width: 11%; padding-right: 10px; } 
@@ -248,7 +258,7 @@
         
         <div class="status-banner">
             <div class="announcement-row">
-                <div id="announceText" class="cash-info"><span style="font-size: 0.85em; opacity: 0.9;">📢</span> 收現金 / 收 LINE Pay</div>
+                <div id="announceText" class="cash-info"><span style="font-size: 0.85em;">📢</span> 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
                         <span class="time-label">截止時間</span>
@@ -267,14 +277,14 @@
         <div class="form-section">
             <h3>🥢 點餐</h3>
             
-            <!-- 👇 新增的注意事項框確保出現 -->
             <div class="order-notes">
                 * 為了精準統計，請務必填寫「完整並正確的品項名稱」。<br>
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
             <div class="desktop-labels">
-                <div style="width: 16%; padding-right: 10px; box-sizing: border-box;">姓名</div>
+                <!-- 👇 拉寬姓名跟品項之間的間距 (padding-right 加大到 25px) -->
+                <div style="width: 16%; padding-right: 25px; box-sizing: border-box;">姓名</div>
                 <div style="width: 38%; padding-right: 10px; box-sizing: border-box;">品項</div>
                 <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">應付</div>
                 <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">實付</div>
@@ -282,7 +292,8 @@
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
-                <div style="width: 16%; padding-right: 10px; box-sizing: border-box;">
+                <!-- 👇 輸入框區域也跟著加大間距 -->
+                <div style="width: 16%; padding-right: 25px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
@@ -494,7 +505,7 @@
 
         database.ref('config/announcement').on('value', (s) => {
             const val = s.val() || { text: "收現金 / 收 LINE Pay", deadline: "未設定" };
-            document.getElementById('announceText').innerHTML = `<span style="font-size: 0.85em; opacity: 0.9;">📢</span> ` + val.text;
+            document.getElementById('announceText').innerHTML = `<span style="font-size: 0.85em;">📢</span> ` + val.text;
             document.getElementById('timeText').innerText = val.deadline;
         });
         
