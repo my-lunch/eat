@@ -28,7 +28,7 @@
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: var(--dark); padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; }
+        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: #475569; padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); gap: 12px; box-sizing: border-box; width: 100%; }
         .admin-toolbar input { padding: 10px 14px; border: 2px solid transparent; background: rgba(255,255,255,0.1); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
         .admin-toolbar input:focus { background: rgba(255,255,255,0.2); outline: none; border-color: rgba(255,255,255,0.3); }
         .admin-toolbar input::placeholder { color: #cbd5e1; }
@@ -51,23 +51,22 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        /* 👇 公告區塊全新升級：深色高對比深海灰藍，絕對吸睛且極具質感 */
+        /* 👇 將公佈欄改回乾淨明亮的莫蘭迪暖白，與深色的控制台完美分離 */
         .status-banner { 
-            background: #475569 !important; 
-            padding: 16px 35px !important; 
+            background: #fffdf7 !important; 
+            padding: 14px 35px !important; 
             border: none !important; 
-            box-shadow: 0 10px 25px rgba(71, 85, 105, 0.25) !important;
+            box-shadow: 0 8px 25px rgba(212, 122, 97, 0.15) !important;
         }
         
         .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .cash-info { font-size: 18px; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 10px; } 
+        .cash-info { font-size: 18px; font-weight: 900; color: #2c3e50; display: flex; align-items: center; gap: 10px; } 
         
         .time-info-wrapper { display: flex; align-items: center; }
-        .time-info { display: flex; align-items: baseline; background: rgba(255, 255, 255, 0.1); padding: 8px 18px; border-radius: 12px; white-space: nowrap; border: 1px solid rgba(255, 255, 255, 0.15); } 
-        .time-label { font-size: 13px; font-weight: 800; color: #e2e8f0; opacity: 0.9; }
-        .time-value { font-size: 26px; font-weight: 900; margin: 0 8px; line-height: 1; letter-spacing: -0.5px; color: #fca5a5; }
+        .time-info { display: flex; align-items: baseline; color: #b91c1c; background: #ffffff; padding: 6px 16px; border-radius: 12px; white-space: nowrap; border: 1px solid rgba(254, 202, 202, 0.4); box-shadow: 0 2px 8px rgba(0,0,0,0.02); } 
+        .time-label { font-size: 13px; font-weight: 800; color: #b91c1c; opacity: 0.9; }
+        .time-value { font-size: 26px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; color: #b91c1c; }
 
-        /* 👇 給 📢 一個低調的呼吸動畫，吸引注意力 */
         @keyframes gentle-pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.15); }
@@ -75,8 +74,16 @@
         }
         .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; }
 
-        .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
-        .admin-checkbox-secret:hover { opacity: 0.8; }
+        /* 👇 將隱形開關做到極致：超小、超透明，但仍可點擊 */
+        .admin-checkbox-secret { 
+            width: 8px; height: 8px; 
+            cursor: pointer; 
+            opacity: 0.02; 
+            margin-left: 8px; 
+            transform: scale(0.8); 
+            border: none; outline: none; 
+        }
+        .admin-checkbox-secret:hover { opacity: 0.15; }
 
         .menu-wrapper { width: 100%; display: none; text-align: center; }
         .menu-display { width: 100%; height: auto; display: block; margin-top: 0; }
@@ -183,7 +190,6 @@
 
         .stats-icon { font-size: 11px; opacity: 0.85; display: inline-block; transform: scale(0.9); margin-right: 2px; }
 
-        /* 👇 通關密碼登入畫面樣式 */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--bg); z-index: 9999;
@@ -393,6 +399,7 @@
     </div>
 
     <script>
+        // 👇👇👇 你的專屬通關密碼設定 👇👇👇
         const SECRET_OFFICE_CODE = "0000"; 
 
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
@@ -757,23 +764,18 @@
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
         function getGroupKey(name) {
-            // 先過濾出「加購」與「飲品」，強制排到最後
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
-            
-            // 主食與小菜
             if (name.includes('飯')) return "10-" + name;
             if (/(麵|粉|粄條|米粉|餃|抄手|線)/.test(name)) return "20-" + name;
             if (name.includes('湯')) return "30-" + name;
             if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
-            
-            return "50-" + name; // 其他未分類
+            return "50-" + name;
         }
 
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; let totalAmt = 0;
-                
                 statsTextForCopy = "【今日點餐清單】\n\n";
 
                 if(orders) {
@@ -782,9 +784,7 @@
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = (orderList[i].item || "").trim();
                         let currentName = orderList[i].name || "";
-                        
                         totalAmt += parseInt(orderList[i].price) || 0;
-
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
@@ -798,17 +798,10 @@
                             let originalName = singleItem.trim();
                             if(originalName) { 
                                 let formatName = formatItemName(originalName);
-
                                 const normKey = formatName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
-                                
                                 if (!normKey) return; 
-
                                 if (!stats[normKey]) {
-                                    stats[normKey] = { 
-                                        displayName: formatName, 
-                                        count: 0, 
-                                        users: [] 
-                                    };
+                                    stats[normKey] = { displayName: formatName, count: 0, users: [] };
                                 }
                                 stats[normKey].count++;
                                 if (!stats[normKey].users.includes(o.name)) {
