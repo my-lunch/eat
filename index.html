@@ -28,7 +28,6 @@
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        /* 👇 控制台：換上莫蘭迪深石板藍，絕不被背景吃掉 */
         .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: #718096; padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; color: white; box-shadow: 0 10px 30px rgba(113, 128, 150, 0.2); gap: 12px; box-sizing: border-box; width: 100%; border: 1px solid #475569; }
         .admin-toolbar span { color: #f8fafc !important; }
         .admin-toolbar input { padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
@@ -44,7 +43,7 @@
         
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #8e7eb8; color: white; } 
-        .btn-clear { background: #475569; color: white; } /* 淨空按鈕加深，與深色底更搭 */
+        .btn-clear { background: #475569; color: white; }
 
         .status-banner, .form-section, .table-container, .card, .menu-display { 
             background: var(--card-bg); 
@@ -53,7 +52,6 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        /* 👇 公佈欄：淡化為優雅的莫蘭迪淺灰藍，輕盈且層次分明 */
         .status-banner { 
             background: #e2e8f0 !important; 
             padding: 14px 35px !important; 
@@ -62,9 +60,9 @@
         }
         
         .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .cash-info { font-size: 18px; font-weight: 900; color: #1e293b; display: flex; align-items: center; gap: 10px; } 
+        /* 👇 公告文字放大為 20px */
+        .cash-info { font-size: 20px; font-weight: 900; color: #1e293b; display: flex; align-items: center; gap: 10px; } 
         
-        /* 喇叭呼吸動畫 (保留) */
         @keyframes gentle-pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.15); }
@@ -75,7 +73,8 @@
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; background: #ffffff; padding: 6px 16px; border-radius: 12px; white-space: nowrap; border: 1px solid #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.03); } 
         .time-label { font-size: 13px; font-weight: 800; color: #64748b; opacity: 0.9; }
-        .time-value { font-size: 26px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; color: var(--danger); }
+        /* 👇 時間數字放大為 28px */
+        .time-value { font-size: 28px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; color: var(--danger); }
 
         .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.02; margin-left: 10px; border: none; outline: none; }
         .admin-checkbox-secret:hover { opacity: 0.15; }
@@ -105,7 +104,6 @@
             font-weight: bold;
         }
 
-        /* 👇 精準網格對齊系統 (保證文字對齊) */
         .form-grid-wrapper {
             display: grid;
             grid-template-columns: 2fr 3.5fr 1fr 1fr 110px; 
@@ -115,17 +113,17 @@
         }
 
         .grid-label {
-            font-size: 12px; /* 標題縮小至 12px */
+            font-size: 12px; 
             font-weight: 800;
             color: #64748b;
             text-align: left;
-            padding-left: 14px; /* 標題起點設定為 14px */
+            padding-left: 14px; 
             margin-bottom: 6px;
         }
 
         .form-box, .inline-input { 
             width: 100%; 
-            padding: 14px; /* 框內文字 padding: 14px，完美對齊標題起點 */
+            padding: 14px; 
             border: 2px solid transparent; 
             background-color: #f1f5f9;
             border-radius: 12px; 
@@ -160,7 +158,6 @@
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 表格標題同樣設定為 12px，左右 padding: 14px，貫徹完美對齊 */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 14px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 14px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
@@ -191,7 +188,6 @@
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.5); }
         
-        /* 👇 蘋果風格毛玻璃背景 (用於統計與密碼畫面) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(244, 246, 248, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99; }
         
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
@@ -210,7 +206,6 @@
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
         .stats-icon { font-size: 11px; opacity: 0.85; display: inline-block; transform: scale(0.9); margin-right: 2px; }
 
-        /* 👇 Apple 風格的高質感密碼解鎖畫面 */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(244, 246, 248, 0.85);
@@ -249,7 +244,8 @@
             .admin-toolbar button { width: 100%; padding: 8px; font-size: 14px; margin-bottom: 5px; height: 36px; }
             
             .announcement-row { flex-direction: column; gap: 15px; align-items: center; text-align: center; }
-            .cash-info { font-size: 18px; justify-content: center; width: 100%; }
+            /* 👇 手機版公告文字同步放大為 20px */
+            .cash-info { font-size: 20px; justify-content: center; width: 100%; }
 
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 8px 16px; }
@@ -259,7 +255,8 @@
             .form-grid-wrapper.inputs-grid { display: flex; flex-direction: column; gap: 16px; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 4px; }
             
-            .form-section { padding: 25px 20px; }
+            /* 👇 修改此處：padding 縮小至 10px，完美撐寬手機版輸入框！ */
+            .form-section { padding: 25px 10px; }
             .table-container { overflow-x: auto; padding: 25px 15px; border-radius: 20px; }
             table { table-layout: fixed; width: 680px; } 
             th { padding: 12px 6px; font-size: 12px; }
@@ -292,7 +289,6 @@
 </head>
 <body>
 
-    <!-- 👇 Apple 風格的高質感密碼解鎖畫面 -->
     <div id="authOverlay">
         <div class="auth-box">
             <h1>午餐吃什麼</h1>
@@ -414,7 +410,6 @@
         </footer>
     </div>
 
-    <!-- 蘋果風格霧面遮罩套用於統計畫面 -->
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
@@ -427,7 +422,6 @@
     </div>
 
     <script>
-        // 👇👇👇 修改密碼請改這裡！ 👇👇👇
         const SECRET_OFFICE_CODE = "8888"; 
 
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
@@ -447,7 +441,6 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
-        // 👇 短期記憶解鎖邏輯 (關閉網頁重啟需重打密碼)
         document.addEventListener("DOMContentLoaded", () => {
             try {
                 if (window.sessionStorage) {
@@ -458,7 +451,6 @@
                     }
                 }
                 
-                // 姓名自動帶入維持使用 localStorage，不受密碼重啟影響
                 if (window.localStorage) {
                     let savedName = localStorage.getItem('myLunchName');
                     if(savedName) {
@@ -796,23 +788,18 @@
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
         function getGroupKey(name) {
-            // 先過濾出「加購」與「飲品」，強制排到最後
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
-            
-            // 主食與小菜
             if (name.includes('飯')) return "10-" + name;
             if (/(麵|粉|粄條|米粉|餃|抄手|線)/.test(name)) return "20-" + name;
             if (name.includes('湯')) return "30-" + name;
             if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
-            
-            return "50-" + name; // 其他未分類
+            return "50-" + name;
         }
 
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; let totalAmt = 0;
-                
                 statsTextForCopy = "【今日點餐清單】\n\n";
 
                 if(orders) {
@@ -821,9 +808,7 @@
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = (orderList[i].item || "").trim();
                         let currentName = orderList[i].name || "";
-                        
                         totalAmt += parseInt(orderList[i].price) || 0;
-
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
@@ -837,17 +822,10 @@
                             let originalName = singleItem.trim();
                             if(originalName) { 
                                 let formatName = formatItemName(originalName);
-
                                 const normKey = formatName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
-                                
                                 if (!normKey) return; 
-
                                 if (!stats[normKey]) {
-                                    stats[normKey] = { 
-                                        displayName: formatName, 
-                                        count: 0, 
-                                        users: [] 
-                                    };
+                                    stats[normKey] = { displayName: formatName, count: 0, users: [] };
                                 }
                                 stats[normKey].count++;
                                 if (!stats[normKey].users.includes(o.name)) {
