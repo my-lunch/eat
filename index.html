@@ -67,7 +67,6 @@
             50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
-        /* 👇 圖示單獨縮小為 15px，不影響旁邊的文字 */
         .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; font-size: 15px; margin-right: 2px; }
 
         .time-info-wrapper { display: flex; align-items: center; }
@@ -103,7 +102,23 @@
             font-weight: bold;
         }
 
-        /* 👇 輸入框內部左側留白 12px + 邊框厚度 2px = 14px，保證與下方表格的 14px 對齊 */
+        .form-grid-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 3.5fr 1fr 1fr 110px; 
+            gap: 12px; 
+            align-items: center;
+            width: 100%;
+        }
+
+        .grid-label {
+            font-size: 12px; 
+            font-weight: 800;
+            color: #64748b;
+            text-align: left;
+            padding-left: 14px; 
+            margin-bottom: 6px;
+        }
+
         .form-box, .inline-input { 
             width: 100%; 
             padding: 14px 12px; 
@@ -141,12 +156,10 @@
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 所有表格起算點統一鎖死在 padding-left: 14px */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 14px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 10px 18px 14px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
         
-        /* 👇 全域統一的各欄位精準寬度配置 (加總100%) */
         th:nth-child(1), td:nth-child(1) { width: 18%; } 
         th:nth-child(2), td:nth-child(2) { width: 36%; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 11%; } 
@@ -241,7 +254,6 @@
             .form-inputs-container > div { width: 100% !important; padding-right: 0 !important; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 4px; }
             
-            /* 👇 手機版點餐格子左右留白設定為 4px，讓寬度最大化！ */
             .form-section { padding: 25px 4px; }
             
             .table-container { overflow-x: auto; padding: 25px 15px; border-radius: 20px; }
@@ -412,7 +424,7 @@
     </div>
 
     <script>
-        // 👇 密碼設定為 8888
+        // 👇 將密碼改為 localStorage (長期記憶)，輸入一次後免再輸入
         const SECRET_OFFICE_CODE = "8888"; 
 
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
@@ -432,17 +444,16 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
+        // 👇 驗證邏輯改為使用 localStorage
         document.addEventListener("DOMContentLoaded", () => {
             try {
-                if (window.sessionStorage) {
-                    let savedPasscode = sessionStorage.getItem('officePasscode');
+                if (window.localStorage) {
+                    let savedPasscode = localStorage.getItem('officePasscode');
                     if(savedPasscode === SECRET_OFFICE_CODE) {
                         document.getElementById('authOverlay').style.display = 'none';
                         document.getElementById('mainContainer').style.display = 'flex';
                     }
-                }
-                
-                if (window.localStorage) {
+                    
                     let savedName = localStorage.getItem('myLunchName');
                     if(savedName) {
                         document.getElementById('userName').value = savedName;
@@ -454,7 +465,8 @@
         function checkPasscode() {
             const input = document.getElementById('passcodeInput').value;
             if(input === SECRET_OFFICE_CODE) {
-                try { if(window.sessionStorage) sessionStorage.setItem('officePasscode', input); } catch(e){}
+                // 👇 存入 localStorage，永久記住該裝置
+                try { if(window.localStorage) localStorage.setItem('officePasscode', input); } catch(e){}
                 document.getElementById('authOverlay').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'flex';
             } else {
