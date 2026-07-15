@@ -22,10 +22,8 @@
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
-        /* 👇 全局間距再次縮小至 12px */
         .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
         
-        /* 👇 1. 調整點餐系統文字和公佈欄的間距，加上 margin-bottom: 20px */
         .page-title-section { text-align: center; margin-top: 5px; margin-bottom: 20px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
@@ -53,7 +51,7 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        /* 👇 公告區塊：大幅縮減高度 (padding)，保留莫蘭迪暈開陰影無生硬邊框 */
+        /* 公告區塊 */
         .status-banner { 
             background: #fffdf7 !important; 
             padding: 14px 35px !important; 
@@ -62,13 +60,11 @@
         }
         
         .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        /* 文字字體微調縮小以配合扁框 */
         .cash-info { font-size: 18px; font-weight: 900; color: #2c3e50; display: flex; align-items: center; gap: 10px; } 
         
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; color: #b91c1c; background: #ffffff; padding: 6px 16px; border-radius: 12px; white-space: nowrap; border: 1px solid rgba(254, 202, 202, 0.4); box-shadow: 0 2px 8px rgba(0,0,0,0.02); } 
         .time-label { font-size: 13px; font-weight: 800; opacity: 0.9; }
-        /* 時間數字稍微縮小，讓版面不擁擠 */
         .time-value { font-size: 26px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; }
 
         .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.15; margin-left: 10px; }
@@ -99,9 +95,10 @@
             font-weight: bold;
         }
 
+        /* 👇 修改此處：padding-left 和 right 改為 10px，修復文字出框與對齊問題 */
         .form-box, .inline-input { 
             width: 100%; 
-            padding: 14px 16px; 
+            padding: 14px 10px; 
             border: 2px solid transparent; 
             background-color: #f1f5f9;
             border-radius: 12px; 
@@ -128,20 +125,22 @@
         
         .table-container h3 { margin-top: 0; padding-bottom: 15px; font-size: 20px; font-weight: 900; }
         
-        .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
+        /* 👇 統一設定點餐區標題字體大小為 13px */
+        .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 13px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 2. 所有標題列統一為 font-size: 14px */
-        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 14px; text-transform: uppercase; }
-        td { padding: 18px 10px; border-bottom: 1px solid #f1f5f9; font-size: 16px; }
+        /* 👇 統一設定表格標題字體大小為 13px */
+        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
+        td { padding: 18px 10px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
+        tbody tr:hover td { background-color: #fafcfd; }
         
-        /* 👇 3. 姓名欄位加大為 22%，品項降為 34%，藉此將品項、應付、實付一起往右邊推移 */
-        th:nth-child(1), td:nth-child(1) { width: 22%; padding-right: 25px; } 
+        /* 👇 重新分配精準寬度，保證垂直對齊且不斷字 */
+        th:nth-child(1), td:nth-child(1) { width: 20%; padding-right: 15px; } 
         th:nth-child(2), td:nth-child(2) { width: 34%; padding-right: 15px; white-space: normal; word-break: break-all; font-weight: bold; } 
-        th:nth-child(3), td:nth-child(3) { width: 10%; padding-right: 10px; } 
-        th:nth-child(4), td:nth-child(4) { width: 10%; padding-right: 10px; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center; } 
-        th:nth-child(6), td:nth-child(6) { width: 14%; text-align: right; } 
+        th:nth-child(3), td:nth-child(3) { width: 12%; padding-right: 10px; } 
+        th:nth-child(4), td:nth-child(4) { width: 12%; padding-right: 10px; } 
+        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: left; } /* 找零統一靠左對齊，保證格線完美 */
+        th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } 
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
         
@@ -158,7 +157,7 @@
         .btn-del:hover { background: #ffe4e6; transform: scale(0.95); }
         
         .status-icon-only { font-size: 16px; font-weight: 900; }
-        .inline-input { height: 40px; padding: 8px 12px; font-size: 14px; } 
+        .inline-input { height: 40px; padding: 8px 10px; font-size: 14px; } 
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.5); }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); z-index: 99; }
@@ -279,32 +278,32 @@
             </div>
             
             <div class="desktop-labels">
-                <!-- 👇 3. 將寬高設定與 padding-left 對齊，確保列對齊且向右平移 -->
-                <div style="width: 22%; padding-left: 10px; padding-right: 25px; box-sizing: border-box;">姓名</div>
-                <div style="width: 34%; padding-left: 10px; padding-right: 15px; box-sizing: border-box;">品項</div>
-                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">應付</div>
-                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">實付</div>
-                <div style="width: 24%;"></div> 
+                <!-- 👇 統一套用全新精準寬度，並加入 padding-left: 10px 讓標題與文字起點完美對齊 -->
+                <div style="width: 20%; padding-left: 10px; box-sizing: border-box;">姓名</div>
+                <div style="width: 34%; padding-left: 10px; box-sizing: border-box;">品項</div>
+                <div style="width: 12%; padding-left: 10px; box-sizing: border-box;">應付</div>
+                <div style="width: 12%; padding-left: 10px; box-sizing: border-box;">實付</div>
+                <div style="width: 22%;"></div> 
             </div>
             
             <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
-                <div style="width: 22%; padding-left: 10px; padding-right: 25px; box-sizing: border-box;">
+                <div style="width: 20%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 34%; padding-left: 10px; padding-right: 15px; box-sizing: border-box;">
+                <div style="width: 34%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
-                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 10%; padding-left: 10px; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 12%; padding-right: 15px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 24%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                <div style="width: 22%; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button type="button" id="submitOrderBtn" class="btn-sync" style="height: 52px; width: 100%; max-width: 130px; font-size: 16px; border-radius: 12px; font-weight: 900; transition: 0.3s;" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -701,7 +700,6 @@
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
-        /* 👇 智能分類：強制將加購與飲品墊底 */
         function getGroupKey(name) {
             // 先過濾出「加購」與「飲品」，強制排到最後
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
