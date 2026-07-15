@@ -51,7 +51,6 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        /* 公告區塊 */
         .status-banner { 
             background: #fffdf7 !important; 
             padding: 14px 35px !important; 
@@ -84,7 +83,7 @@
         .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
         .order-notes {
-            font-size: 10px;
+            font-size: 13px;
             color: #64748b;
             background: #f8fafc;
             padding: 12px 16px;
@@ -95,7 +94,6 @@
             font-weight: bold;
         }
 
-        /* 👇 修改此處：padding-left 和 right 改為 10px，修復文字出框與對齊問題 */
         .form-box, .inline-input { 
             width: 100%; 
             padding: 14px 10px; 
@@ -125,21 +123,18 @@
         
         .table-container h3 { margin-top: 0; padding-bottom: 15px; font-size: 20px; font-weight: 900; }
         
-        /* 👇 統一設定點餐區標題字體大小為 13px */
         .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 13px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 統一設定表格標題字體大小為 13px */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 10px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
         
-        /* 👇 重新分配精準寬度，保證垂直對齊且不斷字 */
         th:nth-child(1), td:nth-child(1) { width: 20%; padding-right: 15px; } 
         th:nth-child(2), td:nth-child(2) { width: 34%; padding-right: 15px; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 12%; padding-right: 10px; } 
         th:nth-child(4), td:nth-child(4) { width: 12%; padding-right: 10px; } 
-        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: left; } /* 找零統一靠左對齊，保證格線完美 */
+        th:nth-child(5), td:nth-child(5) { width: 10%; text-align: left; } 
         th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } 
 
         .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
@@ -178,6 +173,30 @@
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
         .stats-icon { font-size: 11px; opacity: 0.85; display: inline-block; transform: scale(0.9); margin-right: 2px; }
+
+        /* 👇 通關密碼登入畫面樣式 */
+        #authOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .auth-box {
+            background: #ffffff; padding: 40px 50px; border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(149, 157, 165, 0.15); text-align: center; max-width: 90%;
+        }
+        .auth-box h1 { margin: 0 0 10px 0; font-size: 28px; color: var(--dark); font-weight: 900; letter-spacing: 2px;}
+        .auth-box p { color: #64748b; font-size: 14px; margin-bottom: 25px; font-weight: bold;}
+        .auth-input {
+            width: 100%; padding: 14px 20px; border: 2px solid #e2e8f0; border-radius: 12px;
+            font-size: 18px; box-sizing: border-box; text-align: center; margin-bottom: 20px;
+            transition: 0.3s; font-weight: bold; letter-spacing: 2px; color: var(--dark);
+        }
+        .auth-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(212, 122, 97, 0.15); }
+        .auth-btn {
+            width: 100%; padding: 14px; background: var(--primary); color: white; border: none;
+            border-radius: 12px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.3s;
+        }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(212, 122, 97, 0.3); }
 
         @media (max-width: 768px) {
             body { padding: 12px 10px; background: #eef2f6; }
@@ -232,7 +251,17 @@
 </head>
 <body>
 
-    <div class="container">
+    <!-- 👇 通關密碼畫面 -->
+    <div id="authOverlay">
+        <div class="auth-box">
+            <h1>午餐吃什麼</h1>
+            <p>請輸入辦公室通關密碼</p>
+            <input type="password" id="passcodeInput" class="auth-input" placeholder="Enter Code" onkeypress="if(event.key === 'Enter') checkPasscode()">
+            <button class="auth-btn" onclick="checkPasscode()">進入點餐系統</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
         
         <div class="page-title-section">
             <h1>午餐吃什麼</h1>
@@ -278,7 +307,6 @@
             </div>
             
             <div class="desktop-labels">
-                <!-- 👇 統一套用全新精準寬度，並加入 padding-left: 10px 讓標題與文字起點完美對齊 -->
                 <div style="width: 20%; padding-left: 10px; box-sizing: border-box;">姓名</div>
                 <div style="width: 34%; padding-left: 10px; box-sizing: border-box;">品項</div>
                 <div style="width: 12%; padding-left: 10px; box-sizing: border-box;">應付</div>
@@ -357,6 +385,9 @@
     </div>
 
     <script>
+        // 👇👇👇 在這裡設定你的通關密碼！若有人離職，只要把引號裡面的字改掉即可。 👇👇👇
+        const SECRET_OFFICE_CODE = "0000"; 
+
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -374,6 +405,37 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
+        // 👇 驗證密碼邏輯
+        document.addEventListener("DOMContentLoaded", () => {
+            try {
+                if (window.localStorage) {
+                    let savedPasscode = localStorage.getItem('officePasscode');
+                    if(savedPasscode === SECRET_OFFICE_CODE) {
+                        // 密碼正確，隱藏登入畫面，顯示主系統
+                        document.getElementById('authOverlay').style.display = 'none';
+                        document.getElementById('mainContainer').style.display = 'flex';
+                    }
+                    
+                    let savedName = localStorage.getItem('myLunchName');
+                    if(savedName) {
+                        document.getElementById('userName').value = savedName;
+                    }
+                }
+            } catch(e) {}
+        });
+
+        function checkPasscode() {
+            const input = document.getElementById('passcodeInput').value;
+            if(input === SECRET_OFFICE_CODE) {
+                try { if(window.localStorage) localStorage.setItem('officePasscode', input); } catch(e){}
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'flex';
+            } else {
+                alert("通關密碼錯誤喔！請確認後再試一次。");
+                document.getElementById('passcodeInput').value = '';
+            }
+        }
+
         function formatItemName(str) {
             if (!str) return "";
             let res = str.trim();
@@ -386,17 +448,6 @@
             res = res.replace(/_\+/g, '+').replace(/\+_/g, '+'); 
             return res;
         }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            try {
-                if (window.localStorage) {
-                    let savedName = localStorage.getItem('myLunchName');
-                    if(savedName) {
-                        document.getElementById('userName').value = savedName;
-                    }
-                }
-            } catch(e) {}
-        });
 
         window.addEventListener('load', () => {
             try {
