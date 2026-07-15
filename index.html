@@ -23,25 +23,29 @@
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
         .container { max-width: 1000px; margin: 0 auto; display: none; flex-direction: column; gap: 12px; }
+        .container.active { display: flex; }
         
         .page-title-section { text-align: center; margin-top: 5px; margin-bottom: 20px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        .admin-toolbar { display: none; flex-direction: column; background: #718096; padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; border: 1px solid #475569; color: white; box-shadow: 0 10px 30px rgba(113, 128, 150, 0.2); gap: 12px; box-sizing: border-box; width: 100%; }
-        .admin-toolbar-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; width: 100%; }
+        /* 👇 後台控制台：整體留白縮小、間距縮小 */
+        .admin-toolbar { display: none; flex-direction: column; background: #718096; padding: 12px 20px; border-radius: 12px; align-items: center; justify-content: center; margin-bottom: 0; border: 1px solid #475569; color: white; box-shadow: 0 10px 30px rgba(113, 128, 150, 0.2); gap: 8px; box-sizing: border-box; width: 100%; }
+        .admin-toolbar-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; width: 100%; }
         .admin-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 2px 0; }
         
         .admin-toolbar-row span { color: #f8fafc !important; }
-        .admin-toolbar-row input { padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
+        
+        /* 👇 輸入框與按鈕高度從 40px 縮小為 32px，字體改為 12px */
+        .admin-toolbar-row input { padding: 6px 12px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: white; border-radius: 6px; font-size: 12px; height: 32px; box-sizing: border-box; transition: 0.3s; }
         .admin-toolbar-row input:focus { background: rgba(255,255,255,0.25); outline: none; border-color: rgba(255,255,255,0.5); }
         .admin-toolbar-row input::placeholder { color: #cbd5e1; }
         
         .ann-input { width: 150px; }
         .time-input { width: 110px; }
-        .file-input { width: 180px; color: #cbd5e1; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
+        .file-input { width: 160px; color: #cbd5e1; font-size: 11px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
 
-        .admin-toolbar-row button { padding: 0 16px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-size: 14px; height: 40px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
+        .admin-toolbar-row button { padding: 0 12px; border: none; border-radius: 6px; font-weight: 800; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-size: 12px; height: 32px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
         .admin-toolbar-row button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         
         .btn-sync { background: var(--primary); color: white; }
@@ -70,8 +74,7 @@
             50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
-        /* 👇 圖示獨立縮小至 16px */
-        .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; font-size: 16px; margin-right: 2px; }
+        .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; font-size: 15px; margin-right: 2px; }
 
         .time-info-wrapper { display: flex; align-items: center; }
         .time-info { display: flex; align-items: baseline; background: #ffffff; padding: 6px 16px; border-radius: 12px; white-space: nowrap; border: 1px solid #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.03); } 
@@ -106,11 +109,27 @@
             font-weight: bold;
         }
 
-        /* 👇 絕對垂直對齊系統：強制取消輸入框實體邊框，改用陰影，確保起點 100% 在 16px 處 */
+        .form-grid-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 3.5fr 1fr 1fr 110px; 
+            gap: 12px; 
+            align-items: center;
+            width: 100%;
+        }
+
+        .grid-label {
+            font-size: 12px; 
+            font-weight: 800;
+            color: #64748b;
+            text-align: left;
+            padding-left: 14px; 
+            margin-bottom: 6px;
+        }
+
         .form-box, .inline-input { 
             width: 100%; 
-            padding: 0 16px; /* 強制文字從 16px 起算 */
-            border: none; /* 移除實體邊框，防止影響寬度與對齊 */
+            padding: 14px 12px; 
+            border: 2px solid transparent; 
             background-color: #f1f5f9;
             border-radius: 12px; 
             font-size: 16px; 
@@ -120,14 +139,14 @@
             transition: all 0.3s ease;
             color: var(--dark);
             font-weight: bold;
-            box-shadow: inset 0 0 0 2px transparent; /* 假邊框位置 */
         }
         .form-box:focus, .inline-input:focus { 
             background-color: #ffffff; 
+            border-color: var(--primary); 
             outline: none; 
-            box-shadow: inset 0 0 0 2px var(--primary), 0 0 0 4px rgba(212, 122, 97, 0.15); 
+            box-shadow: 0 0 0 4px rgba(212, 122, 97, 0.15); 
         }
-        .form-box:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        .form-box:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; border-color: transparent; }
         .mobile-only-label { display: none; }
 
         .btn-submit-grid {
@@ -144,12 +163,10 @@
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 表格內容同步強制從 16px 起算 */
-        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 16px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
-        td { padding: 18px 10px 18px 16px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
+        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 14px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
+        td { padding: 18px 10px 18px 14px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
         
-        /* 表格各欄寬度，與點餐區 100% 對應 */
         th:nth-child(1), td:nth-child(1) { width: 18%; } 
         th:nth-child(2), td:nth-child(2) { width: 36%; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 11%; } 
@@ -172,9 +189,10 @@
         .btn-del:hover { background: #ffe4e6; transform: scale(0.95); }
         
         .status-icon-only { font-size: 16px; font-weight: 900; }
-        .inline-input { height: 40px; padding: 0 16px; font-size: 14px; } 
+        .inline-input { height: 40px; padding: 8px 12px; font-size: 14px; } 
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.5); }
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(244, 246, 248, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99; }
         
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
@@ -192,13 +210,14 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 密碼解鎖畫面 */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(244, 246, 248, 0.85);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center;
         }
+        #authOverlay.active { display: flex; }
+        
         .auth-box {
             background: rgba(255, 255, 255, 0.95); padding: 45px 50px; border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.5);
@@ -212,6 +231,10 @@
             transition: 0.3s; font-weight: bold; letter-spacing: 4px; color: var(--dark);
         }
         .auth-input:focus { background: #ffffff; border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(212, 122, 97, 0.15); }
+        
+        /* 👇 讓 Enter Code 的提示字單獨變小且精緻 */
+        .auth-input::placeholder { font-size: 14px; font-weight: bold; letter-spacing: 1px; color: #94a3b8; }
+        
         .auth-btn {
             width: 100%; padding: 16px; background: var(--primary); color: white; border: none;
             border-radius: 12px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.3s; letter-spacing: 1px;
@@ -223,11 +246,11 @@
             .container { padding: 0; gap: 12px; }
             .page-footer { order: 100; }
             
-            .admin-toolbar { padding: 20px 15px; }
-            .admin-toolbar-row { flex-direction: column; gap: 12px; width: 100%; }
+            .admin-toolbar { padding: 16px 12px; }
+            .admin-toolbar-row { flex-direction: column; gap: 8px; width: 100%; }
             .admin-toolbar-row span, .admin-toolbar-row label { text-align: center; justify-content: center; width: 100%; display: flex; margin: 0; }
-            .admin-toolbar-row input { width: 100% !important; box-sizing: border-box; height: 36px !important; padding: 6px 12px !important; font-size: 13px; }
-            .admin-toolbar-row button { width: 100%; padding: 8px; font-size: 14px; height: 36px; }
+            .admin-toolbar-row input { width: 100% !important; box-sizing: border-box; height: 32px !important; padding: 6px 10px !important; font-size: 12px; }
+            .admin-toolbar-row button { width: 100%; padding: 6px; font-size: 13px; height: 32px; }
             
             .file-input { display: block; margin: 0 auto !important; width: 100% !important; text-align: center; }
             
@@ -243,8 +266,7 @@
             .desktop-labels-container { display: none !important; }
             .form-inputs-container { flex-direction: column; gap: 16px; display: flex; width: 100%; }
             .form-inputs-container > div { width: 100% !important; padding-right: 0 !important; }
-            /* 手機版文字也配合 16px 縮排 */
-            .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 6px; }
+            .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 4px; }
             
             .form-section { padding: 25px 4px; }
             
@@ -280,8 +302,8 @@
 </head>
 <body>
 
-    <!-- 👇 密碼解鎖畫面 (提示字已修改為團主) -->
-    <div id="authOverlay">
+    <!-- 密碼解鎖畫面 -->
+    <div id="authOverlay" class="active">
         <div class="auth-box">
             <h1>午餐吃什麼</h1>
             <p>請輸入團主的通關密碼</p>
@@ -301,11 +323,12 @@
         <div class="admin-toolbar" id="adminToolbar">
             <!-- 團主第一排功能 -->
             <div class="admin-toolbar-row">
-                <span style="font-weight:bold; font-size: 15px;">團主：</span>
+                <!-- 👇 文字縮小至 13px -->
+                <span style="font-weight:bold; font-size: 13px;">團主：</span>
                 <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
                 <input type="text" id="timeInput" class="time-input" placeholder="時間(10:30)">
                 <button type="button" class="btn-sync" style="background:#5c8eb5;" onclick="updateAnnouncement()">同步</button>
-                <span style="font-weight:bold; font-size:14px; margin-left: 5px;">上傳菜單：</span>
+                <span style="font-weight:bold; font-size:12px; margin-left: 5px;">上傳菜單：</span>
                 <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
                 <button type="button" class="btn-stats" onclick="showStats()">統計</button>
                 <button type="button" class="btn-clear" onclick="clearOrders()">淨空</button>
@@ -316,9 +339,9 @@
             
             <!-- 團主第二排功能：動態設定密碼保護 -->
             <div class="admin-toolbar-row">
-                <span style="font-weight:bold; font-size: 14px;">🔒 密碼保護：</span>
-                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; margin-right: 8px; color: white;">
-                    <input type="checkbox" id="authEnableCheck" style="width: 16px; height: 16px; margin: 0; cursor: pointer;"> 啟用
+                <span style="font-weight:bold; font-size: 12px;">🔒 密碼保護：</span>
+                <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12px; margin-right: 8px; color: white;">
+                    <input type="checkbox" id="authEnableCheck" style="width: 14px; height: 14px; margin: 0; cursor: pointer;"> 啟用
                 </label>
                 <input type="text" id="authPasswordInput" class="ann-input" placeholder="設定密碼 (例:8888)">
                 <button type="button" class="btn-sync" style="background:#5c8eb5;" onclick="updateAuthSettings()">儲存密碼設定</button>
@@ -327,7 +350,6 @@
         
         <div class="status-banner">
             <div class="announcement-row">
-                <!-- 圖示縮小、文字維持 -->
                 <div id="announceText" class="cash-info"><span class="pulse-icon">📢</span> 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
@@ -352,33 +374,32 @@
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
-            <!-- 👇 所有標題與輸入框的絕對起點，鎖死在 padding-left: 16px -->
             <div class="desktop-labels-container" style="display: flex; width: 100%; margin-bottom: 6px;">
-                <div style="width: 18%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
-                <div style="width: 36%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
-                <div style="width: 11%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">應付</div>
-                <div style="width: 11%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">實付</div>
+                <div style="width: 18%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
+                <div style="width: 36%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
+                <div style="width: 11%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">應付</div>
+                <div style="width: 11%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">實付</div>
                 <div style="width: 24%; box-sizing: border-box;"></div> 
             </div>
             
             <div class="form-inputs-container" style="display: flex; width: 100%; align-items: center;">
-                <div style="width: 18%; padding-right: 12px; box-sizing: border-box;">
+                <div style="width: 18%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 36%; padding-right: 12px; box-sizing: border-box;">
+                <div style="width: 36%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
-                <div style="width: 11%; padding-right: 12px; box-sizing: border-box;">
+                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 11%; padding-right: 12px; box-sizing: border-box;">
+                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 24%; display: flex; justify-content: flex-end; box-sizing: border-box;">
+                <div style="width: 24%; padding-left: 4px; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button type="button" id="submitOrderBtn" class="btn-submit-grid" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
@@ -458,7 +479,6 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
-        // 👇 獨立的雲端密碼偵測機制 (解決統計不出來的問題)
         database.ref('config/authSettings').on('value', (s) => {
             const val = s.val() || { enabled: false, password: "8888" };
             isAuthEnabled = val.enabled === true; 
@@ -670,7 +690,6 @@
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
 
-        // 👇 解決無法點餐 Bug：已重新展開寫法確保 JS 不會出錯
         function submitOrder() {
             if (isOrderLocked) {
                 alert("目前團主已關閉系統，需點餐請聯絡團主。");
