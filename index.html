@@ -18,7 +18,7 @@
         :root { 
             --primary: #d47a61; --primary-rgb: 212, 122, 97;
             --danger: #ce6c72;  --success: #6e9e80; 
-            --bg: #f4f6f8; --dark: #2c3e50; --card-bg: #ffffff; 
+            --bg: #f4f6f8; --dark: #1e293b; --card-bg: #ffffff; 
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
@@ -28,21 +28,23 @@
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: #f1f5f9; padding: 20px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; border: 2px solid #cbd5e1; color: #475569; box-shadow: 0 10px 30px rgba(0,0,0,0.04); gap: 12px; box-sizing: border-box; width: 100%; }
-        .admin-toolbar input { padding: 10px 14px; border: 2px solid #94a3b8; background: #ffffff; color: var(--dark); border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; font-weight: bold;}
-        .admin-toolbar input:focus { outline: none; border-color: #475569; box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.15); }
-        .admin-toolbar input::placeholder { color: #94a3b8; font-weight: normal; }
+        /* 👇 控制台：換上莫蘭迪深石板藍，絕不被背景吃掉 */
+        .admin-toolbar { display: none; flex-direction: row; flex-wrap: wrap; background: #718096; padding: 18px 24px; border-radius: 16px; align-items: center; justify-content: center; margin-bottom: 0; color: white; box-shadow: 0 10px 30px rgba(113, 128, 150, 0.2); gap: 12px; box-sizing: border-box; width: 100%; border: 1px solid #475569; }
+        .admin-toolbar span { color: #f8fafc !important; }
+        .admin-toolbar input { padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: white; border-radius: 8px; font-size: 14px; height: 40px; box-sizing: border-box; transition: 0.3s; }
+        .admin-toolbar input:focus { background: rgba(255,255,255,0.25); outline: none; border-color: rgba(255,255,255,0.5); }
+        .admin-toolbar input::placeholder { color: #cbd5e1; }
         
         .ann-input { width: 150px; }
         .time-input { width: 110px; }
-        .file-input { width: 180px; color: #64748b; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
+        .file-input { width: 180px; color: #cbd5e1; font-size: 13px; border: none !important; background: transparent !important; padding: 0 !important; cursor: pointer; }
 
         .admin-toolbar button { padding: 0 16px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-size: 14px; height: 40px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; }
-        .admin-toolbar button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .admin-toolbar button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         
         .btn-sync { background: var(--primary); color: white; }
         .btn-stats { background: #8e7eb8; color: white; } 
-        .btn-clear { background: #718096; color: white; }
+        .btn-clear { background: #475569; color: white; } /* 淨空按鈕加深，與深色底更搭 */
 
         .status-banner, .form-section, .table-container, .card, .menu-display { 
             background: var(--card-bg); 
@@ -51,18 +53,18 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        /* 👇 公告欄：恢復剛好的高度 (padding: 14px 35px) */
+        /* 👇 公佈欄：淡化為優雅的莫蘭迪淺灰藍，輕盈且層次分明 */
         .status-banner { 
-            background: #475569 !important; 
+            background: #e2e8f0 !important; 
             padding: 14px 35px !important; 
-            border: none !important; 
-            box-shadow: 0 8px 25px rgba(71, 85, 105, 0.25) !important;
+            border: 1px solid #cbd5e1 !important; 
+            box-shadow: 0 8px 25px rgba(148, 163, 184, 0.15) !important;
         }
         
         .announcement-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .cash-info { font-size: 18px; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 10px; } 
+        .cash-info { font-size: 18px; font-weight: 900; color: #1e293b; display: flex; align-items: center; gap: 10px; } 
         
-        /* 喇叭呼吸動畫 */
+        /* 喇叭呼吸動畫 (保留) */
         @keyframes gentle-pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.15); }
@@ -71,11 +73,10 @@
         .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; font-size: 1.1em; margin-right: 2px; }
 
         .time-info-wrapper { display: flex; align-items: center; }
-        .time-info { display: flex; align-items: baseline; background: rgba(255, 255, 255, 0.1); padding: 6px 16px; border-radius: 12px; white-space: nowrap; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 2px 8px rgba(0,0,0,0.02); } 
-        .time-label { font-size: 13px; font-weight: 800; color: #e2e8f0; opacity: 0.9; }
-        .time-value { font-size: 26px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; color: #fca5a5; }
+        .time-info { display: flex; align-items: baseline; background: #ffffff; padding: 6px 16px; border-radius: 12px; white-space: nowrap; border: 1px solid #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.03); } 
+        .time-label { font-size: 13px; font-weight: 800; color: #64748b; opacity: 0.9; }
+        .time-value { font-size: 26px; font-weight: 900; margin: 0 6px; line-height: 1; letter-spacing: -0.5px; color: var(--danger); }
 
-        /* 隱形開關維持極低透明度 */
         .admin-checkbox-secret { width: 10px; height: 10px; cursor: pointer; opacity: 0.02; margin-left: 10px; border: none; outline: none; }
         .admin-checkbox-secret:hover { opacity: 0.15; }
 
@@ -104,10 +105,27 @@
             font-weight: bold;
         }
 
-        /* 👇 輸入框內部左側留白 12px + 邊框 2px = 絕對座標 14px 起算文字 */
+        /* 👇 精準網格對齊系統 (保證文字對齊) */
+        .form-grid-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 3.5fr 1fr 1fr 110px; 
+            gap: 12px; 
+            align-items: center;
+            width: 100%;
+        }
+
+        .grid-label {
+            font-size: 12px; /* 標題縮小至 12px */
+            font-weight: 800;
+            color: #64748b;
+            text-align: left;
+            padding-left: 14px; /* 標題起點設定為 14px */
+            margin-bottom: 6px;
+        }
+
         .form-box, .inline-input { 
             width: 100%; 
-            padding: 14px 12px; 
+            padding: 14px; /* 框內文字 padding: 14px，完美對齊標題起點 */
             border: 2px solid transparent; 
             background-color: #f1f5f9;
             border-radius: 12px; 
@@ -128,26 +146,29 @@
         .form-box:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; border-color: transparent; }
         .mobile-only-label { display: none; }
 
+        .btn-submit-grid {
+            width: 100%; height: 52px; background: var(--primary); color: white;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 900;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-submit-grid:disabled { background: #94a3b8; cursor: not-allowed; }
+
         .table-container { padding: 35px 30px; }
         #unpaidTable h3, .table-container:first-of-type h3 { border-bottom: 2px solid rgba(206, 108, 114, 0.1); }
         #paidTable h3, .table-container:nth-of-type(2) h3 { border-bottom: 2px solid rgba(110, 158, 128, 0.1); }
-        
         .table-container h3 { margin-top: 0; padding-bottom: 15px; font-size: 20px; font-weight: 900; }
         
-        /* 👇 標題縮小為 12px，左側留白 14px 起算 */
-        .desktop-labels { display: flex; width: 100%; margin-bottom: 10px; font-weight: 800; font-size: 12px; color: #64748b; text-align: left; letter-spacing: 0.5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 表格標題同樣縮小為 12px，左右留白 14px */
+        /* 👇 表格標題同樣設定為 12px，左右 padding: 14px，貫徹完美對齊 */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 14px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 14px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
         
-        /* 👇 精準的各欄位寬度與間隔，確保上下對齊 */
-        th:nth-child(1), td:nth-child(1) { width: 20%; padding-right: 15px; } 
-        th:nth-child(2), td:nth-child(2) { width: 36%; padding-right: 15px; white-space: normal; word-break: break-all; font-weight: bold; } 
-        th:nth-child(3), td:nth-child(3) { width: 11%; padding-right: 10px; } 
-        th:nth-child(4), td:nth-child(4) { width: 11%; padding-right: 10px; } 
+        th:nth-child(1), td:nth-child(1) { width: 20%; } 
+        th:nth-child(2), td:nth-child(2) { width: 34%; white-space: normal; word-break: break-all; font-weight: bold; } 
+        th:nth-child(3), td:nth-child(3) { width: 12%; } 
+        th:nth-child(4), td:nth-child(4) { width: 12%; } 
         th:nth-child(5), td:nth-child(5) { width: 10%; text-align: left; } 
         th:nth-child(6), td:nth-child(6) { width: 12%; text-align: right; } 
 
@@ -166,12 +187,14 @@
         .btn-del:hover { background: #ffe4e6; transform: scale(0.95); }
         
         .status-icon-only { font-size: 16px; font-weight: 900; }
-        .inline-input { height: 40px; padding: 8px 12px; font-size: 14px; } 
+        .inline-input { height: 40px; padding: 8px 14px; font-size: 14px; } 
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.5); }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); z-index: 99; }
-        .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
         
+        /* 👇 蘋果風格毛玻璃背景 (用於統計與密碼畫面) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(244, 246, 248, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99; }
+        
+        .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
         .stats-total { display: flex; align-items: baseline; margin: 0 0 0 60px; flex-grow: 1; white-space: nowrap; }
         .stats-list { max-height: 750px; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
         .stats-list::-webkit-scrollbar { width: 6px; }
@@ -185,8 +208,33 @@
         .stats-user-names { font-size: 14px; color: #94a3b8; font-weight: normal; word-break: break-all; white-space: normal; } 
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
-
         .stats-icon { font-size: 11px; opacity: 0.85; display: inline-block; transform: scale(0.9); margin-right: 2px; }
+
+        /* 👇 Apple 風格的高質感密碼解鎖畫面 */
+        #authOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(244, 246, 248, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .auth-box {
+            background: rgba(255, 255, 255, 0.95); padding: 45px 50px; border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.5);
+            text-align: center; max-width: 90%; width: 380px; box-sizing: border-box;
+        }
+        .auth-box h1 { margin: 0 0 10px 0; font-size: 28px; color: var(--dark); font-weight: 900; letter-spacing: 2px;}
+        .auth-box p { color: #64748b; font-size: 14px; margin-bottom: 25px; font-weight: bold;}
+        .auth-input {
+            width: 100%; padding: 16px 20px; border: 2px solid #e2e8f0; border-radius: 12px; background: #f8fafc;
+            font-size: 20px; box-sizing: border-box; text-align: center; margin-bottom: 20px;
+            transition: 0.3s; font-weight: bold; letter-spacing: 4px; color: var(--dark);
+        }
+        .auth-input:focus { background: #ffffff; border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(212, 122, 97, 0.15); }
+        .auth-btn {
+            width: 100%; padding: 16px; background: var(--primary); color: white; border: none;
+            border-radius: 12px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.3s; letter-spacing: 1px;
+        }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(212, 122, 97, 0.3); }
 
         @media (max-width: 768px) {
             body { padding: 12px 10px; background: #eef2f6; }
@@ -206,12 +254,12 @@
             .time-info-wrapper { justify-content: center; width: 100%; }
             .time-info { padding: 8px 16px; }
             .dashboard { flex-direction: column; gap: 12px; }
-            .desktop-labels { display: none !important; }
+            
+            .form-grid-wrapper.desktop-labels-grid { display: none; }
+            .form-grid-wrapper.inputs-grid { display: flex; flex-direction: column; gap: 16px; }
             .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 4px; }
             
             .form-section { padding: 25px 20px; }
-            .form-inputs { flex-direction: column; gap: 16px; }
-            .form-inputs > div { width: 100% !important; padding-right: 0 !important; }
             .table-container { overflow-x: auto; padding: 25px 15px; border-radius: 20px; }
             table { table-layout: fixed; width: 680px; } 
             th { padding: 12px 6px; font-size: 12px; }
@@ -237,12 +285,24 @@
             .stats-count { font-size: 14px; margin-top: 0; flex: none; white-space: nowrap; }
             
             .stats-user-names { width: auto; margin-left: 28px !important; margin-top: 0; white-space: nowrap; font-size: 11px !important; background: transparent; padding: 0; color: #94a3b8 !important; flex: none; font-weight: normal; word-break: break-all; }
+            
+            .auth-box { padding: 35px 30px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainContainer">
+    <!-- 👇 Apple 風格的高質感密碼解鎖畫面 -->
+    <div id="authOverlay">
+        <div class="auth-box">
+            <h1>午餐吃什麼</h1>
+            <p>請輸入辦公室通關密碼</p>
+            <input type="password" id="passcodeInput" class="auth-input" placeholder="Enter Code" onkeypress="if(event.key === 'Enter') checkPasscode()">
+            <button class="auth-btn" onclick="checkPasscode()">進入點餐系統</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
         
         <div class="page-title-section">
             <h1>午餐吃什麼</h1>
@@ -250,20 +310,19 @@
         </div>
 
         <div class="admin-toolbar" id="adminToolbar">
-            <span style="font-weight:bold; color:#475569; font-size: 15px;">👑 團主：</span>
+            <span style="font-weight:bold; color:white; font-size: 15px;">👑 團主：</span>
             <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
             <input type="text" id="timeInput" class="time-input" placeholder="時間(10:30)">
             <button type="button" class="btn-sync" style="background:#5c8eb5; color: white;" onclick="updateAnnouncement()">同步</button>
-            <span style="font-weight:bold; font-size:14px; color: #64748b; margin-left: 5px;">上傳菜單：</span>
+            <span style="font-weight:bold; font-size:14px; color: #f8fafc; margin-left: 5px;">上傳菜單：</span>
             <input type="file" accept="image/*" class="file-input" onchange="uploadMenu(this)">
             <button type="button" class="btn-stats" onclick="showStats()">統計</button>
-            <button type="button" class="btn-sync" style="background:#8b96a3;" onclick="clearOrders()">淨空</button>
+            <button type="button" class="btn-clear" onclick="clearOrders()">淨空</button>
             <button type="button" id="lockSystemBtn" class="btn-sync" onclick="toggleOrderLock()">開放</button>
         </div>
         
         <div class="status-banner">
             <div class="announcement-row">
-                <!-- 👇 恢復單純大聲公與呼吸動畫 -->
                 <div id="announceText" class="cash-info"><span class="pulse-icon">📢</span> 收現金 / 收 LINE Pay</div>
                 <div class="time-info-wrapper">
                     <div class="time-info">
@@ -288,35 +347,33 @@
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
-            <div class="desktop-labels">
-                <!-- 👇 標題加上 padding-left: 14px 起算點，保證與下方框內文字貼齊 -->
-                <div style="width: 20%; padding-left: 14px; padding-right: 15px; box-sizing: border-box;">姓名</div>
-                <div style="width: 36%; padding-left: 14px; padding-right: 15px; box-sizing: border-box;">品項</div>
-                <div style="width: 11%; padding-left: 14px; padding-right: 10px; box-sizing: border-box;">應付</div>
-                <div style="width: 11%; padding-left: 14px; padding-right: 10px; box-sizing: border-box;">實付</div>
-                <div style="width: 22%;"></div> 
+            <div class="form-grid-wrapper desktop-labels-grid">
+                <div class="grid-label">姓名</div>
+                <div class="grid-label">品項</div>
+                <div class="grid-label">應付</div>
+                <div class="grid-label">實付</div>
+                <div></div> 
             </div>
             
-            <div class="form-inputs" style="display: flex; width: 100%; align-items: center;">
-                <!-- 👇 輸入框的容器移除左方 padding，靠著 form-box 內部的 padding 達到精準對齊 -->
-                <div style="width: 20%; padding-right: 15px; box-sizing: border-box;">
+            <div class="form-grid-wrapper inputs-grid">
+                <div>
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 36%; padding-right: 15px; box-sizing: border-box;">
+                <div>
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
-                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
+                <div>
                     <label class="mobile-only-label">應付</label>
                     <input type="number" id="price" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
+                <div>
                     <label class="mobile-only-label">實付</label>
                     <input type="number" id="pay" placeholder="130" class="form-box">
                 </div>
-                <div style="width: 22%; display: flex; justify-content: flex-end; box-sizing: border-box;">
-                    <button type="button" id="submitOrderBtn" class="btn-sync" style="height: 52px; width: 100%; max-width: 130px; font-size: 16px; border-radius: 12px; font-weight: 900; transition: 0.3s;" onclick="submitOrder()">送出點餐</button>
+                <div>
+                    <button type="button" id="submitOrderBtn" class="btn-submit-grid" onclick="submitOrder()">送出點餐</button>
                 </div>
             </div>
         </div>
@@ -357,6 +414,7 @@
         </footer>
     </div>
 
+    <!-- 蘋果風格霧面遮罩套用於統計畫面 -->
     <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
     <div id="statsModal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
@@ -369,6 +427,9 @@
     </div>
 
     <script>
+        // 👇👇👇 修改密碼請改這裡！ 👇👇👇
+        const SECRET_OFFICE_CODE = "8888"; 
+
         const firebaseConfig = { databaseURL: "https://test-order-system-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -386,8 +447,18 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
+        // 👇 短期記憶解鎖邏輯 (關閉網頁重啟需重打密碼)
         document.addEventListener("DOMContentLoaded", () => {
             try {
+                if (window.sessionStorage) {
+                    let savedPasscode = sessionStorage.getItem('officePasscode');
+                    if(savedPasscode === SECRET_OFFICE_CODE) {
+                        document.getElementById('authOverlay').style.display = 'none';
+                        document.getElementById('mainContainer').style.display = 'flex';
+                    }
+                }
+                
+                // 姓名自動帶入維持使用 localStorage，不受密碼重啟影響
                 if (window.localStorage) {
                     let savedName = localStorage.getItem('myLunchName');
                     if(savedName) {
@@ -396,6 +467,18 @@
                 }
             } catch(e) {}
         });
+
+        function checkPasscode() {
+            const input = document.getElementById('passcodeInput').value;
+            if(input === SECRET_OFFICE_CODE) {
+                try { if(window.sessionStorage) sessionStorage.setItem('officePasscode', input); } catch(e){}
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'flex';
+            } else {
+                alert("通關密碼錯誤喔！請確認後再試一次。");
+                document.getElementById('passcodeInput').value = '';
+            }
+        }
 
         function formatItemName(str) {
             if (!str) return "";
@@ -713,18 +796,23 @@
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
         function getGroupKey(name) {
+            // 先過濾出「加購」與「飲品」，強制排到最後
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
+            
+            // 主食與小菜
             if (name.includes('飯')) return "10-" + name;
             if (/(麵|粉|粄條|米粉|餃|抄手|線)/.test(name)) return "20-" + name;
             if (name.includes('湯')) return "30-" + name;
             if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
-            return "50-" + name;
+            
+            return "50-" + name; // 其他未分類
         }
 
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; let totalAmt = 0;
+                
                 statsTextForCopy = "【今日點餐清單】\n\n";
 
                 if(orders) {
@@ -733,7 +821,9 @@
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = (orderList[i].item || "").trim();
                         let currentName = orderList[i].name || "";
+                        
                         totalAmt += parseInt(orderList[i].price) || 0;
+
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
@@ -747,10 +837,17 @@
                             let originalName = singleItem.trim();
                             if(originalName) { 
                                 let formatName = formatItemName(originalName);
+
                                 const normKey = formatName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+                                
                                 if (!normKey) return; 
+
                                 if (!stats[normKey]) {
-                                    stats[normKey] = { displayName: formatName, count: 0, users: [] };
+                                    stats[normKey] = { 
+                                        displayName: formatName, 
+                                        count: 0, 
+                                        users: [] 
+                                    };
                                 }
                                 stats[normKey].count++;
                                 if (!stats[normKey].users.includes(o.name)) {
