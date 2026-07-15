@@ -51,7 +51,6 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        /* 👇 將公佈欄改回乾淨明亮的莫蘭迪暖白，與深色的控制台完美分離 */
         .status-banner { 
             background: #fffdf7 !important; 
             padding: 14px 35px !important; 
@@ -74,7 +73,6 @@
         }
         .pulse-icon { display: inline-block; animation: gentle-pulse 2s infinite; }
 
-        /* 👇 將隱形開關做到極致：超小、超透明，但仍可點擊 */
         .admin-checkbox-secret { 
             width: 8px; height: 8px; 
             cursor: pointer; 
@@ -419,15 +417,19 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
+        // 👇 使用 sessionStorage 確保重新開啟網頁時必須重新輸入密碼
         document.addEventListener("DOMContentLoaded", () => {
             try {
-                if (window.localStorage) {
-                    let savedPasscode = localStorage.getItem('officePasscode');
+                if (window.sessionStorage) {
+                    let savedPasscode = sessionStorage.getItem('officePasscode');
                     if(savedPasscode === SECRET_OFFICE_CODE) {
                         document.getElementById('authOverlay').style.display = 'none';
                         document.getElementById('mainContainer').style.display = 'flex';
                     }
-                    
+                }
+                
+                // 姓名自動帶入維持使用 localStorage，不受密碼重啟影響
+                if (window.localStorage) {
                     let savedName = localStorage.getItem('myLunchName');
                     if(savedName) {
                         document.getElementById('userName').value = savedName;
@@ -439,7 +441,8 @@
         function checkPasscode() {
             const input = document.getElementById('passcodeInput').value;
             if(input === SECRET_OFFICE_CODE) {
-                try { if(window.localStorage) localStorage.setItem('officePasscode', input); } catch(e){}
+                // 登入成功後存入 sessionStorage (關閉網頁即失效)
+                try { if(window.sessionStorage) sessionStorage.setItem('officePasscode', input); } catch(e){}
                 document.getElementById('authOverlay').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'flex';
             } else {
@@ -764,18 +767,23 @@
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
 
         function getGroupKey(name) {
+            // 先過濾出「加購」與「飲品」，強制排到最後
             if (name.includes('加購') || /(茶|奶|咖啡|拿鐵|可樂|雪碧|果汁|冰|飲|豆漿|水|汽水|烏龍)/.test(name)) return "90-" + name;
+            
+            // 主食與小菜
             if (name.includes('飯')) return "10-" + name;
             if (/(麵|粉|粄條|米粉|餃|抄手|線)/.test(name)) return "20-" + name;
             if (name.includes('湯')) return "30-" + name;
             if (/(菜|筍|蛋|豬耳朵|豆腐|豆干|海帶|小菜|滷|沙拉)/.test(name)) return "40-" + name;
-            return "50-" + name;
+            
+            return "50-" + name; // 其他未分類
         }
 
         function showStats() {
             database.ref('orders').once('value', (s) => {
                 const orders = s.val(); 
                 const stats = {}; let total = 0; let totalAmt = 0;
+                
                 statsTextForCopy = "【今日點餐清單】\n\n";
 
                 if(orders) {
@@ -784,7 +792,9 @@
                     for(let i = 0; i < orderList.length; i++) {
                         let currentItem = (orderList[i].item || "").trim();
                         let currentName = orderList[i].name || "";
+                        
                         totalAmt += parseInt(orderList[i].price) || 0;
+
                         let hasLeft = (currentItem.includes('(') || currentItem.includes('（'));
                         let hasRight = (currentItem.includes(')') || currentItem.includes('）'));
                         if (hasLeft && !hasRight && i + 1 < orderList.length && orderList[i+1].name === currentName) {
@@ -798,10 +808,17 @@
                             let originalName = singleItem.trim();
                             if(originalName) { 
                                 let formatName = formatItemName(originalName);
+
                                 const normKey = formatName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+                                
                                 if (!normKey) return; 
+
                                 if (!stats[normKey]) {
-                                    stats[normKey] = { displayName: formatName, count: 0, users: [] };
+                                    stats[normKey] = { 
+                                        displayName: formatName, 
+                                        count: 0, 
+                                        users: [] 
+                                    };
                                 }
                                 stats[normKey].count++;
                                 if (!stats[normKey].users.includes(o.name)) {
