@@ -22,18 +22,8 @@
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
-        /* 👇 全新加入的載入動畫樣式 */
-        #loadingOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg); z-index: 10000; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .loader-icon { font-size: 45px; margin-bottom: 12px; animation: bounce 1s infinite alternate; }
-        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
-        .loader-text { color: #64748b; font-weight: 800; font-size: 14px; letter-spacing: 2px; }
-
-        /* 主容器預設隱藏，由 JS 決定何時顯示 */
         .container { max-width: 1000px; margin: 0 auto; display: none; flex-direction: column; gap: 12px; }
+        .container.active { display: flex; }
         
         .page-title-section { text-align: center; margin-top: 5px; margin-bottom: 20px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -44,6 +34,7 @@
         .admin-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 2px 0; }
         
         .admin-toolbar-row span { color: #f8fafc !important; }
+        
         .admin-toolbar-row input { padding: 6px 12px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: white; border-radius: 6px; font-size: 12px; height: 32px; box-sizing: border-box; transition: 0.3s; }
         .admin-toolbar-row input:focus { background: rgba(255,255,255,0.25); outline: none; border-color: rgba(255,255,255,0.5); }
         .admin-toolbar-row input::placeholder { color: #cbd5e1; }
@@ -116,11 +107,27 @@
             font-weight: bold;
         }
 
-        /* 👇 取消邊框厚度，強制從 16px 起算，實現像素級對齊 */
+        .form-grid-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 3.5fr 1fr 1fr 110px; 
+            gap: 12px; 
+            align-items: center;
+            width: 100%;
+        }
+
+        .grid-label {
+            font-size: 12px; 
+            font-weight: 800;
+            color: #64748b;
+            text-align: left;
+            padding-left: 14px; 
+            margin-bottom: 6px;
+        }
+
         .form-box, .inline-input { 
             width: 100%; 
-            padding: 0 16px; 
-            border: none; 
+            padding: 14px 12px; 
+            border: 2px solid transparent; 
             background-color: #f1f5f9;
             border-radius: 12px; 
             font-size: 16px; 
@@ -130,14 +137,14 @@
             transition: all 0.3s ease;
             color: var(--dark);
             font-weight: bold;
-            box-shadow: inset 0 0 0 2px transparent; 
         }
         .form-box:focus, .inline-input:focus { 
             background-color: #ffffff; 
+            border-color: var(--primary); 
             outline: none; 
-            box-shadow: inset 0 0 0 2px var(--primary), 0 0 0 4px rgba(212, 122, 97, 0.15); 
+            box-shadow: 0 0 0 4px rgba(212, 122, 97, 0.15); 
         }
-        .form-box:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        .form-box:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; border-color: transparent; }
         .mobile-only-label { display: none; }
 
         .btn-submit-grid {
@@ -154,9 +161,8 @@
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 👇 表格起算點精準鎖死在 padding-left: 16px */
-        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 16px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
-        td { padding: 18px 10px 18px 16px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
+        th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 14px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
+        td { padding: 18px 10px 18px 14px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
         
         th:nth-child(1), td:nth-child(1) { width: 18%; } 
@@ -181,9 +187,10 @@
         .btn-del:hover { background: #ffe4e6; transform: scale(0.95); }
         
         .status-icon-only { font-size: 16px; font-weight: 900; }
-        .inline-input { height: 40px; padding: 0 16px; font-size: 14px; } 
+        .inline-input { height: 40px; padding: 8px 12px; font-size: 14px; } 
 
         #statsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 100; min-width: 450px; max-width: 700px; width: 90%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.5); }
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(244, 246, 248, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99; }
         
         .stats-header { font-size: 22px; font-weight: 900; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
@@ -201,13 +208,13 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 👇 密碼畫面預設隱藏，由系統判斷後優雅顯示 */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(244, 246, 248, 0.85);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center;
         }
+        #authOverlay.active { display: flex; }
         
         .auth-box {
             background: rgba(255, 255, 255, 0.95); padding: 45px 50px; border-radius: 24px;
@@ -254,7 +261,7 @@
             .desktop-labels-container { display: none !important; }
             .form-inputs-container { flex-direction: column; gap: 16px; display: flex; width: 100%; }
             .form-inputs-container > div { width: 100% !important; padding-right: 0 !important; }
-            .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 6px; }
+            .mobile-only-label { display: block; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #64748b; text-align: left; padding-left: 4px; }
             
             .form-section { padding: 25px 4px; }
             
@@ -290,14 +297,8 @@
 </head>
 <body>
 
-    <!-- 👇 精緻的初次載入畫面，徹底消滅畫面閃爍的 Bug -->
-    <div id="loadingOverlay">
-        <div class="loader-icon">🍱</div>
-        <div class="loader-text">系統載入中...</div>
-    </div>
-
-    <!-- 密碼解鎖畫面 (預設隱藏) -->
-    <div id="authOverlay">
+    <!-- 密碼解鎖畫面 -->
+    <div id="authOverlay" class="active">
         <div class="auth-box">
             <h1>午餐吃什麼</h1>
             <p>請輸入團主的通關密碼</p>
@@ -306,7 +307,7 @@
         </div>
     </div>
 
-    <!-- 主系統畫面 (預設隱藏) -->
+    <!-- 主系統畫面 -->
     <div class="container" id="mainContainer">
         
         <div class="page-title-section">
@@ -367,12 +368,11 @@
                 * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
             </div>
             
-            <!-- 👇 標題的絕對起點，鎖死在 padding-left: 16px -->
             <div class="desktop-labels-container" style="display: flex; width: 100%; margin-bottom: 6px;">
-                <div style="width: 18%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
-                <div style="width: 36%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
-                <div style="width: 11%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">應付</div>
-                <div style="width: 11%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">實付</div>
+                <div style="width: 18%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
+                <div style="width: 36%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
+                <div style="width: 11%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">應付</div>
+                <div style="width: 11%; padding-left: 14px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">實付</div>
                 <div style="width: 24%; box-sizing: border-box;"></div> 
             </div>
             
@@ -448,6 +448,9 @@
 
     <script>
         const SECRET_CODE_KEY = "officePasscode";
+        // 👇 萬用密碼在這裡：只要輸入 boss 隨時可以進入！
+        const MASTER_PASSWORD = "boss"; 
+        
         let currentPassword = "8888"; 
         let isAuthEnabled = false;
 
@@ -473,7 +476,6 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
-        // 👇 獨立的雲端密碼偵測機制
         database.ref('config/authSettings').on('value', (s) => {
             const val = s.val() || { enabled: false, password: "8888" };
             isAuthEnabled = val.enabled === true; 
@@ -487,14 +489,8 @@
             verifyAccess();
         });
 
-        // 👇 優雅無閃爍的放行機制
         function verifyAccess() {
-            // 收到雲端資料後，隱藏載入畫面
-            const loader = document.getElementById('loadingOverlay');
-            if (loader) loader.style.display = 'none';
-
             if (!isAuthEnabled) {
-                // 若團主選擇不鎖，直接進入主畫面
                 document.getElementById('authOverlay').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'flex';
             } else {
@@ -506,23 +502,25 @@
                 } catch(e){}
                 
                 if (savedPasscode === currentPassword && currentPassword !== "") {
-                    // 有正確記憶，直接進入主畫面
                     document.getElementById('authOverlay').style.display = 'none';
                     document.getElementById('mainContainer').style.display = 'flex';
                 } else {
-                    // 沒記憶或密碼改了，顯示解鎖畫面
                     document.getElementById('mainContainer').style.display = 'none';
                     document.getElementById('authOverlay').style.display = 'flex';
                 }
             }
         }
 
+        // 👇 更新密碼驗證邏輯，加入萬能密碼判斷
         function checkPasscode() {
             const input = document.getElementById('passcodeInput').value;
-            if(input === currentPassword && currentPassword !== "") {
+            
+            // 如果輸入的是「正確的雲端密碼」或「老闆專屬萬能密碼」，都讓他過！
+            if((input === currentPassword && currentPassword !== "") || input === MASTER_PASSWORD) {
                 try { 
                     if(window.localStorage) {
-                        localStorage.setItem(SECRET_CODE_KEY, input); 
+                        // 即便他是用萬能密碼登入，我們也幫他偷偷存下「真正的密碼」，這樣下次也不用重打
+                        localStorage.setItem(SECRET_CODE_KEY, currentPassword); 
                     }
                 } catch(e){}
                 verifyAccess();
@@ -541,10 +539,9 @@
                 return;
             }
 
-            // 若密碼為空，強制寫入預設值以免 Firebase 刪除節點
             database.ref('config/authSettings').update({
                 enabled: enabled,
-                password: password || "8888" 
+                password: password
             }).then(() => {
                 alert("密碼安全設定已更新完畢！");
             }).catch(err => {
@@ -694,7 +691,6 @@
             document.getElementById('annInput').value = ''; document.getElementById('timeInput').value = '';
         }
 
-        // 👇 修復點餐 Bug
         function submitOrder() {
             if (isOrderLocked) {
                 alert("目前團主已關閉系統，需點餐請聯絡團主。");
