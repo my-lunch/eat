@@ -37,7 +37,6 @@
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        /* 👇 控制台底色變淺為 #8696a7 */
         .admin-toolbar { display: none; flex-direction: column; background: #8696a7; padding: 12px 20px; border-radius: 20px; align-items: center; justify-content: center; margin-bottom: 0; border: 1px solid #5a6b7e; color: white; box-shadow: 0 10px 30px rgba(134, 150, 167, 0.2); gap: 8px; box-sizing: border-box; width: 100%; }
         .admin-toolbar-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; width: 100%; }
         .admin-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 2px 0; }
@@ -65,7 +64,6 @@
             border: 1px solid rgba(255,255,255,0.8);
         }
         
-        /* 👇 公佈欄高度微幅增加（padding 調整為 17px） */
         .status-banner { 
             background: #e2e8f0 !important; 
             padding: 17px 35px !important; 
@@ -104,7 +102,6 @@
         .form-section { padding: 35px 30px; }
         .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
-        /* 👇 點餐注意事項全部改為莫蘭迪灰紅色 */
         .order-notes {
             font-size: 13px; 
             color: var(--danger);
@@ -374,10 +371,9 @@
         <div class="form-section">
             <h3>🥢 點餐</h3>
             
-            <!-- 👇 點餐注意事項全部改為灰紅色 -->
             <div class="order-notes">
-                * 點餐請務必填寫「完整並正確的品項名稱」。<br>
-                * 點餐完畢，請儘速付款。
+                💡 開團純屬熱心服務，<span style="color: var(--danger); font-weight: 900;">恕不代墊，請先付款</span>，感謝配合。<br>
+                💡 請填寫完整品項，<span style="color: var(--danger); font-weight: 900;">避免漏單或誤訂</span>。
             </div>
             
             <div class="desktop-labels-container" style="display: flex; width: 100%; margin-bottom: 6px;">
@@ -940,7 +936,6 @@
                 paidBody.innerHTML = `<tr class="empty-state-row"><td colspan="6">目前尚無點餐紀錄 🍽️</td></tr>`;
             }
             
-            // 👇 財務報表保留千分位，移除 $
             document.getElementById('totalNeed').innerText = tNeed.toLocaleString('en-US'); 
             document.getElementById('totalGet').innerText = tGet.toLocaleString('en-US'); 
             document.getElementById('totalUnpaid').innerText = tUnpaid.toLocaleString('en-US'); 
@@ -1010,7 +1005,6 @@
                     }); 
                 }
                 
-                // 👇 統計視窗移除 $
                 document.getElementById('statsTotal').innerHTML = `
                     <span class="total-num" style="color:var(--danger); font-size:26px; font-weight:900; margin-right:4px;">${total}</span>
                     <span class="total-text" style="font-size:16px; margin-right:60px; color:var(--dark);">份</span>
@@ -1024,7 +1018,6 @@
                 sortedStats.forEach((v) => {
                     statsTextForCopy += `${v.displayName} x ${v.count}\n`;
                 });
-                // 👇 複製文字移除 $
                 statsTextForCopy += `\n總計：${total} 份 / 金額：${totalAmt.toLocaleString('en-US')} 元`;
 
                 document.getElementById('statsContent').innerHTML = sortedStats.map((v) => `
