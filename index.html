@@ -22,7 +22,6 @@
         }
         body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background: var(--bg); margin: 0; padding: 24px 20px; display: block; color: var(--dark); overflow-x: hidden; }
         
-        /* 👇 完美載入動畫，徹底消滅畫面閃爍的 Bug */
         #loadingOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--bg); z-index: 10000; 
@@ -32,14 +31,12 @@
         @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
         .loader-text { color: #64748b; font-weight: 800; font-size: 14px; letter-spacing: 2px; }
 
-        /* 主容器預設隱藏，由 JS 決定何時顯示 */
         .container { max-width: 1000px; margin: 0 auto; display: none; flex-direction: column; gap: 12px; }
         
         .page-title-section { text-align: center; margin-top: 5px; margin-bottom: 20px; }
         .page-title-section h1 { margin: 0; font-size: 34px; font-weight: 900; color: var(--dark); letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .page-title-section h2 { margin: 8px 0 0 0; font-size: 15px; font-weight: 800; color: #94a3b8; letter-spacing: 6px; text-transform: uppercase; }
 
-        /* 控制台：無皇冠，維持 20px 圓角與莫蘭迪質感 */
         .admin-toolbar { display: none; flex-direction: column; background: #718096; padding: 12px 20px; border-radius: 20px; align-items: center; justify-content: center; margin-bottom: 0; border: 1px solid #475569; color: white; box-shadow: 0 10px 30px rgba(113, 128, 150, 0.2); gap: 8px; box-sizing: border-box; width: 100%; }
         .admin-toolbar-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; width: 100%; }
         .admin-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 2px 0; }
@@ -105,8 +102,9 @@
         .form-section { padding: 35px 30px; }
         .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
+        /* 👇 修改字體大小為 13px */
         .order-notes {
-            font-size: 10px;
+            font-size: 13px; 
             color: #64748b;
             background: #f8fafc;
             padding: 12px 16px;
@@ -134,7 +132,6 @@
             margin-bottom: 6px;
         }
 
-        /* 👇 無實體邊框，絕對對齊 */
         .form-box, .inline-input { 
             width: 100%; 
             padding: 0 16px; 
@@ -172,11 +169,13 @@
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
         
-        /* 表格起算點精準鎖死在 padding-left: 16px */
         th { position: sticky; top: 0; z-index: 10; text-align: left; background: #f8fafc; padding: 16px 10px 16px 16px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; box-sizing: border-box; }
         td { padding: 18px 10px 18px 16px; border-bottom: 1px solid #f1f5f9; font-size: 16px; white-space: nowrap; box-sizing: border-box; text-align: left; transition: 0.2s; }
         tbody tr:hover td { background-color: #fafcfd; }
         
+        /* 👇 表格為空時的幽靈樣式 */
+        .empty-state-row td { text-align: center !important; padding: 40px 0 !important; color: #94a3b8; font-weight: 800; letter-spacing: 1px; background-color: transparent !important; border-bottom: none !important; }
+
         th:nth-child(1), td:nth-child(1) { width: 18%; } 
         th:nth-child(2), td:nth-child(2) { width: 36%; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 11%; } 
@@ -219,14 +218,12 @@
 
         .page-footer { text-align: center; color: #94a3b8; font-size: 11px; font-weight: 800; padding: 15px 0 30px 0; margin-top: 10px; letter-spacing: 1px; }
 
-        /* 密碼解鎖畫面 (預設隱藏，由系統判斷) */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(244, 246, 248, 0.85);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center;
         }
-        
         .auth-box {
             background: rgba(255, 255, 255, 0.95); padding: 45px 50px; border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.5);
@@ -308,13 +305,11 @@
 </head>
 <body>
 
-    <!-- 👇 新增載入畫面 -->
     <div id="loadingOverlay">
         <div class="loader-icon">🍱</div>
         <div class="loader-text">系統載入中...</div>
     </div>
 
-    <!-- 密碼解鎖畫面 -->
     <div id="authOverlay">
         <div class="auth-box">
             <h1>午餐吃什麼</h1>
@@ -324,7 +319,6 @@
         </div>
     </div>
 
-    <!-- 主系統畫面 -->
     <div class="container" id="mainContainer">
         
         <div class="page-title-section">
@@ -333,7 +327,6 @@
         </div>
 
         <div class="admin-toolbar" id="adminToolbar">
-            <!-- 團主第一排功能 -->
             <div class="admin-toolbar-row">
                 <span style="font-weight:bold; font-size: 13px;">團主：</span>
                 <input type="text" id="annInput" class="ann-input" placeholder="修改公告...">
@@ -348,7 +341,6 @@
             
             <div class="admin-divider"></div>
             
-            <!-- 團主第二排功能：動態設定密碼保護 -->
             <div class="admin-toolbar-row">
                 <span style="font-weight:bold; font-size: 12px;">🔒 密碼保護：</span>
                 <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12px; margin-right: 8px; color: white;">
@@ -380,9 +372,10 @@
         <div class="form-section">
             <h3>🥢 點餐</h3>
             
+            <!-- 👇 點餐注意事項，灰紅色、最粗字體、放大兩碼(13px) -->
             <div class="order-notes">
-                * 為了精準統計，請務必填寫「完整並正確的品項名稱」。<br>
-                * 若點購多項餐點，請使用「+」號隔開（例：肉燥飯+蛋花湯）。
+                * 點餐請務必填寫「完整並正確的品項名稱，<span style="color: var(--danger); font-weight: 900;">不准寫錯字</span>」。<br>
+                * 點餐完畢，請儘速付款。
             </div>
             
             <div class="desktop-labels-container" style="display: flex; width: 100%; margin-bottom: 6px;">
@@ -402,13 +395,14 @@
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
+                <!-- 👇 喚出手機純數字鍵盤：加入 inputmode="numeric" pattern="[0-9]*" -->
                 <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">應付</label>
-                    <input type="number" id="price" placeholder="130" class="form-box">
+                    <input type="number" id="price" placeholder="130" class="form-box" inputmode="numeric" pattern="[0-9]*">
                 </div>
                 <div style="width: 11%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">實付</label>
-                    <input type="number" id="pay" placeholder="130" class="form-box">
+                    <input type="number" id="pay" placeholder="130" class="form-box" inputmode="numeric" pattern="[0-9]*">
                 </div>
                 <div style="width: 24%; padding-left: 4px; display: flex; justify-content: flex-end; box-sizing: border-box;">
                     <button type="button" id="submitOrderBtn" class="btn-submit-grid" onclick="submitOrder()">送出點餐</button>
@@ -465,7 +459,6 @@
 
     <script>
         const SECRET_CODE_KEY = "officePasscode";
-        // 👇 萬用密碼在這裡：只要輸入 boss 隨時可以進入！
         const MASTER_PASSWORD = "boss"; 
         
         let currentPassword = "8888"; 
@@ -493,7 +486,6 @@
         let isOrderLocked = false;
         let statsTextForCopy = "";
 
-        // 👇 獨立的雲端密碼偵測機制
         database.ref('config/authSettings').on('value', (s) => {
             const val = s.val() || { enabled: false, password: "8888" };
             isAuthEnabled = val.enabled === true; 
@@ -507,14 +499,11 @@
             verifyAccess();
         });
 
-        // 👇 優雅無閃爍的放行機制
         function verifyAccess() {
-            // 收到雲端資料後，隱藏載入畫面
             const loader = document.getElementById('loadingOverlay');
             if (loader) loader.style.display = 'none';
 
             if (!isAuthEnabled) {
-                // 若團主選擇不鎖，直接進入主畫面
                 document.getElementById('authOverlay').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'flex';
             } else {
@@ -526,26 +515,21 @@
                 } catch(e){}
                 
                 if (savedPasscode === currentPassword && currentPassword !== "") {
-                    // 有正確記憶，直接進入主畫面
                     document.getElementById('authOverlay').style.display = 'none';
                     document.getElementById('mainContainer').style.display = 'flex';
                 } else {
-                    // 沒記憶或密碼改了，顯示解鎖畫面
                     document.getElementById('mainContainer').style.display = 'none';
                     document.getElementById('authOverlay').style.display = 'flex';
                 }
             }
         }
 
-        // 👇 檢查密碼，加入老闆專屬萬能密碼判斷
         function checkPasscode() {
             const input = document.getElementById('passcodeInput').value;
             
-            // 如果輸入的是「正確的雲端密碼」或「老闆專屬萬能密碼」，都讓他過！
             if((input === currentPassword && currentPassword !== "") || input === MASTER_PASSWORD) {
                 try { 
                     if(window.localStorage) {
-                        // 偷偷幫萬能密碼的使用者存下「真正的密碼」，這樣下次也不用重打
                         localStorage.setItem(SECRET_CODE_KEY, currentPassword); 
                     }
                 } catch(e){}
@@ -833,6 +817,9 @@
                 isAdminMode = document.getElementById('adminToggle').checked; 
             } catch(e) {}
 
+            let hasUnpaid = false;
+            let hasPaid = false;
+
             if (orders && typeof orders === 'object') {
                 Object.keys(orders).forEach(id => {
                     const o = orders[id];
@@ -851,6 +838,7 @@
                     const changeText = changeAmt > 0 ? `<span style="color:var(--danger); font-weight:900; font-size:16px;">${changeAmt}</span>` : `<span style="color:#94a3b8; font-weight:bold; font-size:16px;">0</span>`;
 
                     if (o.isPaid) {
+                        hasPaid = true;
                         if (changeAmt <= 0 || o.changeSettled) {
                             tGet += price;
                         } else {
@@ -902,6 +890,7 @@
                             `;
                         }
                     } else {
+                        hasUnpaid = true;
                         tUnpaid += price;
                         if (isEditing) {
                             unpaidBody.innerHTML += `
@@ -943,9 +932,18 @@
                 });
             }
             
-            document.getElementById('totalNeed').innerText = tNeed; 
-            document.getElementById('totalGet').innerText = tGet; 
-            document.getElementById('totalUnpaid').innerText = tUnpaid; 
+            // 👇 處理無人點餐時的優雅空白狀態 (Empty State)
+            if (!hasUnpaid) {
+                unpaidBody.innerHTML = `<tr class="empty-state-row"><td colspan="6">目前尚無點餐紀錄 🍽️</td></tr>`;
+            }
+            if (!hasPaid) {
+                paidBody.innerHTML = `<tr class="empty-state-row"><td colspan="6">目前尚無點餐紀錄 🍽️</td></tr>`;
+            }
+            
+            // 👇 財務報表格式化：加入 $ 與千分位
+            document.getElementById('totalNeed').innerText = '$ ' + tNeed.toLocaleString('en-US'); 
+            document.getElementById('totalGet').innerText = '$ ' + tGet.toLocaleString('en-US'); 
+            document.getElementById('totalUnpaid').innerText = '$ ' + tUnpaid.toLocaleString('en-US'); 
         }
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
