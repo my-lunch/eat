@@ -102,8 +102,9 @@
         .form-section { padding: 35px 30px; }
         .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
+        /* 👇 修改此處：字體縮小為 11.5px，確保手機版不會折行 */
         .order-notes {
-            font-size: 13px; 
+            font-size: 11.5px; 
             color: var(--danger);
             background: #f8fafc;
             padding: 12px 16px;
@@ -371,7 +372,6 @@
         <div class="form-section">
             <h3>🥢 點餐</h3>
             
-            <!-- 👇 更新版文案 -->
             <div class="order-notes">
                 💡 開團純屬熱心服務，<span style="color: var(--danger); font-weight: 900;">恕不代墊請先付款</span>，感謝配合。<br>
                 💡 請填寫完整品項，<span style="color: var(--danger); font-weight: 900;">避免漏單或誤訂</span>。
@@ -937,7 +937,6 @@
                 paidBody.innerHTML = `<tr class="empty-state-row"><td colspan="6">目前尚無點餐紀錄 🍽️</td></tr>`;
             }
             
-            // 👇 移除千分位 .toLocaleString('en-US')，回歸純數字
             document.getElementById('totalNeed').innerText = tNeed; 
             document.getElementById('totalGet').innerText = tGet; 
             document.getElementById('totalUnpaid').innerText = tUnpaid; 
@@ -1007,7 +1006,6 @@
                     }); 
                 }
                 
-                // 👇 移除千分位 .toLocaleString('en-US')
                 document.getElementById('statsTotal').innerHTML = `
                     <span class="total-num" style="color:var(--danger); font-size:26px; font-weight:900; margin-right:4px;">${total}</span>
                     <span class="total-text" style="font-size:16px; margin-right:60px; color:var(--dark);">份</span>
@@ -1021,7 +1019,6 @@
                 sortedStats.forEach((v) => {
                     statsTextForCopy += `${v.displayName} x ${v.count}\n`;
                 });
-                // 👇 移除千分位 .toLocaleString('en-US')
                 statsTextForCopy += `\n總計：${total} 份 / 金額：${totalAmt} 元`;
 
                 document.getElementById('statsContent').innerHTML = sortedStats.map((v) => `
