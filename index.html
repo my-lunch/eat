@@ -371,8 +371,9 @@
         <div class="form-section">
             <h3>🥢 點餐</h3>
             
+            <!-- 👇 更新版文案 -->
             <div class="order-notes">
-                💡 開團純屬熱心服務，<span style="color: var(--danger); font-weight: 900;">恕不代墊，請先付款</span>，感謝配合。<br>
+                💡 開團純屬熱心服務，<span style="color: var(--danger); font-weight: 900;">恕不代墊請先付款</span>，感謝配合。<br>
                 💡 請填寫完整品項，<span style="color: var(--danger); font-weight: 900;">避免漏單或誤訂</span>。
             </div>
             
@@ -936,9 +937,10 @@
                 paidBody.innerHTML = `<tr class="empty-state-row"><td colspan="6">目前尚無點餐紀錄 🍽️</td></tr>`;
             }
             
-            document.getElementById('totalNeed').innerText = tNeed.toLocaleString('en-US'); 
-            document.getElementById('totalGet').innerText = tGet.toLocaleString('en-US'); 
-            document.getElementById('totalUnpaid').innerText = tUnpaid.toLocaleString('en-US'); 
+            // 👇 移除千分位 .toLocaleString('en-US')，回歸純數字
+            document.getElementById('totalNeed').innerText = tNeed; 
+            document.getElementById('totalGet').innerText = tGet; 
+            document.getElementById('totalUnpaid').innerText = tUnpaid; 
         }
 
         database.ref('orders').on('value', (snapshot) => renderTable(snapshot.val()));
@@ -1005,10 +1007,11 @@
                     }); 
                 }
                 
+                // 👇 移除千分位 .toLocaleString('en-US')
                 document.getElementById('statsTotal').innerHTML = `
                     <span class="total-num" style="color:var(--danger); font-size:26px; font-weight:900; margin-right:4px;">${total}</span>
                     <span class="total-text" style="font-size:16px; margin-right:60px; color:var(--dark);">份</span>
-                    <span class="amt-num" style="color:#475569; font-size:18px; font-weight:900;">${totalAmt.toLocaleString('en-US')}</span>
+                    <span class="amt-num" style="color:#475569; font-size:18px; font-weight:900;">${totalAmt}</span>
                 `;
                 
                 const sortedStats = Object.values(stats).sort((a, b) => {
@@ -1018,7 +1021,8 @@
                 sortedStats.forEach((v) => {
                     statsTextForCopy += `${v.displayName} x ${v.count}\n`;
                 });
-                statsTextForCopy += `\n總計：${total} 份 / 金額：${totalAmt.toLocaleString('en-US')} 元`;
+                // 👇 移除千分位 .toLocaleString('en-US')
+                statsTextForCopy += `\n總計：${total} 份 / 金額：${totalAmt} 元`;
 
                 document.getElementById('statsContent').innerHTML = sortedStats.map((v) => `
                     <div class="stats-item">
