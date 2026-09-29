@@ -102,9 +102,8 @@
         .form-section { padding: 35px 30px; }
         .form-section h3 { margin-top: 0; border-bottom: 2px solid rgba(var(--primary-rgb), 0.1); padding-bottom: 12px; font-size: 20px; font-weight: 900; }
         
-        /* 👇 修改此處：字體縮小為 11.5px，確保手機版不會折行 */
         .order-notes {
-            font-size: 11.5px; 
+            font-size: 13px; 
             color: var(--danger);
             background: #f8fafc;
             padding: 12px 16px;
@@ -175,8 +174,9 @@
         
         .empty-state-row td { text-align: center !important; padding: 40px 0 !important; color: #94a3b8; font-weight: 800; letter-spacing: 1px; background-color: transparent !important; border-bottom: none !important; }
 
-        th:nth-child(1), td:nth-child(1) { width: 18%; } 
-        th:nth-child(2), td:nth-child(2) { width: 36%; white-space: normal; word-break: break-all; font-weight: bold; } 
+        /* 👇 修改表格寬度比例，名稱加寬至25%，品項縮減至29%，保證上下絕對對齊 */
+        th:nth-child(1), td:nth-child(1) { width: 25%; } 
+        th:nth-child(2), td:nth-child(2) { width: 29%; white-space: normal; word-break: break-all; font-weight: bold; } 
         th:nth-child(3), td:nth-child(3) { width: 11%; } 
         th:nth-child(4), td:nth-child(4) { width: 11%; } 
         th:nth-child(5), td:nth-child(5) { width: 10%; text-align: left; } 
@@ -377,20 +377,21 @@
                 💡 請填寫完整品項，<span style="color: var(--danger); font-weight: 900;">避免漏單或誤訂</span>。
             </div>
             
+            <!-- 👇 修改輸入與表格的寬度配比：姓名 25%，品項 29% -->
             <div class="desktop-labels-container" style="display: flex; width: 100%; margin-bottom: 6px;">
-                <div style="width: 18%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
-                <div style="width: 36%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
+                <div style="width: 25%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">姓名</div>
+                <div style="width: 29%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">品項</div>
                 <div style="width: 11%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">應付</div>
                 <div style="width: 11%; padding-left: 16px; box-sizing: border-box; font-size: 12px; font-weight: 800; color: #64748b;">實付</div>
                 <div style="width: 24%; box-sizing: border-box;"></div> 
             </div>
             
             <div class="form-inputs-container" style="display: flex; width: 100%; align-items: center;">
-                <div style="width: 18%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 25%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">姓名</label>
                     <input type="text" id="userName" placeholder="AMY" class="form-box">
                 </div>
-                <div style="width: 36%; padding-right: 10px; box-sizing: border-box;">
+                <div style="width: 29%; padding-right: 10px; box-sizing: border-box;">
                     <label class="mobile-only-label">品項</label>
                     <input type="text" id="userItem" placeholder="蒜香清炒_雞胸蛤蠣義大利麵" class="form-box">
                 </div>
